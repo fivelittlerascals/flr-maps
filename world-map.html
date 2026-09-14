@@ -302,7 +302,7 @@ const svg = document.getElementById('worldmap');
 
 function go(key) {
   const url = LINKS[key];
-  if (url && url.trim()) window.location.href = url.trim();
+  if (url && url.trim()) window.top.location.href = url.trim();
 }
 
 function lite(i, on) {
