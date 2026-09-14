@@ -1,0 +1,363 @@
+<!--
+  ============================================================
+  SOUTH AUSTRALIA — INTERACTIVE POEM MAP
+  ============================================================
+  Everything is self-contained: no external scripts, no data
+  files, nothing to load from another site. Paste the whole
+  thing into a Squarespace Code block and it works.
+
+  Hovering a numbered stop shows the part of the poem written
+  about that place. Clicking it jumps to the full verse below.
+
+  TO EDIT A VERSE: find the STOPS array near the bottom and
+  edit the "verse" lines, then edit the matching card in the
+  list markup above it. (Keeping both in sync matters only if
+  you change the words.)
+  ============================================================
+-->
+<style>
+  :root { --stick: calc(35px + 2vw); }
+  :root {
+    --ink: #c2410c;
+    --ink-dark: #16294a;
+    --land: #ffffff;
+    --sea: #eef2f6;
+    --border: #111111;
+    --accent: #b8452f;
+    --paper: #ffffff;
+    --text: #24303f;
+    --muted: #7c8899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--text);
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 8px 16px 24px; }
+
+  header { text-align: center; margin-bottom: 10px; }
+  h1 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 800; font-size: clamp(1.7rem, 5vw, 3rem);
+    letter-spacing: -0.02em; color: #111; margin: 0 0 6px;
+  }
+  .subtitle { font-style: italic; color: #5a6b80; margin: 0 0 4px;
+    font-size: clamp(0.95rem, 2vw, 1.08rem); }
+  .eyebrow { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .74rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink); margin: 0 0 4px; font-weight: 700; }
+  .hint { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 0.8rem; color: var(--muted); margin: 0; }
+
+  #tabs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    margin: 0 0 18px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .82rem; }
+  .tab { padding: 6px 15px; border: 1px solid #d7dde6; border-radius: 999px;
+    text-decoration: none; color: var(--text); background: #fff; cursor: pointer; }
+  .tab:hover { border-color: var(--ink); color: var(--ink); }
+  .tab.current { background: var(--ink); border-color: var(--ink); color: #fff;
+    font-weight: 700; }
+  #map-container { position: relative; width: 100%; }
+  #samap { width: 100%; height: auto; display: block; }
+
+  .sea { fill: var(--sea); }
+  .land { fill: var(--land); stroke: var(--border); stroke-width: 0.9;
+    stroke-linejoin: round; }
+  .insetbox { fill: var(--sea); stroke: var(--border); stroke-width: 1.1; }
+  .divider { stroke: #b9c2d0; stroke-width: 1; stroke-dasharray: 3 4; }
+  .note, .pin {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    fill: #5a6b80; font-size: 12px; font-style: italic;
+  }
+  .pin { font-size: 11.5px; font-style: normal; }
+
+  .route { fill: none; stroke: var(--ink); stroke-width: 2.4;
+    stroke-linecap: round; stroke-linejoin: round; }
+  .route.ferry { stroke-dasharray: 9 7; }
+
+  .stop circle { fill: var(--ink); stroke: #fff; stroke-width: 1.6;
+    cursor: pointer; transition: fill .12s ease; }
+  .stop text {
+    fill: #fff; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700; font-size: 12px; text-anchor: middle;
+    pointer-events: none; user-select: none;
+  }
+  .stop:hover circle, .stop:focus circle, .stop.active circle { fill: var(--accent); }
+  .stop:focus { outline: none; }
+  .stop:focus circle { stroke: var(--accent); stroke-width: 2.4; }
+
+  #tooltip {
+    position: absolute; pointer-events: none; opacity: 0;
+    background: var(--ink-dark); color: #fff;
+    padding: 10px 13px; border-radius: 7px; max-width: 330px;
+    box-shadow: 0 6px 20px rgba(20,35,60,.34);
+    transition: opacity .12s ease; z-index: 10;
+  }
+  #tooltip .t-name {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700; font-size: .84rem; display: block; margin-bottom: 6px;
+  }
+  #tooltip .t-verse { font-size: .84rem; line-height: 1.45; font-style: italic; }
+  #tooltip .t-verse .ln { display: block; }
+  #tooltip .t-verse .br { display: block; height: .5em; }
+  #tooltip .t-more {
+    display: block; margin-top: 7px; color: #aec3e8; font-style: normal;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .74rem;
+  }
+
+  hr.rule { border: none; border-top: 2px solid var(--ink); margin: 40px 0 22px; }
+  h2 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink); margin: 0 0 18px;
+  }
+
+  #cards { list-style: none; padding: 0; margin: 0;
+    columns: 2; column-gap: 34px; }
+  .card { break-inside: avoid; margin: 0 0 22px; padding: 10px 12px;
+    border-left: 3px solid #dfe5ec; border-radius: 3px;
+    transition: background .2s ease, border-color .2s ease; }
+  .card.lit { background: #fbf3f1; border-left-color: var(--accent); }
+  .chead { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin-bottom: 7px; }
+  .badge { display: inline-block; min-width: 22px; height: 22px; line-height: 22px;
+    text-align: center; background: var(--ink); color: #fff; border-radius: 50%;
+    font-size: .72rem; font-weight: 700; margin-right: 8px; }
+  .card.lit .badge { background: var(--accent); }
+  .cname { font-weight: 700; font-size: .92rem; color: #111; }
+  .creg { color: var(--muted); font-size: .78rem; margin-left: 7px; }
+  .verse { font-style: italic; line-height: 1.55; font-size: .93rem; }
+  .verse .ln { display: block; }
+  .verse .br { display: block; height: .55em; }
+  .verse.none { font-style: normal; color: var(--muted); font-size: .85rem; }
+
+  #coda { margin-top: 8px; padding: 18px 20px; background: #f6f8fa;
+    border-radius: 6px; font-style: italic; line-height: 1.6; }
+  #coda .ln { display: block; }
+  #coda .br { display: block; height: .6em; }
+
+  @media (max-width: 720px) { #cards { columns: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .stop circle, #tooltip, .card { transition: none; }
+  }
+  /* TIGHTEN */
+  html, body { margin:0; padding:0; }
+  .wrap { overflow: visible; }
+  .wrap > *:last-child { margin-bottom: 0; }
+
+  a.ctype { float:right; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:.62rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:2px 8px; border-radius:999px; border:1px solid var(--accent); color:var(--accent); text-decoration:none; cursor:pointer; }
+  
+  
+  a.ctype:hover,a.ctype:focus{background:var(--accent);color:#fff;}
+
+  .cthumb { width:100%; height:130px; object-fit:cover; border-radius:3px; margin:-2px 0 8px; display:block; background:#eef2f6; }
+  .tooltip .t-img, .tooltip img.tip-photo { width:100%; max-width:280px; height:120px; object-fit:cover; border-radius:5px; margin:0 0 7px; display:block; }
+</style>
+
+<div class="wrap">
+  <nav id="tabs">
+    <a class="tab" data-nav="world" href="https://fivelittlerascals.com/world-map">&larr; All our travels</a>
+    <a class="tab" data-nav="region" href="https://fivelittlerascals.com/world-map">Australia</a>
+    <span class="tab current">South Australia &middot; 2021</span>
+  </nav>
+
+  <div id="map-container">
+    <div id="tooltip" role="status"></div>
+    <svg id="samap" viewBox="0 0 940 556" role="img" aria-label="Map of a South Australia road trip with 26 numbered stops. Every stop and its poem verse is also listed below the map.">
+<rect class="sea" x="0" y="0" width="940" height="556"/>
+<clipPath id="mapclip"><rect x="0" y="0" width="778" height="556"/></clipPath>
+<g clip-path="url(#mapclip)">
+<path class="land" d="M340.0,278.6L341.7,278.3L342.6,272.0L345.3,272.9L345.0,274.4L347.4,272.0L350.8,274.9L347.7,271.8L348.8,267.9L347.1,264.9L346.7,260.5L344.8,259.0L345.3,257.4L338.6,254.2L336.0,249.7L334.1,249.4L332.6,246.4L329.5,244.5L330.9,244.1L328.6,243.7L329.5,240.8L331.1,240.7L328.0,234.4L325.8,234.3L326.4,233.0L325.0,230.2L317.8,225.8L315.4,221.7L314.5,216.5L301.7,205.7L298.6,190.6L295.1,183.7L296.0,179.4L294.7,172.9L289.7,165.2L282.1,163.9L285.6,159.8L285.3,155.1L275.0,138.8L270.9,137.8L265.4,145.8L263.0,155.1L260.3,157.1L258.5,162.2L261.8,167.7L259.4,180.4L244.8,196.0L241.7,209.1L239.9,211.8L237.9,229.7L243.2,233.3L238.1,243.7L238.8,249.1L236.8,254.5L236.2,263.1L235.0,264.2L236.2,265.5L230.7,272.4L225.6,285.3L224.9,291.0L226.4,292.2L224.0,294.2L218.6,309.1L219.7,317.8L214.7,318.6L213.2,320.5L216.6,324.7L216.3,330.3L218.8,332.6L208.8,338.0L205.6,343.2L199.0,343.3L185.5,333.2L180.7,332.3L178.3,333.5L170.7,329.6L163.9,329.3L152.4,336.5L150.5,339.6L150.8,342.0L149.5,342.5L151.6,342.3L149.5,343.3L143.5,343.4L138.1,341.5L133.6,342.6L128.1,348.1L125.9,351.5L126.0,355.5L123.2,357.2L113.0,358.3L107.3,355.0L95.0,354.3L92.0,356.8L92.0,359.6L89.9,360.1L89.4,363.1L85.8,363.6L85.6,366.2L78.4,366.9L75.7,369.8L73.6,367.1L70.1,366.1L65.7,358.8L67.7,358.1L66.9,356.3L69.7,355.5L69.6,347.7L72.9,348.5L76.5,346.8L78.1,341.0L80.6,340.4L85.2,335.5L85.3,330.8L88.4,326.2L83.4,315.5L85.7,314.1L85.6,312.3L89.6,309.8L90.9,298.0L96.9,293.9L97.0,288.4L110.1,293.8L118.7,293.4L126.6,290.0L131.5,290.7L140.0,288.6L142.4,290.0L145.3,295.3L151.5,295.7L153.1,299.1L156.1,300.5L162.7,297.5L168.2,291.9L169.6,286.7L169.9,271.4L178.1,233.7L177.6,226.6L172.2,212.5L174.3,206.7L173.8,198.2L170.5,195.8L167.7,197.8L164.6,204.8L162.6,202.3L162.9,199.3L166.4,196.0L167.8,190.1L170.8,190.6L172.6,189.0L173.9,179.2L176.6,173.0L176.5,156.1L168.3,138.2L177.6,138.6L180.2,136.9L180.8,132.8L187.6,120.0L185.1,114.3L181.0,112.3L182.8,109.9L186.1,109.2L186.9,105.8L188.9,104.9L192.9,98.9L197.9,96.0L197.0,90.8L192.9,87.1L200.0,78.0L213.4,66.1L215.2,59.8L218.2,55.2L225.6,49.1L231.2,41.1L234.9,38.9L238.5,32.1L240.7,30.4L245.1,30.2L245.9,32.2L244.2,35.3L242.5,35.6L242.7,32.1L240.8,37.8L244.8,37.6L247.7,28.8L247.7,23.5L249.5,23.8L250.4,27.5L252.5,27.7L254.6,24.7L253.5,20.9L252.2,23.1L248.3,22.5L248.7,16.7L249.9,15.6L247.3,13.1L243.0,0.2L237.1,-7.1L237.9,-13.8L239.3,-14.3L240.4,-13.0L239.4,-14.3L157.2,-14.3L157.8,-11.9L153.8,-3.6L153.7,1.2L146.2,7.5L144.6,13.1L143.1,14.6L140.4,25.9L137.9,28.4L136.1,34.4L129.7,44.7L124.6,47.1L122.3,50.5L115.1,52.5L106.2,52.1L100.9,53.9L99.0,56.2L93.4,57.2L86.9,63.2L71.5,71.7L62.0,72.7L58.6,78.1L50.7,78.9L40.6,87.5L28.2,91.6L24.9,96.2L25.3,100.3L12.7,110.0L2.4,113.7L-9.3,125.1L-12.0,131.0L-10.3,135.6L-14.5,140.6L-15.6,147.3L-22.9,154.7L-22.9,-14.3L749.0,-14.3L749.1,115.7L746.9,117.7L745.4,114.6L746.4,113.4L744.5,113.2L745.4,111.4L743.6,110.9L742.6,107.6L742.5,459.8L743.2,579.4L539.2,579.4L528.8,555.4L507.2,519.3L483.3,488.8L456.3,461.0L430.7,439.9L402.7,421.3L382.9,414.0L374.3,412.5L371.5,414.4L370.1,417.5L361.5,418.6L360.6,421.4L356.0,425.8L356.9,428.8L350.7,431.6L343.6,438.6L339.1,436.6L328.7,435.8L325.3,438.1L303.4,437.8L296.2,441.9L289.5,443.0L283.9,441.6L274.0,435.0L273.6,430.6L276.0,428.4L279.1,420.9L285.3,413.7L289.9,414.6L298.2,410.0L306.3,403.4L314.0,388.3L330.3,379.7L331.4,373.7L330.7,364.1L333.4,362.0L335.0,357.5L334.9,331.6L338.9,326.6L342.8,316.2L341.7,303.7L336.1,281.2L338.4,272.1L336.4,266.5L339.4,262.8L342.5,264.0L341.8,273.5L340.0,278.6Z"/>
+<path class="land" d="M280.3,478.5L276.4,479.9L264.9,491.2L243.7,482.2L237.7,484.4L234.7,482.2L226.1,480.4L215.9,480.9L213.5,485.6L202.7,487.3L194.8,493.0L192.6,498.9L193.7,503.4L196.2,506.2L193.3,512.4L190.7,514.5L182.4,515.7L177.2,521.8L174.1,522.0L173.7,523.8L170.1,525.7L163.5,518.9L161.1,518.4L161.3,517.1L156.8,513.3L155.4,510.2L140.3,509.4L137.0,506.9L129.0,505.3L124.3,507.3L124.2,509.3L125.8,509.9L121.2,513.8L121.4,515.5L118.6,514.7L116.2,517.4L111.6,514.2L109.9,515.6L104.2,514.6L100.7,516.1L94.4,514.0L85.4,515.9L81.0,519.3L70.9,513.9L67.3,514.5L64.8,518.4L59.1,516.9L58.0,519.3L55.2,520.6L50.2,519.6L46.6,523.5L45.2,521.6L46.7,520.9L47.1,518.0L40.1,505.6L33.5,501.3L29.2,502.8L26.4,500.6L26.1,496.5L21.4,490.7L19.4,490.2L21.3,487.4L18.7,487.6L18.5,485.6L19.9,481.9L23.5,480.1L23.0,475.9L26.1,468.6L25.1,463.3L27.4,459.9L45.3,458.0L49.1,454.1L55.4,454.6L58.6,452.5L59.4,450.1L72.2,448.8L87.1,444.8L106.2,443.8L114.7,440.3L117.9,435.9L121.5,436.6L125.0,434.2L128.1,434.9L133.9,430.8L141.4,429.5L146.0,425.7L167.8,429.1L175.1,425.8L179.6,429.0L184.0,427.3L187.0,424.1L191.5,422.7L193.7,424.2L196.4,422.1L198.5,423.0L197.2,429.3L195.4,427.7L192.6,429.0L187.9,433.7L187.9,436.4L191.1,438.6L199.6,437.7L200.0,440.8L193.8,445.8L193.4,448.6L189.5,451.8L189.3,455.2L192.2,457.1L197.3,456.4L208.6,458.0L222.3,454.8L226.1,461.6L221.0,466.3L221.1,467.7L216.7,470.3L218.1,478.8L219.4,478.0L218.1,477.0L221.0,474.8L225.0,477.1L228.0,474.6L225.3,472.2L220.8,473.0L218.8,471.4L219.5,469.8L222.0,469.4L221.9,467.0L229.2,470.2L234.1,469.2L240.7,461.7L240.9,455.7L242.0,454.0L248.6,453.3L259.2,455.3L265.8,458.6L269.3,462.1L269.2,466.2L270.8,469.3L275.7,472.1L278.8,470.6L277.7,474.2L278.4,477.1L280.3,478.5Z"/>
+<path class="land" d="M157.2,209.7L155.5,211.5L154.5,216.1L152.2,217.0L150.5,215.5L150.1,208.0L153.9,202.9L156.1,204.1L157.2,209.7Z"/>
+<path class="land" d="M804.2,579.4L743.2,579.4L742.5,459.8L742.6,107.6L743.6,110.9L745.4,111.4L744.5,113.2L746.4,113.4L745.4,114.6L746.7,117.5L748.3,115.3L750.6,116.3L749.2,116.9L748.9,119.1L752.4,123.2L754.2,118.5L755.7,119.8L755.5,123.5L759.3,121.3L760.3,123.8L762.5,123.7L763.2,126.5L764.5,125.2L762.8,122.7L764.0,121.4L768.2,124.2L771.0,122.8L772.0,123.9L773.6,122.2L773.7,124.1L772.1,124.8L773.6,125.0L773.7,127.6L775.7,127.8L777.1,125.9L779.0,129.6L780.4,128.7L779.2,127.1L782.2,123.6L784.9,123.6L785.9,126.0L788.1,123.5L789.0,125.9L788.2,128.6L791.0,126.8L794.9,131.9L797.7,133.8L800.5,133.6L799.8,136.1L801.8,136.5L801.7,138.8L804.2,136.8L804.2,579.4Z"/>
+<path class="land" d="M804.2,-14.3L804.2,136.8L801.7,138.8L801.8,136.5L799.8,136.1L800.5,133.6L797.7,133.8L794.9,131.9L791.0,126.8L788.2,128.6L789.0,125.9L788.1,123.5L785.9,126.0L784.9,123.6L782.2,123.6L779.2,127.1L780.2,129.1L778.8,129.6L777.1,125.9L775.7,127.8L773.7,127.6L773.6,125.0L772.1,124.8L773.7,124.1L773.6,122.2L772.0,123.9L771.0,122.8L768.2,124.2L764.0,121.4L762.8,122.7L764.5,125.2L763.2,126.5L762.5,123.7L760.3,123.8L759.3,121.3L755.5,123.5L755.7,119.9L754.5,118.5L752.6,123.2L748.9,119.2L749.2,116.9L750.6,116.3L749.1,115.9L749.0,-14.3L804.2,-14.3Z"/>
+</g>
+<line class="divider" x1="784" y1="14" x2="784" y2="542"/>
+<text class="note" x="794" y="26">east &mdash; not to scale</text>
+<path class="route ferry" d="M893.7,278.0 Q861.4,217.0 813.5,167.3"/>
+<path class="route ferry" d="M813.5,167.3 Q774.4,151.1 732.3,146.2"/>
+<path class="route ferry" d="M376.8,119.9 Q593.0,173.7 814.4,198.0"/>
+<path class="route ferry" d="M814.4,198.0 Q845.6,258.6 892.3,308.4"/>
+<path class="route" d="M732.3,146.2 Q502.8,272.4 289.1,423.9"/>
+<path class="route" d="M289.1,423.9 Q261.6,432.2 237.3,447.7"/>
+<path class="route" d="M237.3,447.7 Q200.8,459.5 168.9,480.9"/>
+<path class="route" d="M168.9,480.9 Q226.0,489.3 283.3,481.7"/>
+<path class="route" d="M283.3,481.7 Q259.7,476.2 235.5,477.3"/>
+<path class="route" d="M235.5,477.3 Q189.1,487.2 147.3,509.5"/>
+<path class="route" d="M147.3,509.5 Q180.8,493.2 208.5,468.2"/>
+<path class="route" d="M208.5,468.2 Q234.9,469.9 260.8,464.2"/>
+<path class="route" d="M260.8,464.2 Q264.0,450.2 263.3,435.8"/>
+<path class="route" d="M263.3,435.8 Q298.7,359.6 311.9,276.5"/>
+<path class="route" d="M311.9,276.5 Q337.7,295.7 367.8,307.0"/>
+<path class="route" d="M367.8,307.0 Q353.9,303.2 339.6,303.4"/>
+<path class="route" d="M339.6,303.4 Q356.2,286.9 367.6,266.5"/>
+<path class="route" d="M367.6,266.5 Q353.4,268.8 340.4,274.9"/>
+<path class="route" d="M340.4,274.9 Q381.7,251.5 415.0,217.6"/>
+<path class="route" d="M415.0,217.6 Q405.1,207.2 392.7,199.9"/>
+<path class="route" d="M392.7,199.9 Q378.9,150.1 352.0,105.9"/>
+<path class="route" d="M352.0,105.9 Q359.3,79.5 359.1,52.1"/>
+<path class="route" d="M359.1,52.1 Q365.2,68.9 375.7,83.4"/>
+<path class="route" d="M375.7,83.4 Q361.7,78.7 346.9,77.9"/>
+<path class="route" d="M346.9,77.9 Q358.9,101.0 376.8,119.9"/>
+<text class="pin" x="814" y="224" text-anchor="middle">Hay</text>
+<text class="pin" x="893" y="335" text-anchor="middle">Canberra</text>
+<g class="stop" data-n="1" tabindex="0" role="button" aria-label="Stop 1: Yarralumla, Canberra. Show poem verse." transform="translate(893.7,278.0)"><circle r="13"/><text dy="0.34em">1</text></g>
+<g class="stop" data-n="2" tabindex="0" role="button" aria-label="Stop 2: Hay. Show poem verse." transform="translate(813.5,167.3)"><circle r="13"/><text dy="0.34em">2</text></g>
+<g class="stop" data-n="3" tabindex="0" role="button" aria-label="Stop 3: The South Australian border. Show poem verse." transform="translate(732.3,146.2)"><circle r="13"/><text dy="0.34em">3</text></g>
+<g class="stop" data-n="4" tabindex="0" role="button" aria-label="Stop 4: Cape Jervis. Show poem verse." transform="translate(289.1,423.9)"><circle r="13"/><text dy="0.34em">4</text></g>
+<g class="stop" data-n="5" tabindex="0" role="button" aria-label="Stop 5: Ferry to Penneshaw. Show poem verse." transform="translate(237.3,447.7)"><circle r="13"/><text dy="0.34em">5</text></g>
+<g class="stop" data-n="6" tabindex="0" role="button" aria-label="Stop 6: Kangaroo Island Wildlife Park. Show poem verse." transform="translate(168.9,480.9)"><circle r="13"/><text dy="0.34em">6</text></g>
+<g class="stop" data-n="7" tabindex="0" role="button" aria-label="Stop 7: Cape Willoughby &amp; Seymour Cottage. Show poem verse." transform="translate(283.3,481.7)"><circle r="13"/><text dy="0.34em">7</text></g>
+<g class="stop" data-n="8" tabindex="0" role="button" aria-label="Stop 8: Prospect Hill &amp; the beach below. Show poem verse." transform="translate(235.5,477.3)"><circle r="13"/><text dy="0.34em">8</text></g>
+<g class="stop" data-n="9" tabindex="0" role="button" aria-label="Stop 9: Seal Bay. Show poem verse." transform="translate(147.3,509.5)"><circle r="13"/><text dy="0.34em">9</text></g>
+<g class="stop" data-n="10" tabindex="0" role="button" aria-label="Stop 10: A winery on the road home. Show poem verse." transform="translate(208.5,468.2)"><circle r="13"/><text dy="0.34em">10</text></g>
+<g class="stop" data-n="11" tabindex="0" role="button" aria-label="Stop 11: A vineyard above the sea. Show poem verse." transform="translate(260.8,464.2)"><circle r="13"/><text dy="0.34em">11</text></g>
+<g class="stop" data-n="12" tabindex="0" role="button" aria-label="Stop 12: Back across to Cape Jervis. Show poem verse." transform="translate(263.3,435.8)"><circle r="13"/><text dy="0.34em">12</text></g>
+<g class="stop" data-n="13" tabindex="0" role="button" aria-label="Stop 13: Semaphore Park. Show poem verse." transform="translate(311.9,276.5)"><circle r="13"/><text dy="0.34em">13</text></g>
+<g class="stop" data-n="14" tabindex="0" role="button" aria-label="Stop 14: Adelaide. Show poem verse." transform="translate(367.8,307.0)"><circle r="13"/><text dy="0.34em">14</text></g>
+<g class="stop" data-n="15" tabindex="0" role="button" aria-label="Stop 15: South Australian Museum. Show poem verse." transform="translate(339.6,303.4)"><circle r="13"/><text dy="0.34em">15</text></g>
+<g class="stop" data-n="16" tabindex="0" role="button" aria-label="Stop 16: Port Adelaide. Show poem verse." transform="translate(367.6,266.5)"><circle r="13"/><text dy="0.34em">16</text></g>
+<g class="stop" data-n="17" tabindex="0" role="button" aria-label="Stop 17: National Railway Museum. Show poem verse." transform="translate(340.4,274.9)"><circle r="13"/><text dy="0.34em">17</text></g>
+<g class="stop" data-n="18" tabindex="0" role="button" aria-label="Stop 18: Jacob’s Creek, Rowland Flat. Show poem verse." transform="translate(415.0,217.6)"><circle r="13"/><text dy="0.34em">18</text></g>
+<g class="stop" data-n="19" tabindex="0" role="button" aria-label="Stop 19: Pindarie, Gomersal. Show poem verse." transform="translate(392.7,199.9)"><circle r="13"/><text dy="0.34em">19</text></g>
+<g class="stop" data-n="20" tabindex="0" role="button" aria-label="Stop 20: Penwortham. Show poem verse." transform="translate(352.0,105.9)"><circle r="13"/><text dy="0.34em">20</text></g>
+<g class="stop" data-n="21" tabindex="0" role="button" aria-label="Stop 21: Bungaree Station. Show poem verse." transform="translate(359.1,52.1)"><circle r="13"/><text dy="0.34em">21</text></g>
+<g class="stop" data-n="22" tabindex="0" role="button" aria-label="Stop 22: Sevenhill. Show poem verse." transform="translate(375.7,83.4)"><circle r="13"/><text dy="0.34em">22</text></g>
+<g class="stop" data-n="23" tabindex="0" role="button" aria-label="Stop 23: Mini golf in the rain. Show poem verse." transform="translate(346.9,77.9)"><circle r="13"/><text dy="0.34em">23</text></g>
+<g class="stop" data-n="24" tabindex="0" role="button" aria-label="Stop 24: Taylors, Auburn. Show poem verse." transform="translate(376.8,119.9)"><circle r="13"/><text dy="0.34em">24</text></g>
+<g class="stop" data-n="25" tabindex="0" role="button" aria-label="Stop 25: Hay. Show poem verse." transform="translate(814.4,198.0)"><circle r="13"/><text dy="0.34em">25</text></g>
+<g class="stop" data-n="26" tabindex="0" role="button" aria-label="Stop 26: Yarralumla, Canberra. Show poem verse." transform="translate(892.3,308.4)"><circle r="13"/><text dy="0.34em">26</text></g>
+</svg>
+  </div>
+
+  <hr class="rule">
+  <ol id="cards">
+    <li class="card" id="stop-1" data-n="1"><div class="chead"><span class="badge">1</span><span class="cname">Yarralumla, Canberra</span><span class="creg">ACT · departure</span></div><div class="verse"><span class="ln">Have you ever sat down and planned a whole trip?</span><span class="ln">Took a quick sleep, thrown the kids in the pool for a dip…</span><span class="ln">Quick ate some lunch and drove off post-midday,</span><span class="ln">To spend the first night in a Roadside Motel in Hay?</span><span class="br"></span><span class="ln">That’s just what we did, your mother and I</span><span class="ln">We do try to sit still, we really do try.</span><span class="ln">But the open road beckons, calls us by name</span><span class="ln">To waste a vacation at home, would be such a shame, shame, shame, shame.</span><span class="br"></span><span class="ln">When COVID struck Brisbane, with a snap lockdown in tow</span><span class="ln">We knew off to the Gold Coast we just couldn’t go</span><span class="ln">So we turned our sights West, off to wide open spaces</span><span class="ln">To South Australia to see lots of new places.</span></div></li>
+<li class="card" id="stop-2" data-n="2"><div class="chead"><span class="badge">2</span><span class="cname">Hay</span><span class="creg">NSW · night one</span></div><div class="verse"><span class="ln">Even splitting the drive, we still have eight hours</span><span class="ln">To get off by seven we take record-fast showers.</span><span class="ln">The cafes aren’t open, the main street is still</span><span class="ln">But only in Oz, 7-11’s make flat whites at the till.</span></div></li>
+<li class="card" id="stop-3" data-n="3"><div class="chead"><span class="badge">3</span><span class="cname">The South Australian border</span><span class="creg">Sturt Highway</span></div><div class="verse"><span class="ln">Haste does make waste—I should have been heeding,</span><span class="ln">I’m caught passing a roadtrain and get a ticket for speeding.</span><span class="ln">Now past the Vic cops, we cross into SA</span><span class="ln">Another rule following lot, we re-learn a lesson this day.</span><span class="br"></span><span class="ln">Do not bring fruit or veggies in here</span><span class="ln">You’d do better with cans of veggies or beer.</span><span class="ln">The COVID threat seems remote on this hot, sunny day.</span><span class="ln">But the fruit flies are real, throw those bananas away!</span></div></li>
+<li class="card" id="stop-4" data-n="4"><div class="chead"><span class="badge">4</span><span class="cname">Cape Jervis</span><span class="creg">Fleurieu Peninsula</span></div><div class="verse"><span class="ln">The drive takes us on top of a peninsula road</span><span class="ln">We get to the holiday cabins and quickly unload</span><span class="ln">The kids get a treat, a real cubby house!</span><span class="ln">And thankfully not yet a trace of a mouse.</span></div></li>
+<li class="card" id="stop-5" data-n="5"><div class="chead"><span class="badge">5</span><span class="cname">Ferry to Penneshaw</span><span class="creg">Kangaroo Island</span></div><div class="verse"><span class="ln">A ferry by morning, then off to the zoo</span></div></li>
+<li class="card" id="stop-6" data-n="6"><div class="chead"><span class="badge">6</span><span class="cname">Kangaroo Island Wildlife Park</span><span class="creg">Kangaroo Island</span></div><div class="verse"><span class="ln">To feed mobs of wallabies and of kangaroo</span><span class="ln">Some were albino but none of them blue</span><span class="ln">Just hold your hand flat, that’s what you must do.</span><span class="br"></span><span class="ln">Jack holds a snake, a python of green</span><span class="ln">If it was sitting in a tree, it wouldn’t be seen</span><span class="ln">It wraps round his leg, and holds to him tight</span><span class="ln">Just take it off slowly, don’t put up a fight.</span><span class="br"></span><span class="ln">The koala’s more cuddly, nearly seems tame.</span><span class="ln">Rescued as a joey; Archie’s his name.</span><span class="ln">He holds on so tight, with both of his thumbs</span><span class="ln">Treating both my arms, like thin branches of gums.</span></div></li>
+<li class="card" id="stop-7" data-n="7"><div class="chead"><span class="badge">7</span><span class="cname">Cape Willoughby &amp; Seymour Cottage</span><span class="creg">Kangaroo Island</span></div><div class="verse"><span class="ln">Get pizza quick, drive to the lighthouse at night</span><span class="ln">Jack sees wildlife indoors, and gets a small fright</span><span class="ln">We have joined the mice at their party</span><span class="ln">They were here first, we were the ones that were tardy.</span><span class="br"></span><span class="ln">They’re on the bedspread, take the cot as their stable</span><span class="ln">They can climb well, and quite like the bedside table</span><span class="ln">We try to take comfort that they’re small and we’re large</span><span class="ln">But if we can’t control them, then we know who’s in charge.</span></div></li>
+<li class="card" id="stop-8" data-n="8"><div class="chead"><span class="badge">8</span><span class="cname">Prospect Hill &amp; the beach below</span><span class="creg">Kangaroo Island</span></div><div class="verse"><span class="ln">Sunrise comes quickly, we survey the scene</span><span class="ln">It’s not even seven and we’ve got the whole team.</span><span class="ln">Our first stop is a climb--up Prospect Hill</span><span class="ln">With the steps and the sun, we don’t feel a chill.</span><span class="br"></span><span class="ln">The beach is a bit colder, we just dip our feet</span><span class="ln">Hot cross buns and a Kit Kat will make a sweet treat.</span><span class="ln">The kids find a cave that fills halfway with water</span><span class="ln">When the waves come too high, we then pick up the daughter.</span></div></li>
+<li class="card" id="stop-9" data-n="9"><div class="chead"><span class="badge">9</span><span class="cname">Seal Bay</span><span class="creg">Kangaroo Island</span></div><div class="verse"><span class="ln">Off to see Seals—or Aussie Sea Lions—to be clear</span><span class="ln">The baby comes out to see us, seemingly with no fear.</span><span class="ln">She waddles about, trying to get close to us</span><span class="ln">When we walk away is when she ramps up the fuss.</span><span class="br"></span><span class="ln">They’ll head from the beach to go hunting for days</span><span class="ln">Diving and searching in incredible ways</span><span class="ln">Eating lobster and squid and also some crabs</span><span class="ln">Coming back to the beach in dribs and in drabs.</span></div></li>
+<li class="card" id="stop-10" data-n="10"><div class="chead"><span class="badge">10</span><span class="cname">A winery on the road home</span><span class="creg">Kangaroo Island</span></div><div class="verse"><span class="ln">With protesting from Jack we still stop for a drink</span><span class="ln">A playground, new friends—so better than you’d think.</span><span class="ln">The wine is impressive, especially for the cost</span><span class="ln">We honk at the sheep going home, hope they’re not lost.</span></div></li>
+<li class="card" id="stop-11" data-n="11"><div class="chead"><span class="badge">11</span><span class="cname">A vineyard above the sea</span><span class="creg">Kangaroo Island</span></div><div class="verse"><span class="ln">Sunrise and a walk, we’re done with this house</span><span class="ln">Back into the car, where there isn’t a mouse.</span><span class="ln">A vineyard with golfing—now this is my style.</span><span class="ln">It’s only a six iron, but it seems like a mile.</span><span class="br"></span><span class="ln">We’re getting spoiled drinking wine over the sea</span><span class="ln">The kids do get some crackers and a fair bit of Brie.</span></div></li>
+<li class="card" id="stop-12" data-n="12"><div class="chead"><span class="badge">12</span><span class="cname">Back across to Cape Jervis</span><span class="creg">Fleurieu Peninsula</span></div><div class="verse"><span class="ln">Quick back to the Ferry, head north to the shore</span><span class="ln">Reunite with the Kia to drive a bit more.</span></div></li>
+<li class="card" id="stop-13" data-n="13"><div class="chead"><span class="badge">13</span><span class="cname">Semaphore Park</span><span class="creg">Adelaide Beachfront</span></div><div class="verse"><span class="ln">The kids get their wish—a bouncy pillow and pool</span><span class="ln">Monkey bars and a slide—this place seems to rule!</span><span class="ln">We’re close to the beach, hear the surf on the deck</span><span class="ln">And you can even see sand if you just stretch your neck.</span><span class="br"></span><span class="ln">Start out the next day with runs on the beach</span><span class="ln">Five playgrounds, mini-golf, steam train—all within reach.</span><span class="ln">But don’t make it quickly to head out the door</span><span class="ln">We wait for each other then keep waiting some more.</span><span class="br"></span><span class="ln">Kids finally get just what they have yearned</span><span class="ln">Time in the pool, and heated, we’ve learned</span><span class="ln">Then spoiled with go-karts on the holiday park street</span><span class="ln">Playground, beach walk with cold, sandy feet</span></div></li>
+<li class="card" id="stop-14" data-n="14"><div class="chead"><span class="badge">14</span><span class="cname">Adelaide</span><span class="creg">the city day</span></div><div class="verse"><span class="ln">Mama was hoping for a morning in the city</span><span class="ln">Arriving by noon, creates frustration—just itty bitty.</span><span class="ln">It’s raining now too so the options are few</span><span class="ln">But we’ve parked in a garage, so we’ll find something to do.</span><span class="br"></span><span class="ln">We find an odd playground, is it fossils of fish?</span><span class="ln">Head for specialty pasta to fulfill mama’s wish</span><span class="ln">They fortunately find us a private wine cellar</span><span class="ln">So patrons can’t hear our 1 year old yeller.</span></div></li>
+<li class="card" id="stop-15" data-n="15"><div class="chead"><span class="badge">15</span><span class="cname">South Australian Museum</span><span class="creg">Adelaide</span></div><div class="verse"><span class="ln">To explore natural history of the region around</span><span class="ln">Gems, boomerangs, even giant squids can be found</span><span class="ln">With Adeline begging to stay sitting down</span><span class="ln">Made to walk on her own would elicit a frown.</span></div></li>
+<li class="card" id="stop-16" data-n="16"><div class="chead"><span class="badge">16</span><span class="cname">Port Adelaide</span><span class="creg">Adelaide</span></div><div class="verse"><span class="ln">The next day to Port Adelaide, a few harbourside streets</span><span class="ln">Just small shipping vessels, one wouldn’t say fleets.</span><span class="ln">To the railway museum to see a hundred odd train</span><span class="ln">Retired steam engines indoors, kept out of the rain</span></div></li>
+<li class="card" id="stop-17" data-n="17"><div class="chead"><span class="badge">17</span><span class="cname">National Railway Museum</span><span class="creg">Port Adelaide</span></div><div class="verse"><span class="ln">You’d think the rails would be one standard size</span><span class="ln">But instead more like Macca’s three sizes of fries</span><span class="ln">There are gauges in small, medium and large</span><span class="ln">Took 100 years to agree one was in charge.</span></div></li>
+<li class="card" id="stop-18" data-n="18"><div class="chead"><span class="badge">18</span><span class="cname">Jacob’s Creek, Rowland Flat</span><span class="creg">Barossa Valley</span></div><div class="verse"><span class="ln">Now heading inland for 10am wine</span><span class="ln">We can sample the grapes, straight from the vine</span><span class="ln">Jack tastes Grenache and a bit of Shiraz</span><span class="ln">Adults do a tasting flight, and all of that jazz.</span><span class="br"></span><span class="ln">175 years since the vines hit the ground</span><span class="ln">Jacob’s Creek heritage is the oldest we found</span><span class="ln">I like it ‘cause of course we share a name</span><span class="ln">And Jack does too, because his name is same same</span></div></li>
+<li class="card" id="stop-19" data-n="19"><div class="chead"><span class="badge">19</span><span class="cname">Pindarie, Gomersal</span><span class="creg">Barossa Valley</span></div><div class="verse"><span class="ln">Lunch at Pindarie and fun on hay bales</span><span class="ln">Although they are less happy because they make less wine sales</span></div></li>
+<li class="card" id="stop-20" data-n="20"><div class="chead"><span class="badge">20</span><span class="cname">Penwortham</span><span class="creg">Clare Valley · Grapeview</span></div><div class="verse"><span class="ln">Now to Clare Valley for a dip in the pool</span><span class="ln">Up to my ankles is enough to know it’s cool.</span><span class="br"></span><span class="ln">We’re back for a nap, at least for CC</span><span class="ln">And Lorelei writing songs about what she can see</span><span class="ln">A playground for the kids, to ride the flying fox</span><span class="ln">A winery for the parents, six bottles in a box.</span><span class="br"></span><span class="ln">A nap stop, pool drop, horses in the field</span><span class="ln">Only from afar to CC they appealed.</span><span class="ln">Running up the driveway, playing frisbee in the yard</span><span class="ln">A giant maze with eagle’s nest, wasn’t very hard.</span></div></li>
+<li class="card" id="stop-21" data-n="21"><div class="chead"><span class="badge">21</span><span class="cname">Bungaree Station</span><span class="creg">Clare Valley</span></div><div class="verse"><span class="ln">We find Bungaree sheep station on a long dusty road</span><span class="ln">Dole out hot cross buns so the kids don’t implode</span><span class="ln">The oldest and largest, topping out at 100,000 heads</span><span class="ln">Supplying wool to the world for fleece blankets and beds.</span></div></li>
+<li class="card" id="stop-22" data-n="22"><div class="chead"><span class="badge">22</span><span class="cname">Sevenhill</span><span class="creg">Clare Valley</span></div><div class="verse"><span class="ln">We spring for the oldest, despite sticker shock.</span><span class="ln">Planted in eighteen seventy—just then a rootstock</span><span class="ln">First for communion by a Jesuit Priest</span><span class="ln">Now low-yielding grapes, making the most with the least!</span></div></li>
+<li class="card" id="stop-23" data-n="23"><div class="chead"><span class="badge">23</span><span class="cname">Mini golf in the rain</span><span class="creg">Clare Valley</span></div><div class="verse"><span class="ln">A morning activity graced by the rain</span><span class="ln">But we brave the moisture so we didn’t come in vain</span><span class="ln">We put on our jumpers, so our bodies don’t shudder</span><span class="ln">And all the kids get a ball and their very own putter.</span><span class="br"></span><span class="ln">Jack goes for speed, making quick work of the course</span><span class="ln">Hitting the ball without a bit of remorse</span><span class="ln">Adeline and CC skip the 18th hole</span><span class="ln">Concerned to lose their ball, oh where could it go?</span></div></li>
+<li class="card" id="stop-24" data-n="24"><div class="chead"><span class="badge">24</span><span class="cname">Taylors, Auburn</span><span class="creg">Clare Valley</span></div><div class="verse"><span class="ln">A rapid, diverse tasting stop at Taylor</span><span class="ln">On the sign you would think we were approaching a sailor</span><span class="ln">We did a double take on the seahorse logo on the door</span><span class="ln">Then learned of limestone fossils on an ancient ocean floor.</span></div></li>
+<li class="card" id="stop-25" data-n="25"><div class="chead"><span class="badge">25</span><span class="cname">Hay</span><span class="creg">NSW · the road home</span></div><div class="verse"><span class="ln">With twenty-seven bottles loaded in the car</span><span class="ln">We’re hopeful that our Kia, will take us very far.</span><span class="ln">Heading east to Canberra with a stopover in Hay</span><span class="ln">Over a thousand k’s ahead of us, is much more than a day.</span><span class="br"></span><span class="ln">A playground after sunset, then to grab some grub</span><span class="ln">Wasn’t super healthy, a classic Aussie pub</span></div></li>
+<li class="card" id="stop-26" data-n="26"><div class="chead"><span class="badge">26</span><span class="cname">Yarralumla, Canberra</span><span class="creg">ACT · home</span></div><div class="verse"><span class="ln">One more stop, Giant Koala, a last meal on the road.</span><span class="ln">Yarralumla, now home safely, before the rooster crowed.</span></div></li>
+  </ol>
+
+
+</div>
+
+<script>
+const STOPS = [{"n": 1, "name": "Yarralumla, Canberra", "region": "ACT · departure", "verse": ["Have you ever sat down and planned a whole trip?", "Took a quick sleep, thrown the kids in the pool for a dip…", "Quick ate some lunch and drove off post-midday,", "To spend the first night in a Roadside Motel in Hay?", "", "That’s just what we did, your mother and I", "We do try to sit still, we really do try.", "But the open road beckons, calls us by name", "To waste a vacation at home, would be such a shame, shame, shame, shame.", "", "When COVID struck Brisbane, with a snap lockdown in tow", "We knew off to the Gold Coast we just couldn’t go", "So we turned our sights West, off to wide open spaces", "To South Australia to see lots of new places."]}, {"n": 2, "name": "Hay", "region": "NSW · night one", "verse": ["Even splitting the drive, we still have eight hours", "To get off by seven we take record-fast showers.", "The cafes aren’t open, the main street is still", "But only in Oz, 7-11’s make flat whites at the till."]}, {"n": 3, "name": "The South Australian border", "region": "Sturt Highway", "verse": ["Haste does make waste—I should have been heeding,", "I’m caught passing a roadtrain and get a ticket for speeding.", "Now past the Vic cops, we cross into SA", "Another rule following lot, we re-learn a lesson this day.", "", "Do not bring fruit or veggies in here", "You’d do better with cans of veggies or beer.", "The COVID threat seems remote on this hot, sunny day.", "But the fruit flies are real, throw those bananas away!"]}, {"n": 4, "name": "Cape Jervis", "region": "Fleurieu Peninsula", "verse": ["The drive takes us on top of a peninsula road", "We get to the holiday cabins and quickly unload", "The kids get a treat, a real cubby house!", "And thankfully not yet a trace of a mouse."]}, {"n": 5, "name": "Ferry to Penneshaw", "region": "Kangaroo Island", "verse": ["A ferry by morning, then off to the zoo"]}, {"n": 6, "name": "Kangaroo Island Wildlife Park", "region": "Kangaroo Island", "verse": ["To feed mobs of wallabies and of kangaroo", "Some were albino but none of them blue", "Just hold your hand flat, that’s what you must do.", "", "Jack holds a snake, a python of green", "If it was sitting in a tree, it wouldn’t be seen", "It wraps round his leg, and holds to him tight", "Just take it off slowly, don’t put up a fight.", "", "The koala’s more cuddly, nearly seems tame.", "Rescued as a joey; Archie’s his name.", "He holds on so tight, with both of his thumbs", "Treating both my arms, like thin branches of gums."]}, {"n": 7, "name": "Cape Willoughby & Seymour Cottage", "region": "Kangaroo Island", "verse": ["Get pizza quick, drive to the lighthouse at night", "Jack sees wildlife indoors, and gets a small fright", "We have joined the mice at their party", "They were here first, we were the ones that were tardy.", "", "They’re on the bedspread, take the cot as their stable", "They can climb well, and quite like the bedside table", "We try to take comfort that they’re small and we’re large", "But if we can’t control them, then we know who’s in charge."]}, {"n": 8, "name": "Prospect Hill & the beach below", "region": "Kangaroo Island", "verse": ["Sunrise comes quickly, we survey the scene", "It’s not even seven and we’ve got the whole team.", "Our first stop is a climb--up Prospect Hill", "With the steps and the sun, we don’t feel a chill.", "", "The beach is a bit colder, we just dip our feet", "Hot cross buns and a Kit Kat will make a sweet treat.", "The kids find a cave that fills halfway with water", "When the waves come too high, we then pick up the daughter."]}, {"n": 9, "name": "Seal Bay", "region": "Kangaroo Island", "verse": ["Off to see Seals—or Aussie Sea Lions—to be clear", "The baby comes out to see us, seemingly with no fear.", "She waddles about, trying to get close to us", "When we walk away is when she ramps up the fuss.", "", "They’ll head from the beach to go hunting for days", "Diving and searching in incredible ways", "Eating lobster and squid and also some crabs", "Coming back to the beach in dribs and in drabs."]}, {"n": 10, "name": "A winery on the road home", "region": "Kangaroo Island", "verse": ["With protesting from Jack we still stop for a drink", "A playground, new friends—so better than you’d think.", "The wine is impressive, especially for the cost", "We honk at the sheep going home, hope they’re not lost."]}, {"n": 11, "name": "A vineyard above the sea", "region": "Kangaroo Island", "verse": ["Sunrise and a walk, we’re done with this house", "Back into the car, where there isn’t a mouse.", "A vineyard with golfing—now this is my style.", "It’s only a six iron, but it seems like a mile.", "", "We’re getting spoiled drinking wine over the sea", "The kids do get some crackers and a fair bit of Brie."]}, {"n": 12, "name": "Back across to Cape Jervis", "region": "Fleurieu Peninsula", "verse": ["Quick back to the Ferry, head north to the shore", "Reunite with the Kia to drive a bit more."]}, {"n": 13, "name": "Semaphore Park", "region": "Adelaide Beachfront", "verse": ["The kids get their wish—a bouncy pillow and pool", "Monkey bars and a slide—this place seems to rule!", "We’re close to the beach, hear the surf on the deck", "And you can even see sand if you just stretch your neck.", "", "Start out the next day with runs on the beach", "Five playgrounds, mini-golf, steam train—all within reach.", "But don’t make it quickly to head out the door", "We wait for each other then keep waiting some more.", "", "Kids finally get just what they have yearned", "Time in the pool, and heated, we’ve learned", "Then spoiled with go-karts on the holiday park street", "Playground, beach walk with cold, sandy feet"]}, {"n": 14, "name": "Adelaide", "region": "the city day", "verse": ["Mama was hoping for a morning in the city", "Arriving by noon, creates frustration—just itty bitty.", "It’s raining now too so the options are few", "But we’ve parked in a garage, so we’ll find something to do.", "", "We find an odd playground, is it fossils of fish?", "Head for specialty pasta to fulfill mama’s wish", "They fortunately find us a private wine cellar", "So patrons can’t hear our 1 year old yeller."]}, {"n": 15, "name": "South Australian Museum", "region": "Adelaide", "verse": ["To explore natural history of the region around", "Gems, boomerangs, even giant squids can be found", "With Adeline begging to stay sitting down", "Made to walk on her own would elicit a frown."]}, {"n": 16, "name": "Port Adelaide", "region": "Adelaide", "verse": ["The next day to Port Adelaide, a few harbourside streets", "Just small shipping vessels, one wouldn’t say fleets.", "To the railway museum to see a hundred odd train", "Retired steam engines indoors, kept out of the rain"]}, {"n": 17, "name": "National Railway Museum", "region": "Port Adelaide", "verse": ["You’d think the rails would be one standard size", "But instead more like Macca’s three sizes of fries", "There are gauges in small, medium and large", "Took 100 years to agree one was in charge."]}, {"n": 18, "name": "Jacob’s Creek, Rowland Flat", "region": "Barossa Valley", "verse": ["Now heading inland for 10am wine", "We can sample the grapes, straight from the vine", "Jack tastes Grenache and a bit of Shiraz", "Adults do a tasting flight, and all of that jazz.", "", "175 years since the vines hit the ground", "Jacob’s Creek heritage is the oldest we found", "I like it ‘cause of course we share a name", "And Jack does too, because his name is same same"]}, {"n": 19, "name": "Pindarie, Gomersal", "region": "Barossa Valley", "verse": ["Lunch at Pindarie and fun on hay bales", "Although they are less happy because they make less wine sales"]}, {"n": 20, "name": "Penwortham", "region": "Clare Valley · Grapeview", "verse": ["Now to Clare Valley for a dip in the pool", "Up to my ankles is enough to know it’s cool.", "", "We’re back for a nap, at least for CC", "And Lorelei writing songs about what she can see", "A playground for the kids, to ride the flying fox", "A winery for the parents, six bottles in a box.", "", "A nap stop, pool drop, horses in the field", "Only from afar to CC they appealed.", "Running up the driveway, playing frisbee in the yard", "A giant maze with eagle’s nest, wasn’t very hard."]}, {"n": 21, "name": "Bungaree Station", "region": "Clare Valley", "verse": ["We find Bungaree sheep station on a long dusty road", "Dole out hot cross buns so the kids don’t implode", "The oldest and largest, topping out at 100,000 heads", "Supplying wool to the world for fleece blankets and beds."]}, {"n": 22, "name": "Sevenhill", "region": "Clare Valley", "verse": ["We spring for the oldest, despite sticker shock.", "Planted in eighteen seventy—just then a rootstock", "First for communion by a Jesuit Priest", "Now low-yielding grapes, making the most with the least!"]}, {"n": 23, "name": "Mini golf in the rain", "region": "Clare Valley", "verse": ["A morning activity graced by the rain", "But we brave the moisture so we didn’t come in vain", "We put on our jumpers, so our bodies don’t shudder", "And all the kids get a ball and their very own putter.", "", "Jack goes for speed, making quick work of the course", "Hitting the ball without a bit of remorse", "Adeline and CC skip the 18th hole", "Concerned to lose their ball, oh where could it go?"]}, {"n": 24, "name": "Taylors, Auburn", "region": "Clare Valley", "verse": ["A rapid, diverse tasting stop at Taylor", "On the sign you would think we were approaching a sailor", "We did a double take on the seahorse logo on the door", "Then learned of limestone fossils on an ancient ocean floor."]}, {"n": 25, "name": "Hay", "region": "NSW · the road home", "verse": ["With twenty-seven bottles loaded in the car", "We’re hopeful that our Kia, will take us very far.", "Heading east to Canberra with a stopover in Hay", "Over a thousand k’s ahead of us, is much more than a day.", "", "A playground after sunset, then to grab some grub", "Wasn’t super healthy, a classic Aussie pub"]}, {"n": 26, "name": "Yarralumla, Canberra", "region": "ACT · home", "verse": ["One more stop, Giant Koala, a last meal on the road.", "Yarralumla, now home safely, before the rooster crowed."]}];
+const byNum = new Map(STOPS.map(s => [s.n, s]));
+const svg = document.getElementById('samap');
+const container = document.getElementById('map-container');
+const tooltip = document.getElementById('tooltip');
+const MAXLINES = 8;
+
+function verseHTML(lines, cap) {
+  let out = '', shown = 0, truncated = false;
+  for (const l of lines) {
+    if (cap && shown >= cap) { truncated = true; break; }
+    out += l ? '<span class="ln">' + l.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</span>'
+             : '<span class="br"></span>';
+    if (l) shown++;
+  }
+  return { html: out, truncated };
+}
+
+let hideTimer = null;
+function showTip(g) {
+  clearTimeout(hideTimer);
+  const s = byNum.get(Number(g.dataset.n));
+  if (!s) return;
+  let inner = '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
+  if (s.verse && s.verse.length) {
+    const v = verseHTML(s.verse, MAXLINES);
+    inner += '<span class="t-verse">' + v.html +
+      (v.truncated ? '<span class="t-more">Click to read the rest &rarr;</span>'
+                   : '<span class="t-more">Click to jump to this verse &rarr;</span>') +
+      '</span>';
+  } else {
+    inner += '<span class="t-verse">A stop on the route with no verse of its own.</span>';
+  }
+  tooltip.innerHTML = inner;
+
+  const crect = container.getBoundingClientRect();
+  const mrect = g.getBoundingClientRect();
+  tooltip.style.opacity = 1;
+  const tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+  let x = mrect.left - crect.left + mrect.width + 10;
+  let y = mrect.top - crect.top + mrect.height / 2 - th / 2;
+  if (x + tw > crect.width) x = mrect.left - crect.left - tw - 10;
+  if (x < 0) x = 4;
+  if (y < 0) y = 4;
+  if (y + th > crect.height) y = Math.max(4, crect.height - th - 4);
+  tooltip.style.left = x + 'px';
+  tooltip.style.top = y + 'px';
+}
+function hideTip() {
+  hideTimer = setTimeout(() => { tooltip.style.opacity = 0; }, 250);
+}
+
+let litTimer = null;
+function goToVerse(n) {
+  const card = document.getElementById('stop-' + n);
+  if (!card) return;
+  document.querySelectorAll('.card.lit').forEach(c => c.classList.remove('lit'));
+  card.classList.add('lit');
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  clearTimeout(litTimer);
+  litTimer = setTimeout(() => card.classList.remove('lit'), 3500);
+}
+
+svg.querySelectorAll('g.stop').forEach(g => {
+  g.addEventListener('mouseenter', () => showTip(g));
+  g.addEventListener('mouseleave', hideTip);
+  g.addEventListener('click', () => goToVerse(Number(g.dataset.n)));
+  g.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToVerse(Number(g.dataset.n)); }
+  });
+});
+tooltip.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+tooltip.addEventListener('mouseleave', hideTip);
+
+// hovering a verse card highlights its marker on the map
+document.querySelectorAll('.card').forEach(card => {
+  const g = svg.querySelector('g.stop[data-n="' + card.dataset.n + '"]');
+  if (!g) return;
+  card.addEventListener('mouseenter', () => g.classList.add('active'));
+  card.addEventListener('mouseleave', () => g.classList.remove('active'));
+});
+
+// ---------------- Navigation ----------------
+// Paste the addresses of the two overview pages here.
+const NAV_URLS = {
+  world: "https://fivelittlerascals.com/world-map",   // the world map, "Where We've Been"
+  region: "https://fivelittlerascals.com/australia-map"    // Australia
+};
+document.querySelectorAll('#tabs a[data-nav]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const u = NAV_URLS[a.dataset.nav];
+    if (u && u.trim()) window.open(u.trim(), '_self');
+  });
+});
+</script>

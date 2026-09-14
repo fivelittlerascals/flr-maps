@@ -1,0 +1,323 @@
+<!--
+  ============================================================
+  QUEENSLAND — INTERACTIVE POEM MAP
+  ============================================================
+  Everything is self-contained: no external scripts, no data
+  files, nothing to load from another site. Paste the whole
+  thing into a Squarespace Code block and it works.
+
+  Hovering a numbered stop shows the part of the poem written
+  about that place. Clicking it jumps to the full verse below.
+
+  TO EDIT A VERSE: find the STOPS array near the bottom and
+  edit the "verse" lines, then edit the matching card in the
+  list markup above it. (Keeping both in sync matters only if
+  you change the words.)
+  ============================================================
+-->
+<style>
+  :root { --stick: calc(35px + 2vw); }
+  :root {
+    --ink: #2a5d8f;
+    --ink-dark: #16294a;
+    --land: #ffffff;
+    --sea: #eef2f6;
+    --border: #111111;
+    --accent: #b8452f;
+    --paper: #ffffff;
+    --text: #24303f;
+    --muted: #7c8899;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--text);
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 8px 16px 24px; }
+
+  header { text-align: center; margin-bottom: 10px; }
+  h1 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 800; font-size: clamp(1.7rem, 5vw, 3rem);
+    letter-spacing: -0.02em; color: #111; margin: 0 0 6px;
+  }
+  .subtitle { font-style: italic; color: #5a6b80; margin: 0 0 4px;
+    font-size: clamp(0.95rem, 2vw, 1.08rem); }
+  .eyebrow { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .74rem; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink); margin: 0 0 4px; font-weight: 700; }
+  .hint { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 0.8rem; color: var(--muted); margin: 0; }
+
+  #tabs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+    margin: 0 0 18px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .82rem; }
+  .tab { padding: 6px 15px; border: 1px solid #d7dde6; border-radius: 999px;
+    text-decoration: none; color: var(--text); background: #fff; cursor: pointer; }
+  .tab:hover { border-color: var(--ink); color: var(--ink); }
+  .tab.current { background: var(--ink); border-color: var(--ink); color: #fff;
+    font-weight: 700; }
+  #map-container { position: relative; width: 100%; }
+  #qldmap { width: 100%; height: auto; display: block; }
+
+  .sea { fill: var(--sea); }
+  .land { fill: var(--land); stroke: var(--border); stroke-width: 0.9;
+    stroke-linejoin: round; }
+  .insetbox { fill: var(--sea); stroke: var(--border); stroke-width: 1.1; }
+  .leader { stroke: #b9c2d0; stroke-width: 0.9; }
+  .locator { fill: #5a6b80; }
+  .pin { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 10.5px;
+    fill: #5a6b80; }
+  .insetlabel {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    fill: #5a6b80; font-size: 12px; font-style: italic;
+  }
+
+
+  .route { fill: none; stroke: var(--ink); stroke-width: 2.4;
+    stroke-linecap: round; stroke-linejoin: round; }
+  .route.flight { stroke-dasharray: 9 7; }
+
+  .stop circle { fill: var(--ink); stroke: #fff; stroke-width: 1.6;
+    cursor: pointer; transition: fill .12s ease; }
+  .stop text {
+    fill: #fff; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700; font-size: 12px; text-anchor: middle;
+    pointer-events: none; user-select: none;
+  }
+  .stop:hover circle, .stop:focus circle, .stop.active circle { fill: var(--accent); }
+  .stop:focus { outline: none; }
+  .stop:focus circle { stroke: var(--accent); stroke-width: 2.4; }
+
+  #tooltip {
+    position: absolute; pointer-events: none; opacity: 0;
+    background: var(--ink-dark); color: #fff;
+    padding: 10px 13px; border-radius: 7px; max-width: 330px;
+    box-shadow: 0 6px 20px rgba(20,35,60,.34);
+    transition: opacity .12s ease; z-index: 10;
+  }
+  #tooltip .t-name {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 700; font-size: .84rem; display: block; margin-bottom: 6px;
+  }
+  #tooltip .t-verse { font-size: .84rem; line-height: 1.45; font-style: italic; }
+  #tooltip .t-verse .ln { display: block; }
+  #tooltip .t-verse .br { display: block; height: .5em; }
+  #tooltip .t-more {
+    display: block; margin-top: 7px; color: #aec3e8; font-style: normal;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .74rem;
+  }
+
+  hr.rule { border: none; border-top: 2px solid var(--ink); margin: 40px 0 22px; }
+  h2 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink); margin: 0 0 18px;
+  }
+
+  #cards { list-style: none; padding: 0; margin: 0;
+    columns: 2; column-gap: 34px; }
+  .card { break-inside: avoid; margin: 0 0 22px; padding: 10px 12px;
+    border-left: 3px solid #dfe5ec; border-radius: 3px;
+    transition: background .2s ease, border-color .2s ease; }
+  .card.lit { background: #fbf3f1; border-left-color: var(--accent); }
+  .chead { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin-bottom: 7px; }
+  .badge { display: inline-block; min-width: 22px; height: 22px; line-height: 22px;
+    text-align: center; background: var(--ink); color: #fff; border-radius: 50%;
+    font-size: .72rem; font-weight: 700; margin-right: 8px; }
+  .card.lit .badge { background: var(--accent); }
+  .cname { font-weight: 700; font-size: .92rem; color: #111; }
+  .creg { color: var(--muted); font-size: .78rem; margin-left: 7px; }
+  .verse { font-style: italic; line-height: 1.55; font-size: .93rem; }
+  .verse .ln { display: block; }
+  .verse .br { display: block; height: .55em; }
+  .verse.none { font-style: normal; color: var(--muted); font-size: .85rem; }
+
+  #coda { margin-top: 8px; padding: 18px 20px; background: #f6f8fa;
+    border-radius: 6px; font-style: italic; line-height: 1.6; }
+  #coda .ln { display: block; }
+  #coda .br { display: block; height: .6em; }
+
+  @media (max-width: 720px) { #cards { columns: 1; } }
+  @media (prefers-reduced-motion: reduce) {
+    .stop circle, #tooltip, .card { transition: none; }
+  }
+  /* TIGHTEN */
+  html, body { margin:0; padding:0; }
+  .wrap { overflow: visible; }
+  .wrap > *:last-child { margin-bottom: 0; }
+
+  a.ctype { float:right; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:.62rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:2px 8px; border-radius:999px; border:1px solid var(--accent); color:var(--accent); text-decoration:none; cursor:pointer; }
+  
+  
+  a.ctype:hover,a.ctype:focus{background:var(--accent);color:#fff;}
+
+  .cthumb { width:100%; height:130px; object-fit:cover; border-radius:3px; margin:-2px 0 8px; display:block; background:#eef2f6; }
+  .tooltip .t-img, .tooltip img.tip-photo { width:100%; max-width:280px; height:120px; object-fit:cover; border-radius:5px; margin:0 0 7px; display:block; }
+</style>
+
+<div class="wrap">
+  <nav id="tabs">
+    <a class="tab" data-nav="world" href="https://fivelittlerascals.com/world-map">&larr; All our travels</a>
+    <a class="tab" data-nav="region" href="https://fivelittlerascals.com/world-map">Australia</a>
+    <span class="tab current">Queensland &middot; 2022</span>
+  </nav>
+
+  <div id="map-container">
+    <div id="tooltip" role="status"></div>
+    <svg id="qldmap" viewBox="0 0 940 783" role="img" aria-label="Map of a Queensland trip with 9 numbered stops: an east-coast strip and a Hamilton Island panel. Every stop and its poem verse is also listed below the map.">
+<rect class="sea" x="0" y="0" width="940" height="783"/>
+<clipPath id="coastclip"><rect x="0" y="0" width="242" height="783"/></clipPath>
+<g clip-path="url(#coastclip)">
+<path class="land" d="M16.0,65.2L18.0,67.4L21.2,67.6L22.9,65.5L21.5,65.2L21.9,63.1L24.2,64.5L26.1,63.4L26.9,68.8L28.3,67.9L27.6,69.3L28.7,69.7L29.1,67.7L29.6,69.5L30.6,68.0L30.4,72.3L32.9,72.2L33.4,70.4L35.3,72.1L34.1,73.0L36.8,75.1L35.9,76.5L36.8,78.4L39.2,79.9L38.5,80.7L40.3,82.6L37.5,82.4L36.1,81.1L36.2,78.2L34.9,77.7L35.0,79.3L33.6,77.9L34.7,79.2L33.9,80.4L30.6,78.8L32.0,81.0L29.9,84.7L31.4,87.0L32.5,86.7L31.7,88.2L32.6,90.1L36.8,93.2L34.8,94.3L36.8,94.6L36.9,96.7L38.2,97.0L38.5,95.6L39.7,97.4L44.7,97.8L45.2,98.9L43.4,99.2L43.5,101.5L46.4,100.8L47.7,103.2L48.1,101.7L49.1,101.8L50.9,105.0L51.7,104.4L51.6,107.9L51.3,106.9L48.9,107.7L51.3,107.8L50.5,110.5L49.7,110.0L51.2,111.8L49.9,113.6L52.8,111.9L54.5,113.1L55.2,118.0L53.6,118.4L56.0,119.5L54.5,119.4L54.2,122.8L56.1,121.4L56.5,122.9L58.2,122.2L57.4,123.9L59.8,124.7L60.1,126.4L61.6,123.8L59.9,128.3L61.5,132.6L59.4,132.6L59.2,133.8L59.6,132.7L59.7,135.7L61.1,136.5L60.7,139.2L63.1,144.4L64.3,151.0L68.3,158.0L72.5,158.7L72.0,161.4L74.2,159.1L83.3,170.8L78.1,157.5L80.4,157.0L78.2,156.6L78.3,154.6L81.5,149.2L83.2,148.5L84.6,149.6L85.1,152.3L88.9,156.8L88.3,158.2L89.9,159.6L93.1,159.8L100.7,166.6L100.5,164.9L102.5,166.6L101.4,167.1L102.5,167.1L102.6,168.9L102.8,166.8L104.5,166.5L102.0,162.0L104.2,162.6L102.3,161.7L102.3,157.9L103.2,156.4L105.6,156.9L106.3,159.0L105.0,159.4L106.9,160.5L105.7,161.6L106.8,160.8L107.2,162.1L107.2,157.7L108.2,161.2L110.7,162.8L109.4,164.8L106.3,163.0L107.7,167.1L109.4,166.7L109.7,169.2L108.2,168.5L108.8,169.7L110.7,169.3L110.0,169.2L111.3,166.2L110.6,165.0L111.7,165.3L111.5,169.9L113.7,171.7L110.4,190.3L113.4,194.8L113.3,196.7L111.1,197.6L115.1,205.1L111.9,206.3L115.3,208.1L113.6,208.2L114.9,209.1L114.5,211.0L117.5,207.8L118.5,210.1L117.2,211.1L118.8,210.3L119.1,208.2L121.1,208.9L121.6,211.7L124.7,213.1L125.2,214.3L124.3,214.5L125.9,215.5L126.7,219.2L132.3,220.8L131.8,222.7L132.5,221.7L136.5,226.4L136.9,230.2L137.1,228.1L138.0,230.0L139.1,229.8L137.0,226.6L141.0,228.2L139.3,228.9L141.1,231.7L141.6,230.1L142.4,230.6L141.4,229.9L142.1,228.5L146.3,231.4L146.1,229.1L143.3,227.3L143.6,226.1L148.2,227.9L147.2,228.6L147.6,230.6L148.5,227.1L149.5,227.6L149.8,232.4L153.8,234.2L152.8,236.2L154.2,233.3L160.3,249.2L169.1,257.1L173.2,257.9L173.3,260.7L174.5,259.0L176.6,261.5L177.3,268.1L179.8,272.4L179.1,273.1L179.6,272.4L183.0,275.8L180.0,276.6L179.6,278.0L182.3,277.1L183.4,279.3L186.4,280.8L189.9,279.7L190.7,281.1L193.8,281.8L194.2,287.7L193.1,287.1L190.3,290.4L195.4,287.8L193.1,290.6L193.3,292.4L191.8,292.9L193.7,298.1L192.4,298.5L196.2,302.2L194.7,304.1L196.6,303.6L197.9,304.7L196.9,306.9L198.0,306.3L198.3,307.2L197.0,309.2L198.3,309.2L197.1,310.7L197.7,311.9L199.3,309.1L198.0,308.1L199.3,308.3L199.6,307.1L198.9,305.5L199.9,304.4L198.9,303.8L199.9,303.9L201.7,309.2L204.5,309.1L199.5,325.4L200.1,328.3L201.7,328.3L200.9,339.6L202.5,341.2L202.9,346.5L201.9,346.7L200.6,350.5L199.5,350.4L198.8,352.7L199.6,354.0L198.0,354.5L199.4,354.6L200.9,357.8L202.7,358.3L198.8,361.5L197.9,360.4L198.5,363.6L201.6,363.6L201.3,366.4L199.2,365.0L199.8,368.7L203.3,371.4L199.2,375.0L204.5,371.0L203.5,372.3L204.4,375.7L206.4,375.2L209.4,380.3L208.6,380.9L209.5,385.4L208.6,385.9L211.9,385.8L211.3,383.2L213.1,382.9L212.0,385.8L214.0,387.0L213.5,388.8L211.9,389.1L213.0,389.4L212.3,390.6L211.2,389.8L212.9,392.8L213.2,397.8L213.8,395.6L214.5,402.1L216.9,405.5L218.4,405.7L217.7,406.3L215.5,405.4L210.8,409.4L204.0,409.3L201.3,414.1L192.5,412.0L187.5,414.4L183.2,412.1L182.2,410.3L180.9,413.3L178.8,411.9L179.2,410.0L176.4,409.8L173.5,414.6L170.5,414.4L166.9,418.1L164.8,417.4L159.2,421.5L156.9,421.2L159.0,427.6L161.5,429.5L160.2,430.5L159.2,435.8L160.0,436.4L158.9,438.3L155.3,439.2L152.8,438.3L152.1,440.6L150.0,440.6L148.3,436.7L147.3,436.7L141.1,440.3L139.2,443.2L139.4,445.5L135.2,450.2L132.2,449.6L130.8,446.8L130.6,439.7L124.0,435.1L121.8,435.5L120.4,430.9L110.5,426.2L105.9,428.1L98.7,427.6L92.7,422.0L89.7,423.6L87.4,422.6L82.1,423.9L80.6,425.3L70.8,425.2L70.1,426.2L65.6,423.6L62.4,423.6L60.4,424.5L57.9,429.0L54.4,429.6L46.1,435.4L44.2,440.4L41.4,442.3L16.0,442.3L16.0,65.2Z"/>
+<path class="land" d="M218.2,373.9L214.6,386.7L213.0,387.1L212.5,376.6L214.0,372.2L218.2,373.9Z"/>
+<path class="land" d="M195.2,293.8L199.1,284.0L199.1,279.7L196.8,278.7L205.7,269.1L205.8,265.6L203.6,262.2L201.7,261.5L207.3,256.4L207.5,264.8L211.0,269.6L201.3,293.2L200.1,303.1L197.7,302.1L195.2,293.8Z"/>
+<path class="land" d="M132.2,216.8L131.0,218.4L130.1,216.4L129.5,218.3L128.3,218.3L125.0,213.0L121.9,211.1L119.2,205.4L122.2,203.7L122.8,205.4L127.8,206.4L127.1,207.6L129.1,205.2L128.7,210.5L132.2,216.8Z"/>
+<path class="land" d="M125.6,660.3L127.0,660.8L125.2,661.2L122.0,660.2L123.3,660.2L123.2,661.3L123.7,660.3L124.6,662.1L126.0,661.1L125.9,662.5L127.2,661.3L127.3,662.7L128.1,661.6L130.3,662.4L130.9,660.7L130.3,666.9L129.6,668.5L126.5,666.1L125.4,668.6L124.6,668.0L124.3,669.5L125.3,670.2L126.3,668.4L126.2,669.5L128.6,668.5L128.9,669.7L126.4,670.3L125.9,671.8L124.3,671.8L124.1,670.4L122.4,671.4L124.0,671.5L123.1,672.6L126.7,672.4L117.3,683.2L116.6,690.1L115.6,689.8L117.0,691.4L115.2,693.5L115.7,691.3L113.6,691.1L112.2,693.9L114.7,693.5L116.4,696.3L114.5,697.1L113.3,705.0L111.6,705.4L110.4,708.4L111.7,714.6L114.2,715.8L113.6,718.7L111.4,719.1L111.5,715.3L110.4,714.7L107.4,716.9L108.5,721.0L102.7,720.0L104.6,721.2L104.5,724.1L99.9,728.9L100.5,732.5L96.6,737.1L97.2,740.4L93.0,745.8L92.2,749.4L88.3,748.4L90.6,751.7L90.6,754.7L16.0,755.4L16.0,442.3L41.4,442.3L44.2,440.4L46.1,435.4L54.4,429.6L57.9,429.0L60.4,424.5L62.4,423.6L65.6,423.6L70.1,426.2L70.8,425.2L80.6,425.3L82.1,423.9L87.4,422.6L89.7,423.6L92.7,422.0L98.7,427.6L105.9,428.1L110.5,426.2L120.4,430.9L121.8,435.5L124.0,435.1L130.6,439.7L130.8,446.8L132.2,449.6L135.2,450.2L139.4,445.5L139.2,443.2L141.1,440.3L147.3,436.7L148.3,436.7L150.0,440.6L152.1,440.6L152.8,438.3L155.3,439.2L158.9,438.3L160.0,436.4L159.2,435.8L160.2,430.5L161.5,429.5L159.0,427.6L156.9,421.2L159.2,421.5L164.8,417.4L166.9,418.1L170.5,414.4L173.5,414.6L176.4,409.8L179.2,410.0L178.8,411.9L180.9,413.3L182.2,410.3L183.2,412.1L187.5,414.4L192.5,412.0L201.3,414.1L204.0,409.3L211.0,409.3L215.5,405.4L218.5,405.9L216.2,408.1L217.8,406.5L218.5,408.8L218.5,405.9L219.7,409.8L218.4,421.7L219.9,425.8L221.7,426.3L220.1,432.4L220.6,435.4L219.9,436.9L219.3,435.3L219.3,436.6L217.4,436.7L219.8,437.0L215.0,443.2L213.8,446.8L214.7,448.5L210.4,455.4L210.4,457.5L211.6,458.5L210.0,472.2L208.4,475.7L207.1,484.5L204.7,488.4L205.1,493.6L202.5,498.0L203.1,500.2L198.3,508.9L196.7,519.3L197.6,525.1L200.0,525.9L200.5,527.4L198.6,531.5L199.6,533.9L196.2,539.0L196.2,545.5L193.8,549.8L194.7,552.8L191.1,557.2L191.3,560.3L186.9,568.0L187.6,569.5L182.0,574.1L178.3,581.8L178.2,584.4L180.6,586.3L178.7,589.9L179.8,591.8L178.5,595.1L179.4,596.7L171.5,600.5L166.1,606.1L166.5,608.5L163.6,607.8L163.3,606.5L161.2,608.0L160.9,606.2L160.2,607.5L157.4,606.4L156.4,607.4L157.7,608.7L156.1,610.1L161.2,610.1L161.0,608.4L162.1,609.7L165.8,609.0L165.2,611.3L154.2,614.8L150.3,618.5L150.6,616.8L149.9,617.7L148.3,616.6L149.5,618.7L151.0,618.3L145.5,626.1L144.2,622.9L144.8,621.1L143.5,620.7L143.8,622.5L142.5,622.0L143.9,624.4L142.3,623.7L143.7,626.0L141.2,625.1L139.7,626.9L141.2,626.3L141.9,627.5L139.7,628.5L141.9,630.3L141.3,628.9L142.4,626.9L143.0,629.6L144.5,625.4L144.7,626.6L145.7,626.2L144.6,630.3L141.9,633.5L142.3,635.2L139.4,638.0L141.1,635.0L140.1,634.3L141.7,633.1L139.6,632.5L140.0,634.3L137.1,636.4L138.1,637.3L137.1,637.4L137.3,638.5L139.1,637.7L139.5,638.9L136.1,646.3L133.3,647.4L133.4,645.6L130.0,648.5L129.2,645.8L130.3,644.6L128.8,646.7L127.7,645.0L129.2,643.1L127.4,644.7L127.7,646.9L127.0,645.3L126.2,645.8L126.4,641.9L123.8,644.3L122.8,642.9L124.0,644.5L126.0,643.7L125.1,644.9L126.0,646.4L124.3,645.6L125.9,648.1L124.0,649.3L126.3,648.8L125.8,647.0L126.8,645.9L129.6,648.9L127.2,649.5L128.3,650.2L125.8,652.4L131.3,648.6L131.7,650.8L130.4,652.5L132.1,653.0L133.0,649.1L132.3,656.5L131.3,656.7L131.7,660.2L127.9,657.9L129.0,658.6L128.5,660.0L130.4,660.4L129.5,661.6L125.6,660.3Z"/>
+<path class="land" d="M58.4,730.2L56.5,731.7L51.0,731.5L48.6,734.7L48.5,743.2L46.0,742.9L47.2,748.1L46.7,755.2L39.5,755.4L38.6,749.2L37.4,751.1L34.0,745.8L34.8,743.0L33.8,738.6L35.6,729.8L47.6,721.0L50.3,723.0L50.9,726.0L52.2,725.6L53.5,728.1L58.4,730.2Z"/>
+</g>
+<text class="insetlabel" x="16" y="20">The east coast</text>
+<line class="leader" x1="41.2" y1="85.1" x2="300" y2="392"/>
+<circle class="locator" cx="41.2" cy="75.1" r="3.6"/>
+<rect class="insetbox" x="300" y="30" width="552" height="723" rx="5"/>
+<clipPath id="isleclip"><rect x="300" y="30" width="552" height="723" rx="5"/></clipPath>
+<g clip-path="url(#isleclip)">
+<path class="land" d="M100.5,204.4L100.5,198.7L101.5,193.4L103.5,188.5L106.5,184.1L110.4,180.0L115.3,177.0L121.1,175.0L127.9,174.0L135.5,173.8L142.3,174.9L148.1,177.0L153.1,180.2L157.1,184.4L162.1,191.8L164.0,201.9L166.0,204.8L177.1,206.5L200.4,206.9L211.1,207.9L219.5,210.1L225.6,213.1L229.2,217.2L233.9,224.2L235.8,232.5L237.1,235.3L241.7,241.0L243.6,245.9L244.9,252.9L245.7,262.0L245.1,282.4L243.7,289.3L241.8,294.1L239.1,296.8L237.1,302.2L235.8,310.4L235.2,321.5L235.8,346.4L237.1,354.7L239.1,360.0L243.8,365.3L245.8,370.4L246.4,375.9L253.9,387.8L255.1,392.0L256.1,407.2L257.5,411.3L259.5,414.7L262.2,417.4L264.2,422.3L265.4,429.1L266.0,438.1L265.9,449.1L264.0,465.0L262.3,469.9L257.0,478.2L255.9,483.6L253.6,489.2L249.4,495.0L247.6,503.3L246.3,517.2L245.8,561.0L247.7,581.5L251.5,597.9L257.2,610.2L264.9,618.5L274.5,630.9L276.4,635.2L276.4,638.1L278.4,643.8L283.1,649.4L285.1,652.9L286.4,657.0L287.0,671.4L288.2,675.5L290.2,678.9L293.0,681.7L295.2,685.3L297.3,694.3L296.6,704.6L295.3,708.8L293.4,712.3L290.9,715.2L289.1,720.1L287.7,727.1L285.5,761.7L284.5,765.5L281.0,767.9L268.4,769.0L263.7,767.9L259.2,765.9L255.1,762.9L251.4,758.7L248.5,754.2L246.7,749.3L244.8,733.0L242.8,728.3L240.0,723.9L236.0,720.1L231.8,717.1L227.2,715.0L222.3,714.0L217.1,713.8L211.5,712.1L205.8,708.7L199.8,703.5L188.9,691.1L185.8,686.3L184.3,682.5L184.3,679.6L182.6,675.8L174.2,664.8L167.3,657.9L157.1,649.2L153.6,647.5L147.0,646.5L144.0,644.3L142.4,640.4L141.4,632.4L140.2,629.6L135.7,624.0L133.8,617.2L132.5,606.2L131.3,556.7L130.0,545.8L128.3,538.9L125.8,536.0L124.0,531.9L122.0,519.6L121.7,511.5L123.5,499.2L129.9,487.9L131.3,482.3L132.1,467.2L131.5,460.3L130.3,454.9L128.2,450.8L125.6,448.0L122.1,442.5L120.6,434.0L119.4,431.3L115.0,425.8L113.3,421.2L111.4,405.5L111.3,394.6L112.6,385.1L115.2,376.8L119.0,369.9L124.2,364.2L128.0,357.9L130.7,351.0L132.0,343.3L132.1,334.9L130.9,327.3L128.3,320.5L124.5,314.2L119.2,308.8L115.4,302.7L112.8,295.9L111.4,288.2L112.1,272.9L113.3,267.4L115.3,263.3L117.8,260.7L119.6,257.3L120.7,253.2L121.2,242.8L119.9,237.4L117.3,232.0L113.4,226.5L100.5,213.0L100.5,204.4Z"/>
+<path class="land" d="M338.4,528.7L338.4,512.3L339.7,498.6L342.3,487.7L346.0,479.5L350.9,474.1L354.8,466.0L357.4,455.1L358.7,441.4L359.6,411.8L360.9,402.2L362.7,395.8L368.3,387.4L369.2,381.9L370.7,378.5L373.4,374.4L386.8,359.3L389.4,355.2L390.6,351.8L390.5,346.8L392.0,342.8L393.2,341.3L396.8,339.4L404.5,338.6L408.0,336.9L410.4,331.7L411.4,324.0L412.8,321.2L419.7,312.8L421.8,307.4L421.5,302.3L420.6,300.2L417.8,297.1L413.8,295.1L406.5,294.0L396.4,286.6L394.0,286.6L385.9,293.1L382.1,294.5L372.3,295.5L367.9,295.1L362.2,293.2L360.9,291.6L359.0,285.6L358.6,275.5L359.2,270.7L360.6,266.6L367.7,257.3L369.0,253.2L369.7,248.4L370.2,238.1L371.5,233.9L373.5,230.4L376.1,227.5L378.1,222.6L379.5,215.7L380.1,195.6L381.3,186.0L383.8,177.8L387.6,170.9L396.1,161.0L397.9,157.6L398.3,155.1L394.8,152.7L377.8,151.5L372.5,149.8L371.5,148.3L370.2,142.5L369.2,128.1L367.8,124.0L361.1,115.1L360.5,113.0L360.9,111.2L364.1,108.7L373.4,107.2L376.0,105.9L384.5,99.3L392.8,97.2L402.1,97.7L406.0,99.0L409.1,101.1L411.7,104.0L416.9,107.6L424.9,109.3L431.8,114.5L438.8,122.3L440.8,125.7L441.9,131.3L443.7,135.0L446.9,139.7L458.0,152.5L464.1,157.7L469.9,161.1L475.5,162.9L480.7,162.7L488.2,163.8L490.3,165.0L491.4,166.6L492.8,170.5L493.6,178.2L495.0,181.0L499.7,186.4L501.8,189.8L503.2,193.9L504.0,204.2L503.4,209.1L502.1,213.2L499.9,216.5L497.1,219.2L495.0,223.3L493.5,228.7L492.4,250.5L491.1,256.1L489.3,260.2L485.1,265.9L483.8,268.8L483.3,274.4L484.9,278.1L488.2,283.0L499.3,295.6L504.8,300.8L509.4,304.2L513.0,305.9L515.6,305.9L520.8,307.9L525.9,312.8L532.2,314.8L542.6,316.4L575.1,317.3L589.3,316.8L599.6,315.4L606.1,313.3L611.0,308.3L613.6,306.8L619.0,306.0L624.2,308.0L632.3,315.0L636.1,316.5L645.4,317.0L651.1,314.9L657.5,310.7L679.0,290.0L684.3,286.1L688.3,284.1L693.5,283.7L696.2,282.4L701.5,277.5L706.7,275.4L714.5,273.9L724.7,273.1L737.5,273.1L748.9,275.2L759.2,279.3L768.2,285.6L776.1,293.9L783.2,300.1L789.8,304.1L795.5,306.0L807.9,306.8L811.6,309.2L812.6,311.7L813.6,319.8L813.0,330.5L811.7,334.7L805.9,343.5L805.9,346.2L811.5,355.4L812.7,359.3L813.5,369.2L813.2,373.6L811.6,379.4L808.5,382.2L801.8,383.4L797.7,385.8L792.0,390.5L775.5,407.5L768.7,416.7L764.1,425.7L761.9,434.4L761.8,442.8L760.4,450.4L757.7,457.3L753.7,463.4L748.5,468.7L744.7,476.1L742.2,485.7L741.1,497.5L741.3,511.3L742.2,522.4L743.5,530.7L745.5,536.2L748.0,539.0L748.9,542.1L748.3,545.5L746.0,549.2L738.7,556.2L732.6,559.4L727.4,558.9L724.8,557.5L719.4,552.5L715.4,552.5L710.2,555.2L703.9,560.6L689.9,575.1L684.8,579.2L680.9,581.2L676.1,580.9L671.1,578.2L669.5,570.2L669.3,555.3L668.4,543.9L667.3,540.9L665.9,539.6L660.5,538.0L647.2,538.0L644.0,538.8L640.0,541.1L638.2,547.0L637.1,564.8L636.2,567.2L633.2,569.6L628.9,570.6L623.5,570.0L620.9,568.5L616.0,563.5L613.4,562.2L610.9,562.2L608.4,563.6L606.1,566.5L600.9,570.1L595.4,570.6L589.1,568.4L587.7,567.1L586.2,555.0L586.5,530.4L587.3,519.3L588.7,511.1L590.6,505.7L592.9,503.1L594.7,499.0L595.8,493.4L596.3,478.2L596.9,471.2L598.3,465.6L600.4,461.5L603.2,458.8L605.3,454.7L606.6,449.2L607.2,442.5L605.8,423.1L604.9,419.9L603.7,418.3L601.4,417.6L600.1,418.3L597.9,421.7L596.3,431.3L594.5,435.0L591.6,437.3L584.9,438.4L578.9,441.4L571.6,448.4L568.7,453.6L566.8,459.8L565.0,482.8L563.0,489.2L560.2,494.3L556.4,498.7L549.5,504.0L546.7,505.0L544.1,505.0L539.0,502.8L533.8,497.8L528.6,494.3L523.5,493.8L519.9,495.5L509.9,504.2L498.2,516.9L493.1,525.4L493.0,528.2L491.0,533.5L485.1,541.4L484.0,544.2L482.7,552.6L481.4,555.4L476.8,560.8L474.7,564.9L472.6,577.4L473.2,592.6L474.4,598.1L476.5,602.2L479.2,604.9L481.2,611.0L482.7,620.6L483.3,650.0L482.7,663.1L481.4,672.7L479.4,679.1L476.8,682.0L473.4,687.8L472.8,693.5L469.8,700.1L463.0,707.6L458.8,710.7L454.2,712.7L449.2,713.7L443.9,713.8L436.4,712.9L433.1,710.7L431.8,704.8L430.6,689.6L429.4,685.4L423.6,676.5L422.3,673.8L421.6,668.2L419.6,664.0L415.5,658.4L401.6,643.4L395.7,635.0L391.6,627.0L389.6,618.8L389.5,610.7L389.7,604.3L391.5,596.5L394.7,594.2L403.6,592.7L407.2,590.7L410.4,585.3L411.6,577.5L412.9,574.9L417.1,569.6L418.9,564.7L420.1,557.8L420.7,537.6L421.4,528.4L422.7,521.6L424.8,516.7L427.4,514.0L430.9,508.7L432.5,499.0L436.6,494.3L442.8,493.1L448.6,490.1L456.2,483.1L459.2,477.9L461.1,471.9L462.3,464.7L462.0,450.0L460.3,442.1L458.9,440.6L455.3,439.5L441.6,438.3L423.5,438.5L417.8,439.2L414.2,440.2L412.8,441.6L411.1,447.4L410.7,457.4L412.8,466.3L414.9,469.7L417.6,472.5L418.7,475.7L418.3,479.1L415.9,483.0L411.9,487.2L405.0,492.5L396.6,494.5L394.1,495.9L386.5,502.5L381.3,504.6L374.4,505.6L371.6,507.9L370.0,516.0L369.7,531.0L368.5,538.2L366.7,544.4L363.8,549.5L356.5,556.3L350.3,559.4L345.2,559.3L341.6,557.3L338.4,553.4L338.4,528.7Z"/>
+</g>
+<text class="insetlabel" x="316" y="56">Hamilton Island, the Whitsundays</text>
+<path class="route flight" d="M48.5,729.7 Q291.7,576.5 503.3,381.9"/>
+<path class="route flight" d="M503.3,381.9 Q292.4,194.9 50.7,49.7"/>
+<path class="route flight" d="M50.7,49.7 Q249.6,246.1 481.4,402.3"/>
+<path class="route flight" d="M397.8,442.5 Q303.1,395.1 198.9,375.4"/>
+<path class="route flight" d="M198.9,375.4 Q99.8,542.4 48.5,729.7"/>
+<path class="route" d="M481.4,402.3 Q461.5,361.2 431.0,327.3"/>
+<path class="route" d="M431.0,327.3 Q476.1,379.7 533.9,417.7"/>
+<path class="route" d="M533.9,417.7 Q498.8,376.6 453.7,346.7"/>
+<path class="route" d="M453.7,346.7 Q419.1,390.7 397.8,442.5"/>
+<g class="stop" data-n="1" tabindex="0" role="button" aria-label="Stop 1: Canberra. Show poem verse." transform="translate(48.5,729.7)"><circle r="13"/><text dy="0.34em">1</text></g>
+<g class="stop" data-n="2" tabindex="0" role="button" aria-label="Stop 2: Reef View Hotel. Show poem verse." transform="translate(503.3,381.9)"><circle r="13"/><text dy="0.34em">2</text></g>
+<g class="stop" data-n="3" tabindex="0" role="button" aria-label="Stop 3: Reefworld, Great Barrier Reef. Show poem verse." transform="translate(50.7,49.7)"><circle r="13"/><text dy="0.34em">3</text></g>
+<g class="stop" data-n="4" tabindex="0" role="button" aria-label="Stop 4: The Pool Terrace. Show poem verse." transform="translate(481.4,402.3)"><circle r="13"/><text dy="0.34em">4</text></g>
+<g class="stop" data-n="5" tabindex="0" role="button" aria-label="Stop 5: Cooinda Gardens. Show poem verse." transform="translate(431.0,327.3)"><circle r="13"/><text dy="0.34em">5</text></g>
+<g class="stop" data-n="6" tabindex="0" role="button" aria-label="Stop 6: Catseye Beach. Show poem verse." transform="translate(533.9,417.7)"><circle r="13"/><text dy="0.34em">6</text></g>
+<g class="stop" data-n="7" tabindex="0" role="button" aria-label="Stop 7: A round of mini-golf. Show poem verse." transform="translate(453.7,346.7)"><circle r="13"/><text dy="0.34em">7</text></g>
+<g class="stop" data-n="8" tabindex="0" role="button" aria-label="Stop 8: Hamilton Island Airport. Show poem verse." transform="translate(397.8,442.5)"><circle r="13"/><text dy="0.34em">8</text></g>
+<g class="stop" data-n="9" tabindex="0" role="button" aria-label="Stop 9: Brisbane. Show poem verse." transform="translate(198.9,375.4)"><circle r="13"/><text dy="0.34em">9</text></g>
+</svg>
+  </div>
+
+  <hr class="rule">
+  <ol id="cards">
+    <li class="card" id="stop-1" data-n="1"><div class="chead"><span class="badge">1</span><span class="cname">Canberra</span><span class="creg">flying north</span></div><div class="verse"><span class="ln">Winter in Canberra got you singing the blues?</span><span class="ln">Flying north to Queensland was easy to choose,</span><span class="ln">Boarded the first plane, had to travel in twos,</span><span class="ln">A surgical mask, in Australia, we still had to use.</span></div></li>
+<li class="card" id="stop-2" data-n="2"><div class="chead"><span class="badge">2</span><span class="cname">Reef View Hotel</span><span class="creg">Hamilton Island</span></div><div class="verse"><span class="ln">Off to Hamilton Island to meet Karolina and Josh.</span><span class="ln">On the 17th floor of the Reef View is really quite posh.</span><span class="br"></span><span class="ln">With sealegs behind us, we began a brand-new day</span><span class="ln">Complimentary breakfast could fill much more than a tray</span><span class="ln">“More ping pong” was most prominently what Jack would say</span><span class="ln">And the rain meant more Uno and War did we play.</span></div></li>
+<li class="card" id="stop-3" data-n="3"><div class="chead"><span class="badge">3</span><span class="cname">Reefworld, Great Barrier Reef</span><span class="creg">Hardy Reef</span></div><div class="verse"><span class="ln">Then onto a boat cruise to slip and to slosh</span><span class="ln">Staring into a vomit bag…oh my gosh!</span><span class="br"></span><span class="ln">We saw a Hawksbill turtle and a whole heap of fish.</span><span class="ln">The girls to underwater viewing whenever they wish.</span><span class="ln">Chocolate and pink lamingtons served freely on your dish</span><span class="ln">And the boat endlessly rocking--a swish swish swish swish.</span></div></li>
+<li class="card" id="stop-4" data-n="4"><div class="chead"><span class="badge">4</span><span class="cname">The Pool Terrace</span><span class="creg">Hamilton Island</span></div><div class="verse"><span class="ln">Hair braids and tattoos are the weather back-up plan</span><span class="ln">The same Poolside Terrace menu merited a quick scan.</span><span class="ln">The kids eat free limited the hotel tab that we ran</span><span class="ln">And all kids with teeth said to pasta, “I’m a fan!”</span></div></li>
+<li class="card" id="stop-5" data-n="5"><div class="chead"><span class="badge">5</span><span class="cname">Cooinda Gardens</span><span class="creg">Hamilton Island</span></div><div class="verse"><span class="ln">Then homeless on Hamilton stuck in the cold rain</span><span class="ln">Spring rolls again for Addy; she ate them plain.</span><span class="ln">Our buggy tried the hill the sixth time, but it was in vain</span><span class="ln">Karolina slid off the back and her left knee was in pain.</span><span class="br"></span><span class="ln">Dancing by the pool with many, many twirls</span><span class="ln">Pizza box turns to plate, as each one unfurls</span><span class="ln">Blue shuttle time, with daddy and his girls</span><span class="ln">Flying foxes at sunset with swoops and with swirls</span></div></li>
+<li class="card" id="stop-6" data-n="6"><div class="chead"><span class="badge">6</span><span class="cname">Catseye Beach</span><span class="creg">Hamilton Island</span></div><div class="verse"><span class="ln">Finally sunshine for a beach day at last</span><span class="ln">We looked to the future, didn’t dwell on the past</span><span class="ln">Paddleboards went quick so had to grab them fast</span><span class="ln">Sandcastles and snorkeling, all ages had a blast.</span><span class="br"></span><span class="ln">Less successful next day at the beach</span><span class="ln">Tried to keep kids safe, but unfortunately had a breach</span><span class="ln">CC backflipped off the table, hopefully a lesson it did teach</span><span class="ln">Don’t sit up high and keep your toddler within reach.</span><span class="br"></span><span class="ln">The good news is we had some cocktails by the pool</span><span class="ln">Pina Coladas and mango mocktails, but not a Moscow Mule.</span><span class="ln">Shuffling through shallow water—don’t be a fool</span><span class="ln">Rays in the surf and fish swimming by the school.</span><span class="br"></span><span class="ln">Up early, grab some chairs closer to the water</span><span class="ln">Reserved with towels and a bucket, but little other fodder</span><span class="ln">With the oldest son, middle and youngest daughter</span><span class="ln">Then pastries, with an early start, the menu slightly broader.</span><span class="br"></span><span class="ln">Time at the beach with paddleboards and with balls</span><span class="ln">Finally had a day without any painful falls</span><span class="ln">Mostly free but took a few work calls</span><span class="ln">Then dinner at Tako where they opened up the walls.</span></div></li>
+<li class="card" id="stop-7" data-n="7"><div class="chead"><span class="badge">7</span><span class="cname">A round of mini-golf</span><span class="creg">Hamilton Island</span></div><div class="verse"><span class="ln">What to do without the pool for the last few hours?</span><span class="ln">No more orange hibiscus bling or rocking out with flowers.</span><span class="ln">Checked out of the holiday home, now without any showers.</span><span class="ln">A round of mini-golf to test out the kids’ powers.</span></div></li>
+<li class="card" id="stop-8" data-n="8"><div class="chead"><span class="badge">8</span><span class="cname">Hamilton Island Airport</span><span class="creg">Hamilton Island</span></div><div class="verse"><span class="ln">Now off to the airport with our treasures and clothes in tow</span><span class="ln">If we went six across we’d take up a whole row.</span><span class="ln">The kids have headphones on, don’t interrupt their flow</span><span class="ln">All the way to Brissy, fortunately, that airplane did go.</span></div></li>
+<li class="card" id="stop-9" data-n="9"><div class="chead"><span class="badge">9</span><span class="cname">Brisbane</span><span class="creg">Marriott, Queen Street</span></div><div class="verse"><span class="ln">An airplane, an airtrain, pulling baggage up a hill</span><span class="ln">Tired kids, bedtime will always test your will</span><span class="ln">Have some sushi in the hotel room—please don’t spill.</span><span class="ln">Watch Encanto from your beds, to have some time to chill.</span><span class="br"></span><span class="ln">CC’s bday, cream filled donuts for a start</span><span class="ln">She’s content with two small presents for her part</span><span class="ln">Pool and hot tub—kids are happy, off the chart!</span><span class="ln">Out to eat, COVID ordering, at the table in your cart.</span><span class="br"></span><span class="ln">A gourmet breakfast, didn’t venture outside</span><span class="ln">Pancakes, eggs, fresh juice on the side</span><span class="ln">A morning of meetings, but pool time turned the tide</span><span class="ln">Hop on the glider board, we’re off for a ride.</span><span class="br"></span><span class="ln">Having pasta and pizza, in more Queensland rain</span><span class="ln">Even more aeroplane pasta to-go, but just keep it plain.</span><span class="ln">Too much time in the hotel room would make us insane</span><span class="ln">So mummy braves the cold pool, with four kids in train.</span><span class="br"></span><span class="ln">One last day for coffee and a snack</span><span class="ln">And into the hot tub for CC to put foam on my back</span><span class="ln">Up to the room for a final, all-in pack</span><span class="ln">Goodbye to Brissy, we’ll see you down the track.</span></div></li>
+  </ol>
+
+
+</div>
+
+<script>
+const STOPS = [{"n": 1, "name": "Canberra", "region": "flying north", "verse": ["Winter in Canberra got you singing the blues?", "Flying north to Queensland was easy to choose,", "Boarded the first plane, had to travel in twos,", "A surgical mask, in Australia, we still had to use."]}, {"n": 2, "name": "Reef View Hotel", "region": "Hamilton Island", "verse": ["Off to Hamilton Island to meet Karolina and Josh.", "On the 17th floor of the Reef View is really quite posh.", "", "With sealegs behind us, we began a brand-new day", "Complimentary breakfast could fill much more than a tray", "“More ping pong” was most prominently what Jack would say", "And the rain meant more Uno and War did we play."]}, {"n": 3, "name": "Reefworld, Great Barrier Reef", "region": "Hardy Reef", "verse": ["Then onto a boat cruise to slip and to slosh", "Staring into a vomit bag…oh my gosh!", "", "We saw a Hawksbill turtle and a whole heap of fish.", "The girls to underwater viewing whenever they wish.", "Chocolate and pink lamingtons served freely on your dish", "And the boat endlessly rocking--a swish swish swish swish."]}, {"n": 4, "name": "The Pool Terrace", "region": "Hamilton Island", "verse": ["Hair braids and tattoos are the weather back-up plan", "The same Poolside Terrace menu merited a quick scan.", "The kids eat free limited the hotel tab that we ran", "And all kids with teeth said to pasta, “I’m a fan!”"]}, {"n": 5, "name": "Cooinda Gardens", "region": "Hamilton Island", "verse": ["Then homeless on Hamilton stuck in the cold rain", "Spring rolls again for Addy; she ate them plain.", "Our buggy tried the hill the sixth time, but it was in vain", "Karolina slid off the back and her left knee was in pain.", "", "Dancing by the pool with many, many twirls", "Pizza box turns to plate, as each one unfurls", "Blue shuttle time, with daddy and his girls", "Flying foxes at sunset with swoops and with swirls"]}, {"n": 6, "name": "Catseye Beach", "region": "Hamilton Island", "verse": ["Finally sunshine for a beach day at last", "We looked to the future, didn’t dwell on the past", "Paddleboards went quick so had to grab them fast", "Sandcastles and snorkeling, all ages had a blast.", "", "Less successful next day at the beach", "Tried to keep kids safe, but unfortunately had a breach", "CC backflipped off the table, hopefully a lesson it did teach", "Don’t sit up high and keep your toddler within reach.", "", "The good news is we had some cocktails by the pool", "Pina Coladas and mango mocktails, but not a Moscow Mule.", "Shuffling through shallow water—don’t be a fool", "Rays in the surf and fish swimming by the school.", "", "Up early, grab some chairs closer to the water", "Reserved with towels and a bucket, but little other fodder", "With the oldest son, middle and youngest daughter", "Then pastries, with an early start, the menu slightly broader.", "", "Time at the beach with paddleboards and with balls", "Finally had a day without any painful falls", "Mostly free but took a few work calls", "Then dinner at Tako where they opened up the walls."]}, {"n": 7, "name": "A round of mini-golf", "region": "Hamilton Island", "verse": ["What to do without the pool for the last few hours?", "No more orange hibiscus bling or rocking out with flowers.", "Checked out of the holiday home, now without any showers.", "A round of mini-golf to test out the kids’ powers."]}, {"n": 8, "name": "Hamilton Island Airport", "region": "Hamilton Island", "verse": ["Now off to the airport with our treasures and clothes in tow", "If we went six across we’d take up a whole row.", "The kids have headphones on, don’t interrupt their flow", "All the way to Brissy, fortunately, that airplane did go."]}, {"n": 9, "name": "Brisbane", "region": "Marriott, Queen Street", "verse": ["An airplane, an airtrain, pulling baggage up a hill", "Tired kids, bedtime will always test your will", "Have some sushi in the hotel room—please don’t spill.", "Watch Encanto from your beds, to have some time to chill.", "", "CC’s bday, cream filled donuts for a start", "She’s content with two small presents for her part", "Pool and hot tub—kids are happy, off the chart!", "Out to eat, COVID ordering, at the table in your cart.", "", "A gourmet breakfast, didn’t venture outside", "Pancakes, eggs, fresh juice on the side", "A morning of meetings, but pool time turned the tide", "Hop on the glider board, we’re off for a ride.", "", "Having pasta and pizza, in more Queensland rain", "Even more aeroplane pasta to-go, but just keep it plain.", "Too much time in the hotel room would make us insane", "So mummy braves the cold pool, with four kids in train.", "", "One last day for coffee and a snack", "And into the hot tub for CC to put foam on my back", "Up to the room for a final, all-in pack", "Goodbye to Brissy, we’ll see you down the track."]}];
+const byNum = new Map(STOPS.map(s => [s.n, s]));
+const svg = document.getElementById('qldmap');
+const container = document.getElementById('map-container');
+const tooltip = document.getElementById('tooltip');
+const MAXLINES = 8;
+
+function verseHTML(lines, cap) {
+  let out = '', shown = 0, truncated = false;
+  for (const l of lines) {
+    if (cap && shown >= cap) { truncated = true; break; }
+    out += l ? '<span class="ln">' + l.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</span>'
+             : '<span class="br"></span>';
+    if (l) shown++;
+  }
+  return { html: out, truncated };
+}
+
+let hideTimer = null;
+function showTip(g) {
+  clearTimeout(hideTimer);
+  const s = byNum.get(Number(g.dataset.n));
+  if (!s) return;
+  let inner = '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
+  if (s.verse && s.verse.length) {
+    const v = verseHTML(s.verse, MAXLINES);
+    inner += '<span class="t-verse">' + v.html +
+      (v.truncated ? '<span class="t-more">Click to read the rest &rarr;</span>'
+                   : '<span class="t-more">Click to jump to this verse &rarr;</span>') +
+      '</span>';
+  } else {
+    inner += '<span class="t-verse">A stop on the route with no verse of its own.</span>';
+  }
+  tooltip.innerHTML = inner;
+
+  const crect = container.getBoundingClientRect();
+  const mrect = g.getBoundingClientRect();
+  tooltip.style.opacity = 1;
+  const tw = tooltip.offsetWidth, th = tooltip.offsetHeight;
+  let x = mrect.left - crect.left + mrect.width + 10;
+  let y = mrect.top - crect.top + mrect.height / 2 - th / 2;
+  if (x + tw > crect.width) x = mrect.left - crect.left - tw - 10;
+  if (x < 0) x = 4;
+  if (y < 0) y = 4;
+  if (y + th > crect.height) y = Math.max(4, crect.height - th - 4);
+  tooltip.style.left = x + 'px';
+  tooltip.style.top = y + 'px';
+}
+function hideTip() {
+  hideTimer = setTimeout(() => { tooltip.style.opacity = 0; }, 250);
+}
+
+let litTimer = null;
+function goToVerse(n) {
+  const card = document.getElementById('stop-' + n);
+  if (!card) return;
+  document.querySelectorAll('.card.lit').forEach(c => c.classList.remove('lit'));
+  card.classList.add('lit');
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  clearTimeout(litTimer);
+  litTimer = setTimeout(() => card.classList.remove('lit'), 3500);
+}
+
+svg.querySelectorAll('g.stop').forEach(g => {
+  g.addEventListener('mouseenter', () => showTip(g));
+  g.addEventListener('mouseleave', hideTip);
+  g.addEventListener('click', () => goToVerse(Number(g.dataset.n)));
+  g.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToVerse(Number(g.dataset.n)); }
+  });
+});
+tooltip.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+tooltip.addEventListener('mouseleave', hideTip);
+
+// hovering a verse card highlights its marker on the map
+document.querySelectorAll('.card').forEach(card => {
+  const g = svg.querySelector('g.stop[data-n="' + card.dataset.n + '"]');
+  if (!g) return;
+  card.addEventListener('mouseenter', () => g.classList.add('active'));
+  card.addEventListener('mouseleave', () => g.classList.remove('active'));
+});
+
+// ---------------- Navigation ----------------
+// Paste the addresses of the two overview pages here.
+const NAV_URLS = {
+  world: "https://fivelittlerascals.com/world-map",   // the world map, "Where We've Been"
+  region: "https://fivelittlerascals.com/australia-map"    // Australia
+};
+document.querySelectorAll('#tabs a[data-nav]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const u = NAV_URLS[a.dataset.nav];
+    if (u && u.trim()) window.open(u.trim(), '_self');
+  });
+});
+</script>

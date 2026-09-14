@@ -1,0 +1,266 @@
+<meta charset="utf-8">
+<style>
+  :root { --stick: calc(35px + 2vw); }
+  :root { --ink:#2d6a4f; --ink-dark:#16294a; --land:#ffffff; --unvisited:#ebe7e1;
+    --sea:#eef2f6; --border:#111111; --accent:#b8452f; --paper:#ffffff;
+    --text:#24303f; --muted:#7c8899; }
+  .y2020 { --c: #4c6b8a; }
+  .y2021 { --c: #c2410c; }
+  .y2022 { --c: #2a5d8f; }
+  .y2023 { --c: #7a4b8f; }
+  .y2024 { --c: #2d6a4f; }
+  .y2025 { --c: #a8862c; }
+  .y2026 { --c: #0e9aa7; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--text);
+    font-family: Georgia, 'Times New Roman', serif; }
+  .wrap { max-width:1180px; margin:0 auto; padding:8px 16px 24px; }
+  header { text-align:center; margin-bottom:14px; }
+  h1 { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:800;
+    font-size:clamp(1.7rem,5vw,3rem); letter-spacing:-0.02em; color:#111; margin:0 0 6px; }
+  .eyebrow { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:.74rem;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--ink); margin:0 0 4px; font-weight:700; }
+  #tabs { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:0 0 14px;
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:.82rem; }
+  .tab { padding:6px 15px; border:1px solid #d7dde6; border-radius:999px; text-decoration:none;
+    color:var(--text); background:#fff; cursor:pointer; }
+  .tab:hover { border-color:var(--ink); color:var(--ink); }
+  .tab.current { background:var(--ink); border-color:var(--ink); color:#fff; font-weight:700; }
+  #yearbar { position:sticky; top:var(--stick,0px); z-index:20; background:rgba(255,255,255,.94);
+    backdrop-filter:blur(4px); padding:8px 0; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:0 0 12px;
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:.82rem; }
+  .ychip { padding:6px 15px; border:1px solid #d7dde6; border-radius:999px; background:#fff;
+    color:var(--text); cursor:pointer; font:inherit; }
+  .ychip:hover { border-color:var(--c,#24303f); color:var(--c,#24303f); }
+  .ychip[aria-pressed="true"] { background:var(--c,#24303f); border-color:var(--c,#24303f);
+    color:#fff; font-weight:700; }
+  .maps { display:block; }
+  .mapfig { margin:0 0 16px; }
+  .map-container { position:relative; width:100%; }
+  .tmap { width:100%; height:auto; display:block; }
+  figcaption { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:.76rem;
+    color:var(--muted); padding-top:6px; }
+  .insets { display:grid; gap:16px; grid-template-columns:1fr 1fr; }
+  .hot { cursor:pointer; }
+  .hot rect { fill:#fff; stroke:var(--ink); stroke-width:1.4; opacity:.95; }
+  .hot text { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:12px; font-weight:700; fill:var(--ink); pointer-events:none; }
+  .hot:hover rect, .hot:focus rect { fill:var(--ink); }
+  .hot:hover text, .hot:focus text { fill:#fff; }
+  .hot:focus { outline:none; }
+  .subnav { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:.8rem; color:var(--muted);
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:-4px 0 14px; }
+  .subnav button { font:inherit; font-weight:700; color:var(--ink); background:#fff; border:1px solid var(--ink);
+    border-radius:999px; padding:4px 12px; cursor:pointer; }
+  .subnav button:hover, .subnav button[aria-expanded="true"] { background:var(--ink); color:#fff; }
+  .mapfig.sub { border:1px solid #d7dde6; border-radius:6px; padding:10px 12px 12px; margin-bottom:18px; background:#fff; }
+  .mapfig.sub[hidden] { display:none; }
+  .subhead { display:flex; align-items:center; justify-content:space-between; margin:0 0 8px; }
+  .subhead h3 { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:1rem; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--ink); margin:0; }
+  .subclose { font:inherit; font-size:.78rem; color:var(--muted); background:none; border:1px solid #d7dde6;
+    border-radius:999px; padding:3px 10px; cursor:pointer; }
+  .subclose:hover { color:var(--ink); border-color:var(--ink); }
+  .yearhead { list-style:none; break-inside:avoid; column-span:all; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; color:var(--c); font-weight:700;
+    margin:6px 0 12px; padding-bottom:6px; border-bottom:2px solid var(--c); }
+  .yearhead.off { display:none; }
+  .sea { fill:var(--sea); }
+  .land { fill:var(--unvisited); stroke:var(--border); stroke-width:0.8; stroke-linejoin:round; }
+  .land.visited { fill:var(--land); }
+  .river { fill:none; stroke:#a8c3d4; stroke-width:2.4; stroke-linecap:round; }
+  .road { fill:none; stroke:#d9d4cc; stroke-width:1.3; stroke-linecap:round; }
+  .citylimit { fill:none; stroke:#c6bfb4; stroke-width:1.4; stroke-dasharray:6 4; }
+  .park { fill:#e6ece0; stroke:none; }
+  .urban { fill:#f7f5f2; stroke:none; }
+  .district { fill:#f2efeb; stroke:#e0dbd3; stroke-width:0.9; }
+  .slabel { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:13px;
+    font-weight:700; fill:#44546a; pointer-events:none; letter-spacing:.04em; }
+  .slabel.faint { fill:#a4aebc; }
+  .route { fill:none; stroke:var(--c); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+  .route.flight { stroke-dasharray:9 7; }
+  .leader { stroke:var(--c); stroke-width:1; opacity:.5; }
+  .tiedot { fill:var(--c); opacity:.7; }
+  .stop circle { fill:var(--c); stroke:#fff; stroke-width:1.6; cursor:pointer;
+    transition:fill .12s ease, r .18s ease; }
+  /* two-state: overview shows small dots (no numbers); single-year promotes to numbered circles */
+  .maps.overview .stop text { display:none; }
+  .maps.overview .stop circle { r:4; stroke-width:1; }
+  .maps.overview .stop { cursor:default; }
+  .maps.overview.nolines .route,
+  .maps.overview.nolines .leader { display:none; }
+  .stop text { transition:opacity .12s ease; }
+  .stop text { fill:#fff; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-weight:700; text-anchor:middle; pointer-events:none; user-select:none; }
+  .stop:hover circle, .stop:focus circle, .stop.lit circle { fill:var(--accent); }
+  .stop:focus { outline:none; }
+  .stop:focus circle { stroke:var(--accent); stroke-width:2.4; }
+  .trip.off { display:none; }
+  .tooltip { position:absolute; pointer-events:none; opacity:0; background:var(--ink-dark);
+    color:#fff; padding:10px 13px; border-radius:7px; max-width:330px;
+    box-shadow:0 6px 20px rgba(20,35,60,.34); transition:opacity .12s ease; z-index:10; }
+  .tooltip .t-name { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:700;
+    font-size:.84rem; display:block; margin-bottom:5px; }
+  .tooltip .t-verse { font-size:.84rem; line-height:1.45; }
+  hr.rule { border:none; border-top:2px solid var(--ink); margin:40px 0 22px; }
+  h2 { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:1rem;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--ink); margin:0 0 18px; }
+  #cards { padding:0; margin:0; }
+  .trip-sec { border-top:2px solid var(--c); margin:0 0 4px; }
+  .trip-sec > summary { list-style:none; cursor:pointer; padding:12px 4px;
+    font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:700; color:var(--c);
+    display:flex; align-items:center; gap:10px; }
+  .trip-sec > summary::-webkit-details-marker { display:none; }
+  .trip-sec > summary::before { content:"\25B8"; color:var(--c); transition:transform .15s ease; font-size:.9em; }
+  .trip-sec[open] > summary::before { transform:rotate(90deg); }
+  .trip-sec .ts-year { letter-spacing:.02em; }
+  .trip-sec.off { display:none; }
+  .stoplist { list-style:none; padding:14px 0 20px; margin:0; columns:2; column-gap:34px; }
+  .card { break-inside:avoid; margin:0 0 20px; padding:10px 12px; border-left:3px solid var(--c);
+    border-radius:3px; transition:background .2s ease; }
+  .cthumb { width:100%; height:130px; object-fit:cover; border-radius:3px; margin:-4px 0 8px;
+    display:block; background:#eef2f6; }
+  .tooltip .t-img { width:100%; max-width:280px; height:120px; object-fit:cover; border-radius:5px;
+    margin:0 0 7px; display:block; }
+  .card.lit { background:#fbf3f1; }
+  .card.off { display:none; }
+  .chead { font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; margin-bottom:7px; }
+  .badge { display:inline-block; min-width:22px; height:22px; line-height:22px; text-align:center;
+    background:var(--c); color:#fff; border-radius:50%; font-size:.72rem; font-weight:700;
+    margin-right:8px; }
+  .card.lit .badge { background:var(--accent); }
+  .cname { font-weight:700; font-size:.92rem; color:#111; }
+  a.ctype { float:right; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; font-size:.62rem;
+    font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:2px 8px; border-radius:999px;
+    border:1px solid var(--accent); color:var(--accent); text-decoration:none; cursor:pointer; }
+  a.ctype:hover, a.ctype:focus { background:var(--accent); color:#fff; }
+  .creg { color:var(--muted); font-size:.78rem; margin-left:7px; }
+  .cyear { color:var(--c); font-size:.72rem; font-weight:700; margin-left:7px;
+    letter-spacing:.08em; }
+  .verse.plain { font-size:.88rem; line-height:1.55; }
+  .site { display:inline-block; margin-top:7px; font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+    font-size:.78rem; font-weight:700; color:var(--ink); text-decoration:none;
+    border-bottom:1px solid var(--ink); }
+  .site:hover { color:var(--accent); border-bottom-color:var(--accent); }
+  .closing { font-size:.93rem; line-height:1.55; color:var(--text); max-width:64ch; }
+  @media (max-width:720px) { .stoplist { columns:1; } .insets { grid-template-columns:1fr; } }
+  @media (prefers-reduced-motion:reduce) { .stop circle, .tooltip, .card { transition:none; } }
+  /* TIGHTEN */
+  html, body { margin:0; padding:0; }
+  .wrap { overflow: visible; }
+  .wrap > *:last-child { margin-bottom: 0; }
+</style>
+
+<div class="wrap">
+  <nav id="tabs">
+    <a class="tab" data-nav="world" href="#">&larr; All our travels</a>
+    <span class="tab current">Victoria &middot; 2024</span>
+  </nav>
+
+  <div id="yearbar"><button type="button" class="ychip y2024" data-year="2024" aria-pressed="false">2024</button><button type="button" class="ychip" data-year="all" aria-pressed="true">All years</button></div>
+
+  <div class="maps" id="maps"><figure class="mapfig"><div class="map-container"><div class="tooltip" role="status"></div><svg class="tmap" viewBox="0 0 1100 688" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Great Ocean Road. Every stop is also listed below the map."><rect class="sea" x="0" y="0" width="1100" height="688"/><path class="land visited" d="M-40.0,-40.0 L-37.8,-40.0 L-19.1,-40.0 L-17.6,-40.0 L-9.8,-40.0 L-8.3,-40.0 L-6.7,-40.0 L-5.2,-40.0 L-3.6,-40.0 L-2.1,-40.0 L-0.5,-40.0 L5.7,-40.0 L21.2,-40.0 L27.4,-40.0 L29.0,-40.0 L27.4,-40.0 L24.3,-40.0 L22.8,-40.0 L18.1,-40.0 L11.9,-40.0 L8.8,-40.0 L5.7,-40.0 L2.6,-40.0 L-0.5,-40.0 L-3.6,-40.0 L-12.9,-40.0 L-14.5,-40.0 L-17.6,-40.0 L-16.0,-40.0 L-14.5,-40.0 L-20.7,-40.0 L-11.4,-40.0 L-3.6,-40.0 L1.0,-40.0 L2.6,-40.0 L7.3,-40.0 L18.1,-40.0 L27.4,-40.0 L32.1,-40.0 L36.8,-40.0 L38.3,-40.0 L43.0,-40.0 L47.6,-40.0 L50.7,-40.0 L47.6,-40.0 L50.7,-40.0 L55.4,-40.0 L64.7,-40.0 L75.6,-40.0 L83.4,-40.0 L84.9,-40.0 L88.0,-40.0 L89.6,-40.0 L94.2,-40.0 L98.9,-40.0 L103.5,-40.0 L105.1,-40.0 L106.6,-40.0 L111.3,-40.0 L112.9,-40.0 L109.8,-40.0 L106.6,-40.0 L105.1,-40.0 L108.2,-40.0 L116.0,-40.0 L120.6,-40.0 L125.3,-40.0 L128.4,-40.0 L129.9,-40.0 L131.5,-40.0 L137.7,-40.0 L139.3,-40.0 L137.7,-40.0 L134.6,-40.0 L129.9,-40.0 L120.6,-40.0 L117.5,-40.0 L119.1,-40.0 L125.3,-40.0 L123.7,-40.0 L125.3,-40.0 L131.5,-40.0 L133.0,-40.0 L136.2,-40.0 L133.0,-40.0 L134.6,-40.0 L139.3,-40.0 L162.6,-40.0 L168.8,-40.0 L182.7,-40.0 L190.5,-40.0 L202.9,-40.0 L210.7,-40.0 L227.8,-40.0 L238.6,-40.0 L248.0,-40.0 L269.7,-40.0 L272.8,-40.0 L280.6,-40.0 L293.0,-40.0 L297.7,-40.0 L302.3,-40.0 L297.7,-40.0 L291.4,-40.0 L282.1,-40.0 L240.2,-40.0 L237.1,-40.0 L234.0,-40.0 L230.9,-40.0 L234.0,-40.0 L232.4,-40.0 L230.9,-40.0 L227.8,-40.0 L229.3,-40.0 L230.9,-40.0 L234.0,-40.0 L229.3,-40.0 L227.8,-40.0 L230.9,-40.0 L238.6,-40.0 L254.2,-40.0 L269.7,-40.0 L274.4,-40.0 L282.1,-40.0 L285.2,-40.0 L303.9,-40.0 L305.4,-40.0 L307.0,-40.0 L311.6,-40.0 L313.2,-40.0 L314.7,-40.0 L316.3,-40.0 L321.0,-40.0 L328.7,-40.0 L333.4,-40.0 L350.5,-40.0 L356.7,-40.0 L362.9,-40.0 L369.1,-40.0 L381.5,-40.0 L372.2,-40.0 L367.5,-40.0 L370.7,-40.0 L372.2,-40.0 L358.2,-40.0 L356.7,-40.0 L352.0,-40.0 L348.9,-40.0 L358.2,-40.0 L361.3,-40.0 L367.5,-40.0 L372.2,-40.0 L376.9,-40.0 L383.1,-40.0 L387.7,-40.0 L392.4,-40.0 L397.1,-40.0 L407.9,-40.0 L414.1,-40.0 L420.3,-40.0 L428.1,-40.0 L407.9,-40.0 L414.1,-40.0 L415.7,-40.0 L411.0,-40.0 L421.9,-40.0 L423.5,-40.0 L425.0,-40.0 L440.5,-40.0 L446.7,-40.0 L449.9,-40.0 L445.2,-40.0 L451.4,-40.0 L449.9,-40.0 L437.4,-40.0 L434.3,-40.0 L429.7,-40.0 L425.0,-40.0 L423.5,-40.0 L425.0,-40.0 L432.8,-40.0 L434.3,-40.0 L437.4,-40.0 L449.9,-40.0 L453.0,-40.0 L451.4,-40.0 L453.0,-40.0 L456.1,-40.0 L457.6,-40.0 L460.7,-40.0 L487.1,-40.0 L490.2,-40.0 L494.9,-40.0 L493.3,-40.0 L498.0,-40.0 L499.5,-40.0 L516.6,-40.0 L532.2,-40.0 L541.5,-40.0 L552.3,-40.0 L558.6,-40.0 L564.8,-40.0 L571.0,-40.0 L578.7,-40.0 L594.3,-40.0 L597.4,-40.0 L600.5,-40.0 L605.1,-40.0 L609.8,-40.0 L620.7,-40.0 L639.3,-40.0 L654.8,-40.0 L675.0,-40.0 L681.2,-40.0 L689.0,-40.0 L695.2,-40.0 L699.9,-40.0 L703.0,-40.0 L704.5,-40.0 L706.1,-40.0 L712.3,-40.0 L713.9,-40.0 L717.0,-40.0 L718.5,-40.0 L720.1,-40.0 L721.6,-40.0 L723.2,-40.0 L724.7,-40.0 L726.3,-40.0 L734.0,-40.0 L735.6,-40.0 L741.8,-40.0 L746.5,-40.0 L751.1,-40.0 L755.8,-40.0 L814.8,-40.0 L819.5,-40.0 L827.2,-40.0 L828.8,-40.0 L830.3,-40.0 L831.9,-40.0 L835.0,-40.0 L841.2,-40.0 L847.4,-40.0 L850.5,-40.0 L853.6,-40.0 L855.2,-40.0 L859.8,-40.0 L878.5,-40.0 L873.8,-40.0 L872.3,-40.0 L875.4,-40.0 L884.7,-40.0 L894.0,-40.0 L898.7,-40.0 L900.2,-40.0 L898.7,-40.0 L895.5,-40.0 L890.9,-40.0 L889.3,-40.0 L890.9,-40.0 L892.4,-40.0 L895.5,-40.0 L908.0,-40.0 L909.5,-40.0 L914.2,-40.0 L917.3,-40.0 L926.6,-40.0 L945.2,-40.0 L951.5,-40.0 L957.7,-40.0 L962.3,-40.0 L968.5,-40.0 L979.4,-40.0 L1007.4,-40.0 L1013.6,-40.0 L1016.7,-40.0 L1018.2,-40.0 L1019.8,-40.0 L1022.9,-40.0 L1030.7,-40.0 L1029.1,-40.0 L1032.2,-40.0 L1036.9,-40.0 L1063.3,-40.0 L1069.5,-40.0 L1080.4,-40.0 L1089.7,-40.0 L1099.0,-40.0 L1109.9,-40.0 L1116.1,-40.0 L1123.8,-40.0 L1130.0,-40.0 L1136.3,-40.0 L1140.0,-40.0 L1140.0,-32.6 L1140.0,-27.1 L1140.0,-21.6 L1140.0,-17.9 L1140.0,-13.3 L1140.0,-8.7 L1140.0,-5.0 L1140.0,-2.2 L1140.0,3.3 L1140.0,6.1 L1140.0,15.3 L1140.0,18.0 L1140.0,19.9 L1140.0,26.3 L1140.0,40.2 L1140.0,36.5 L1140.0,32.8 L1140.0,29.1 L1140.0,23.6 L1140.0,21.7 L1140.0,19.9 L1140.0,14.3 L1140.0,21.7 L1140.0,25.4 L1140.0,26.3 L1140.0,29.1 L1140.0,38.3 L1140.0,40.2 L1140.0,33.7 L1140.0,40.2 L1140.0,58.6 L1140.0,91.8 L1140.0,128.8 L1140.0,180.6 L1140.0,257.5 L1140.0,354.9 L1140.0,396.8 L1140.0,450.8 L1140.0,485.3 L1140.0,488.1 L1140.0,490.8 L1140.0,513.2 L1140.0,512.3 L1140.0,506.7 L1140.0,499.2 L1140.0,496.4 L1140.0,510.4 L1140.0,508.6 L1140.0,510.4 L1140.0,523.5 L1140.0,524.4 L1140.0,522.6 L1140.0,521.6 L1140.0,527.2 L1140.0,532.8 L1140.0,539.4 L1140.0,544.0 L1140.0,535.6 L1140.0,525.4 L1140.0,521.6 L1140.0,518.8 L1140.0,522.6 L1140.0,524.4 L1140.0,530.0 L1140.0,552.4 L1140.0,568.3 L1140.0,572.1 L1140.0,581.4 L1140.0,587.0 L1140.0,588.0 L1140.0,587.0 L1140.0,588.0 L1140.0,591.7 L1140.0,595.4 L1140.0,598.2 L1140.0,605.7 L1140.0,612.3 L1140.0,617.9 L1140.0,620.7 L1140.0,631.9 L1140.0,637.5 L1140.0,639.4 L1140.0,635.7 L1140.0,629.1 L1140.0,615.1 L1140.0,609.5 L1140.0,608.5 L1140.0,609.5 L1140.0,607.6 L1140.0,602.9 L1140.0,597.3 L1140.0,592.6 L1140.0,587.0 L1140.0,577.7 L1140.0,572.1 L1140.0,582.3 L1140.0,589.8 L1140.0,599.2 L1140.0,615.1 L1140.0,620.7 L1140.0,624.4 L1140.0,628.2 L1140.0,631.9 L1140.0,636.6 L1140.0,638.5 L1140.0,640.3 L1140.0,646.0 L1140.0,648.8 L1140.0,653.5 L1140.0,660.0 L1140.0,668.4 L1140.0,674.1 L1140.0,690.9 L1140.0,699.4 L1140.0,703.1 L1140.0,705.0 L1140.0,701.2 L1140.0,703.1 L1140.0,723.8 L1140.0,727.5 L1140.0,727.8 L1140.0,723.8 L1140.0,718.1 L1140.0,708.7 L1140.0,703.1 L1140.0,685.3 L1140.0,654.4 L1140.0,615.1 L1140.0,588.0 L1140.0,594.5 L1140.0,602.9 L1140.0,613.2 L1140.0,630.1 L1140.0,632.9 L1140.0,637.5 L1140.0,635.7 L1140.0,630.1 L1140.0,593.6 L1140.0,554.3 L1140.0,531.9 L1140.0,507.6 L1140.0,499.2 L1140.0,503.9 L1140.0,519.8 L1140.0,521.6 L1140.0,504.8 L1140.0,494.6 L1140.0,489.0 L1140.0,488.1 L1140.0,491.8 L1140.0,509.5 L1140.0,510.4 L1140.0,500.2 L1140.0,462.9 L1140.0,454.5 L1140.0,452.6 L1140.0,438.7 L1140.0,434.9 L1140.0,431.2 L1140.0,428.4 L1140.0,425.6 L1140.0,420.0 L1140.0,412.6 L1140.0,405.1 L1140.0,397.7 L1140.0,389.3 L1140.0,380.0 L1140.0,370.7 L1140.0,363.3 L1140.0,364.2 L1140.0,367.0 L1140.0,369.8 L1140.0,370.7 L1140.0,369.8 L1140.0,362.4 L1140.0,355.8 L1140.0,352.1 L1140.0,348.4 L1140.0,339.1 L1140.0,329.8 L1140.0,325.2 L1140.0,322.4 L1140.0,315.9 L1140.0,307.5 L1140.0,302.0 L1140.0,292.7 L1140.0,271.4 L1140.0,264.9 L1140.0,262.1 L1140.0,261.2 L1140.0,264.9 L1140.0,267.7 L1140.0,271.4 L1140.0,272.3 L1140.0,266.7 L1140.0,263.9 L1140.0,264.9 L1140.0,268.6 L1140.0,276.9 L1140.0,281.6 L1140.0,286.2 L1140.0,290.8 L1140.0,304.8 L1140.0,307.5 L1140.0,309.4 L1140.0,315.0 L1140.0,320.5 L1140.0,328.9 L1140.0,335.4 L1140.0,348.4 L1140.0,363.3 L1116.1,356.8 L1105.2,359.6 L1102.1,364.2 L1100.5,370.7 L1097.4,376.3 L1083.5,381.0 L1078.8,387.5 L1072.6,401.4 L1075.7,405.1 L1067.9,407.9 L1036.9,410.7 L1032.2,417.2 L1022.9,412.6 L1007.4,401.4 L940.6,329.8 L932.8,324.3 L923.5,322.4 L917.3,319.6 L915.7,314.0 L917.3,310.3 L920.4,312.2 L925.1,315.9 L940.6,318.7 L948.3,324.3 L963.9,341.0 L971.6,344.7 L991.8,344.7 L1010.5,341.0 L1036.9,328.0 L1049.3,324.3 L1054.0,319.6 L1055.5,314.0 L1054.0,308.5 L1054.0,303.8 L1057.1,299.2 L1066.4,291.8 L1067.9,288.1 L1071.0,278.8 L1072.6,273.2 L1075.7,268.6 L1083.5,259.3 L1088.1,250.0 L1108.3,224.1 L1113.0,205.6 L1111.4,185.2 L1103.6,164.8 L1092.8,149.1 L1089.7,146.3 L1075.7,141.7 L1071.0,138.0 L1067.9,134.3 L1058.6,114.9 L1054.0,92.8 L1049.3,81.7 L1041.5,72.4 L1029.1,64.1 L1018.2,65.1 L1016.7,81.7 L988.7,78.0 L981.0,80.8 L977.9,88.1 L976.3,96.4 L973.2,103.8 L968.5,108.5 L960.8,111.2 L953.0,114.0 L946.8,115.8 L942.1,119.5 L925.1,135.3 L921.9,139.9 L915.7,146.3 L866.0,163.0 L859.8,168.5 L855.2,175.9 L850.5,182.4 L852.1,187.0 L853.6,190.8 L853.6,194.5 L849.0,198.2 L844.3,198.2 L839.6,196.3 L836.5,193.5 L833.4,189.8 L821.0,194.5 L796.2,195.4 L786.8,201.9 L782.2,216.7 L789.9,223.2 L813.2,224.1 L852.1,234.3 L866.0,231.5 L876.9,225.9 L908.0,204.6 L929.7,216.7 L939.0,226.9 L935.9,240.8 L934.4,244.5 L934.4,251.9 L934.4,254.7 L931.3,256.5 L925.1,256.5 L921.9,258.4 L914.2,266.7 L911.1,273.2 L908.0,280.6 L906.4,293.6 L889.3,297.3 L853.6,295.5 L849.0,298.3 L845.9,301.1 L842.7,302.9 L836.5,302.9 L831.9,302.0 L822.6,297.3 L817.9,295.5 L807.0,297.3 L799.3,302.0 L758.9,332.6 L737.1,354.0 L732.5,356.8 L723.2,357.7 L718.5,359.6 L715.4,362.4 L709.2,371.7 L706.1,375.4 L684.3,381.9 L682.8,383.7 L678.1,392.1 L675.0,394.0 L656.4,397.7 L648.6,403.3 L625.3,430.3 L623.8,433.1 L625.3,437.7 L625.3,442.4 L622.2,448.9 L616.0,452.6 L605.1,455.4 L600.5,458.2 L594.3,466.6 L585.0,490.8 L577.2,495.5 L574.1,498.3 L569.4,503.0 L563.2,512.3 L558.6,517.0 L515.1,531.9 L507.3,533.8 L498.0,537.5 L493.3,545.9 L488.7,555.3 L484.0,566.5 L484.0,567.4 L484.0,569.3 L482.5,571.1 L479.4,572.1 L474.7,571.1 L473.1,571.1 L457.6,580.5 L453.0,585.2 L442.1,601.0 L434.3,606.7 L425.0,609.5 L417.2,604.8 L403.3,589.8 L397.1,587.0 L395.5,585.2 L390.8,576.7 L389.3,574.9 L372.2,568.3 L356.7,557.1 L348.9,554.3 L338.0,552.4 L297.7,556.2 L289.9,552.4 L282.1,545.0 L274.4,536.6 L271.3,528.2 L244.9,503.0 L229.3,490.8 L220.0,486.2 L171.9,476.9 L151.7,467.5 L139.3,464.7 L131.5,459.2 L128.4,458.2 L112.9,454.5 L91.1,432.1 L80.2,425.6 L44.5,395.8 L16.6,380.0 L1.0,367.0 L-5.2,364.2 L-8.3,361.4 L-9.8,360.5 L-12.9,360.5 L-14.5,359.6 L-20.7,347.5 L-19.1,344.7 L-20.7,341.9 L-26.9,341.0 L-31.6,342.8 L-33.1,348.4 L-34.7,354.0 L-36.2,359.6 L-40.0,354.9 L-40.0,351.2 L-40.0,341.0 L-40.0,338.2 L-40.0,341.9 L-40.0,352.1 L-40.0,359.6 L-40.0,355.8 L-40.0,337.3 L-40.0,301.1 L-40.0,291.8 L-40.0,290.8 L-40.0,291.8 L-40.0,289.9 L-40.0,285.3 L-40.0,280.6 L-40.0,283.4 L-40.0,292.7 L-40.0,305.7 L-40.0,322.4 L-40.0,330.8 L-40.0,341.0 L-40.0,348.4 L-40.0,355.8 L-40.0,357.7 L-40.0,355.8 L-40.0,354.9 L-40.0,353.1 L-40.0,352.1 L-40.0,354.0 L-40.0,363.3 L-40.0,367.0 L-40.0,373.5 L-40.0,378.2 L-40.0,375.4 L-40.0,368.9 L-40.0,354.9 L-40.0,348.4 L-40.0,345.6 L-40.0,342.8 L-40.0,341.9 L-40.0,341.0 L-40.0,342.8 L-40.0,345.6 L-40.0,351.2 L-40.0,357.7 L-40.0,359.6 L-40.0,356.8 L-40.0,352.1 L-40.0,348.4 L-40.0,343.8 L-40.0,333.5 L-40.0,325.2 L-40.0,321.5 L-40.0,312.2 L-40.0,304.8 L-40.0,296.4 L-40.0,231.5 L-40.0,206.5 L-40.0,175.0 L-40.0,169.5 L-40.0,166.7 L-40.0,175.0 L-40.0,174.1 L-40.0,170.4 L-40.0,164.8 L-40.0,158.4 L-40.0,156.5 L-40.0,157.4 L-40.0,154.7 L-40.0,149.1 L-40.0,146.3 L-40.0,141.7 L-40.0,109.4 L-40.0,102.9 L-40.0,97.4 L-40.0,92.8 L-40.0,90.9 L-40.0,83.5 L-40.0,81.7 L-40.0,80.8 L-40.0,78.9 L-40.0,78.0 L-40.0,72.4 L-40.0,68.8 L-40.0,61.4 L-40.0,53.1 L-40.0,36.5 L-40.0,-0.4 L-40.0,-10.5 L-40.0,-40.0 Z"/><path class="land visited" d="M1140.0,416.3 L1140.0,417.2 L1140.0,419.1 L1140.0,421.0 L1140.0,423.8 L1140.0,430.3 L1140.0,437.7 L1140.0,445.2 L1140.0,450.8 L1140.0,448.0 L1140.0,446.1 L1140.0,445.2 L1140.0,442.4 L1140.0,433.1 L1140.0,425.6 L1140.0,421.9 L1140.0,423.8 L1140.0,427.5 L1140.0,430.3 L1140.0,431.2 L1140.0,430.3 L1134.7,425.6 L1133.2,423.8 L1125.4,424.7 L1113.0,428.4 L1105.2,428.4 L1108.3,421.9 L1123.8,408.9 L1133.2,397.7 L1137.8,393.0 L1140.0,390.3 L1140.0,386.5 L1140.0,385.6 L1140.0,384.7 L1140.0,386.5 L1140.0,388.4 L1140.0,392.1 L1140.0,394.0 L1140.0,396.8 L1140.0,397.7 L1140.0,406.1 L1140.0,408.9 L1140.0,413.5 L1140.0,415.4 L1140.0,416.3 Z"/><text class="slabel faint" x="1035" y="55" text-anchor="middle">MELBOURNE</text><text class="slabel faint" x="431" y="533" text-anchor="middle">OTWAY RANGES</text><text class="slabel faint" x="712" y="632" text-anchor="middle">BASS STRAIT</text><text class="slabel" x="173" y="301" text-anchor="middle">VICTORIA</text><g class="trip y2024" data-year="2024"><path class="route" data-year="2024" d="M780.7,218.4 Q767.2,263.0 762.8,309.3"/><path class="route" data-year="2024" d="M762.8,309.3 Q731.7,331.9 705.7,360.2"/><path class="route" data-year="2024" d="M705.7,360.2 Q656.4,391.3 614.2,431.6"/><path class="route" data-year="2024" d="M614.2,431.6 Q586.4,465.3 565.8,503.8"/><path class="route" data-year="2024" d="M565.8,503.8 Q521.5,523.8 482.1,552.2"/><path class="route" data-year="2024" d="M482.1,552.2 Q448.8,571.0 419.9,596.1"/><path class="route" data-year="2024" d="M419.9,596.1 Q333.9,540.0 238.5,502.1"/><path class="route" data-year="2024" d="M238.5,502.1 Q216.8,487.2 192.5,476.9"/><path class="route" data-year="2024" d="M192.5,476.9 Q157.0,463.8 119.6,458.0"/><g class="stop" data-id="T12-1" data-year="2024" tabindex="0" role="button" aria-label="Stop 1: Geelong. Show the details." transform="translate(780.7,218.4)"><circle r="13"/><text dy="0.34em" font-size="12">1</text></g><g class="stop" data-id="T12-2" data-year="2024" tabindex="0" role="button" aria-label="Stop 2: Torquay. Show the details." transform="translate(762.8,309.3)"><circle r="13"/><text dy="0.34em" font-size="12">2</text></g><g class="stop" data-id="T12-3" data-year="2024" tabindex="0" role="button" aria-label="Stop 3: Anglesea. Show the details." transform="translate(705.7,360.2)"><circle r="13"/><text dy="0.34em" font-size="12">3</text></g><g class="stop" data-id="T12-4" data-year="2024" tabindex="0" role="button" aria-label="Stop 4: Lorne. Show the details." transform="translate(614.2,431.6)"><circle r="13"/><text dy="0.34em" font-size="12">4</text></g><g class="stop" data-id="T12-5" data-year="2024" tabindex="0" role="button" aria-label="Stop 5: Kennett River Koala Walk. Show the details." transform="translate(565.8,503.8)"><circle r="13"/><text dy="0.34em" font-size="12">5</text></g><g class="stop" data-id="T12-6" data-year="2024" tabindex="0" role="button" aria-label="Stop 6: Apollo Bay. Show the details." transform="translate(482.1,552.2)"><circle r="13"/><text dy="0.34em" font-size="12">6</text></g><g class="stop" data-id="T12-7" data-year="2024" tabindex="0" role="button" aria-label="Stop 7: Cape Otway Lightstation. Show the details." transform="translate(419.9,596.1)"><circle r="13"/><text dy="0.34em" font-size="12">7</text></g><g class="stop" data-id="T12-8" data-year="2024" tabindex="0" role="button" aria-label="Stop 8: Twelve Apostles. Show the details." transform="translate(238.5,502.1)"><circle r="13"/><text dy="0.34em" font-size="12">8</text></g><g class="stop" data-id="T12-9" data-year="2024" tabindex="0" role="button" aria-label="Stop 9: Port Campbell. Show the details." transform="translate(192.5,476.9)"><circle r="13"/><text dy="0.34em" font-size="12">9</text></g><g class="stop" data-id="T12-10" data-year="2024" tabindex="0" role="button" aria-label="Stop 10: Bay of Islands. Show the details." transform="translate(119.6,458.0)"><circle r="13"/><text dy="0.34em" font-size="12">10</text></g></g></svg></div></figure></div>
+
+  <hr class="rule">
+  <h2>Every Stop</h2>
+  <div id="cards"><details class="trip-sec y2024" data-year="2024" style="--c:#2d6a4f"><summary><span class="ts-year">2024 &middot; 10 stops &middot; Australia</span></summary><ol class="stoplist"><li class="card y2024" id="stop-T12-1" data-year="2024"><div class="chead"><span class="badge">1</span><span class="cname">Geelong</span><span class="creg">Victoria</span></div><div class="verse plain">Port city on Corio Bay and the start of the Great Ocean Road.</div></li><li class="card y2024" id="stop-T12-2" data-year="2024"><div class="chead"><span class="badge">2</span><span class="cname">Torquay</span><span class="creg">Victoria</span></div><div class="verse plain">Surf town at the official start of the road; Bells Beach is just south.</div></li><li class="card y2024" id="stop-T12-3" data-year="2024"><div class="chead"><span class="badge">3</span><span class="cname">Anglesea</span><span class="creg">Victoria</span></div><div class="verse plain">Heathland river town where kangaroos graze the golf course.</div></li><li class="card y2024" id="stop-T12-4" data-year="2024"><div class="chead"><span class="badge">4</span><span class="cname">Lorne</span><span class="creg">Victoria</span></div><div class="verse plain">Resort town below the Otway Ranges; Erskine Falls and the pier.</div></li><li class="card y2024" id="stop-T12-5" data-year="2024"><div class="chead"><span class="badge">5</span><span class="cname">Kennett River Koala Walk</span><span class="creg">Victoria</span></div><div class="verse plain">Grey River Road manna gums, one of the most reliable places to see wild koalas, with king parrots and cockatoos at eye level.</div><a class="site" href="https://www.visitgreatoceanroad.org.au" target="_blank" rel="noopener">Kennett River Koala Walk &rarr;</a></li><li class="card y2024" id="stop-T12-6" data-year="2024"><div class="chead"><span class="badge">6</span><span class="cname">Apollo Bay</span><span class="creg">Victoria</span></div><div class="verse plain">Fishing town in the crook of the bay, where the road turns inland into the Otways.</div></li><li class="card y2024" id="stop-T12-7" data-year="2024"><div class="chead"><span class="badge">7</span><span class="cname">Cape Otway Lightstation</span><span class="creg">Victoria</span></div><div class="verse plain">Mainland Australia&#x27;s oldest surviving lighthouse, on the cliff where Bass Strait meets the Southern Ocean.</div><a class="site" href="https://www.lightstation.com" target="_blank" rel="noopener">Cape Otway Lightstation &rarr;</a></li><li class="card y2024" id="stop-T12-8" data-year="2024"><div class="chead"><span class="badge">8</span><span class="cname">Twelve Apostles</span><span class="creg">Port Campbell National Park</span></div><div class="verse plain">Limestone stacks left behind as the cliffs eroded; eight still standing.</div><a class="site" href="https://www.parks.vic.gov.au" target="_blank" rel="noopener">Twelve Apostles &rarr;</a></li><li class="card y2024" id="stop-T12-9" data-year="2024"><div class="chead"><span class="badge">9</span><span class="cname">Port Campbell</span><span class="creg">Victoria</span></div><div class="verse plain">Sheltered inlet town between the Apostles and Loch Ard Gorge.</div></li><li class="card y2024" id="stop-T12-10" data-year="2024"><div class="chead"><span class="badge">10</span><span class="cname">Bay of Islands</span><span class="creg">Peterborough, Victoria</span></div><div class="verse plain">Coastal reserve of offshore stacks and arches at the quiet western end of the Shipwreck Coast.</div><a class="site" href="https://www.parks.vic.gov.au" target="_blank" rel="noopener">Bay of Islands &rarr;</a></li></ol></details></div>
+  <p class="closing">Tasmania, on the far side of Bass Strait, has its own map: <a class="site" href="https://fivelittlerascals.com/tasmania-map">Tasmania &rarr;</a></p>
+</div>
+<script>
+(function(){
+  var wrap = document.currentScript.previousElementSibling;
+  var NOTES = {"T12-1": {"n": "Geelong &middot; Victoria", "v": "Port city on Corio Bay and the start of the Great Ocean Road.", "img": "", "alt": "Geelong", "blog": ""}, "T12-2": {"n": "Torquay &middot; Victoria", "v": "Surf town at the official start of the road; Bells Beach is just south.", "img": "", "alt": "Torquay", "blog": ""}, "T12-3": {"n": "Anglesea &middot; Victoria", "v": "Heathland river town where kangaroos graze the golf course.", "img": "", "alt": "Anglesea", "blog": ""}, "T12-4": {"n": "Lorne &middot; Victoria", "v": "Resort town below the Otway Ranges; Erskine Falls and the pier.", "img": "", "alt": "Lorne", "blog": ""}, "T12-5": {"n": "Kennett River Koala Walk &middot; Victoria", "v": "Grey River Road manna gums, one of the most reliable places to see wild koalas, with king parrots and cockatoos at eye level.", "img": "", "alt": "Kennett River Koala Walk", "blog": ""}, "T12-6": {"n": "Apollo Bay &middot; Victoria", "v": "Fishing town in the crook of the bay, where the road turns inland into the Otways.", "img": "", "alt": "Apollo Bay", "blog": ""}, "T12-7": {"n": "Cape Otway Lightstation &middot; Victoria", "v": "Mainland Australia&#x27;s oldest surviving lighthouse, on the cliff where Bass Strait meets the Southern Ocean.", "img": "", "alt": "Cape Otway Lightstation", "blog": ""}, "T12-8": {"n": "Twelve Apostles &middot; Port Campbell National Park", "v": "Limestone stacks left behind as the cliffs eroded; eight still standing.", "img": "", "alt": "Twelve Apostles", "blog": ""}, "T12-9": {"n": "Port Campbell &middot; Victoria", "v": "Sheltered inlet town between the Apostles and Loch Ard Gorge.", "img": "", "alt": "Port Campbell", "blog": ""}, "T12-10": {"n": "Bay of Islands &middot; Peterborough, Victoria", "v": "Coastal reserve of offshore stacks and arches at the quiet western end of the Shipwreck Coast.", "img": "", "alt": "Bay of Islands", "blog": ""}};
+  var chips = wrap.querySelectorAll('.ychip');
+  var mapsEl = wrap.querySelector('#maps');
+  var LINES_AT_ALL = true;
+  function setYear(y){
+    chips.forEach(function(c){ c.setAttribute('aria-pressed', c.dataset.year===y); });
+    var overview = (y==='all');
+    if(mapsEl){
+      mapsEl.classList.toggle('overview', overview);
+      mapsEl.classList.toggle('nolines', overview && !LINES_AT_ALL);
+    }
+    wrap.querySelectorAll('.trip').forEach(function(g){
+      g.classList.toggle('off', !overview && g.dataset.year!==y); });
+    wrap.querySelectorAll('.trip-sec').forEach(function(sec){
+      var match = overview || sec.dataset.year===y;
+      sec.classList.toggle('off', !match);
+      // when a single year is chosen, open its section; at all-years, collapse all
+      sec.open = (!overview && sec.dataset.year===y);
+    });
+  }
+  function openSub(key, scroll){
+    var fig=wrap.querySelector('#sub-'+key); if(!fig) return;
+    fig.hidden=false;
+    wrap.querySelectorAll('.subnav button[data-sub="'+key+'"]').forEach(function(b){ b.setAttribute('aria-expanded','true'); });
+    if(scroll) fig.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  function closeSub(key){
+    var fig=wrap.querySelector('#sub-'+key); if(!fig) return;
+    fig.hidden=true;
+    wrap.querySelectorAll('.subnav button[data-sub="'+key+'"]').forEach(function(b){ b.setAttribute('aria-expanded','false'); });
+  }
+  wrap.querySelectorAll('.hot').forEach(function(h){
+    var k=h.dataset.sub;
+    h.addEventListener('click', function(){ openSub(k, true); });
+    h.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openSub(k, true); } });
+  });
+  wrap.querySelectorAll('.subnav button').forEach(function(b){
+    b.addEventListener('click', function(){
+      var k=b.dataset.sub, fig=wrap.querySelector('#sub-'+k);
+      if(fig && !fig.hidden) closeSub(k); else openSub(k, true);
+    });
+  });
+  wrap.querySelectorAll('.subclose').forEach(function(b){
+    b.addEventListener('click', function(){ closeSub(b.dataset.sub); });
+  });
+  chips.forEach(function(c){ c.addEventListener('click', function(){ setYear(c.dataset.year); }); });
+
+  function lit(id,on){
+    wrap.querySelectorAll('.stop[data-id="'+id+'"]').forEach(function(s){ s.classList.toggle('lit',on); });
+    var card = wrap.querySelector('#stop-'+id);
+    if(card) card.classList.toggle('lit',on);
+  }
+  wrap.querySelectorAll('.stop').forEach(function(s){
+    var id = s.dataset.id;
+    var fig = s.closest('.map-container');
+    var tip = fig.querySelector('.tooltip');
+    var svg = fig.querySelector('.tmap');
+    function show(e){
+      lit(id,true);
+      var d = NOTES[id]; if(!d) return;
+      tip.innerHTML = (d.img?'<img class="t-img" src="'+d.img+'" alt="'+(d.alt||'')+'" loading="lazy">':'')
+        + '<span class="t-name">'+d.n+'</span>'+(d.v?'<span class="t-verse">'+d.v+'</span>':'');
+      var r = svg.getBoundingClientRect(), b = s.getBoundingClientRect();
+      var x = b.left - r.left + b.width/2, y = b.top - r.top;
+      tip.style.opacity = 1;
+      var w = tip.offsetWidth, h = tip.offsetHeight;
+      tip.style.left = Math.max(4, Math.min(r.width - w - 4, x - w/2)) + 'px';
+      tip.style.top  = Math.max(4, y - h - 10) + 'px';
+    }
+    function hide(){ lit(id,false); tip.style.opacity = 0; }
+    s.addEventListener('mouseenter', show);
+    s.addEventListener('mouseleave', hide);
+    s.addEventListener('focus', show);
+    s.addEventListener('blur', hide);
+    s.addEventListener('click', function(ev){
+      if(ev.button!==0||ev.metaKey||ev.ctrlKey||ev.shiftKey||ev.altKey) return;
+      var d = NOTES[id] || {};
+      // Blog stop -> open the post
+      if(d.blog){ window.open(d.blog, '_blank', 'noopener'); return; }
+      ev.preventDefault();
+      // Overview (all years) -> promote this stop's trip so its route+numbers appear
+      var pressed = wrap.querySelector('.ychip[aria-pressed="true"]');
+      var cur = pressed ? pressed.dataset.year : 'all';
+      if(cur==='all' && s.dataset.year){ setYear(s.dataset.year); }
+      var card = wrap.querySelector('#stop-'+id);
+      if(card) card.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+  });
+
+  var LINKS = { world: "https://fivelittlerascals.com/world-map" };
+  wrap.querySelectorAll('[data-nav]').forEach(function(a){
+    var u = LINKS[a.dataset.nav]; if(u) a.href = u;
+  });
+  setYear('all');
+})();
+</script>

@@ -1,0 +1,64 @@
+===== australia-map =====
+<iframe id="frame-australia-map" src="https://YOURNAME.github.io/flr-maps/australia-map.html" title="australia map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-australia-map");</script>
+
+===== europe-map =====
+<iframe id="frame-europe-map" src="https://YOURNAME.github.io/flr-maps/europe-map.html" title="europe map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-europe-map");</script>
+
+===== new-south-wales-map =====
+<iframe id="frame-new-south-wales-map" src="https://YOURNAME.github.io/flr-maps/new-south-wales-map.html" title="new south wales map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-new-south-wales-map");</script>
+
+===== new-zealand-map =====
+<iframe id="frame-new-zealand-map" src="https://YOURNAME.github.io/flr-maps/new-zealand-map.html" title="new zealand map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-new-zealand-map");</script>
+
+===== north-africa-map =====
+<iframe id="frame-north-africa-map" src="https://YOURNAME.github.io/flr-maps/north-africa-map.html" title="north africa map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-north-africa-map");</script>
+
+===== north-america-map =====
+<iframe id="frame-north-america-map" src="https://YOURNAME.github.io/flr-maps/north-america-map.html" title="north america map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-north-america-map");</script>
+
+===== northern-territory-map =====
+<iframe id="frame-northern-territory-map" src="https://YOURNAME.github.io/flr-maps/northern-territory-map.html" title="northern territory map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-northern-territory-map");</script>
+
+===== queensland-map =====
+<iframe id="frame-queensland-map" src="https://YOURNAME.github.io/flr-maps/queensland-map.html" title="queensland map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-queensland-map");</script>
+
+===== south-australia-map =====
+<iframe id="frame-south-australia-map" src="https://YOURNAME.github.io/flr-maps/south-australia-map.html" title="south australia map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-south-australia-map");</script>
+
+===== southern-africa-map =====
+<iframe id="frame-southern-africa-map" src="https://YOURNAME.github.io/flr-maps/southern-africa-map.html" title="southern africa map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-southern-africa-map");</script>
+
+===== tasmania-map =====
+<iframe id="frame-tasmania-map" src="https://YOURNAME.github.io/flr-maps/tasmania-map.html" title="tasmania map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-tasmania-map");</script>
+
+===== victoria-map =====
+<iframe id="frame-victoria-map" src="https://YOURNAME.github.io/flr-maps/victoria-map.html" title="victoria map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-victoria-map");</script>
+
+===== world-map =====
+<iframe id="frame-world-map" src="https://YOURNAME.github.io/flr-maps/world-map.html" title="world map" style="width:1px;min-width:100%;border:0;" scrolling="no"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/parent@5.3.2"></script>
+<script>iframeResize({ license:"GPLv3", checkOrigin:false }, "#frame-world-map");</script>
