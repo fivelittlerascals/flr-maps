@@ -366,7 +366,7 @@ document.querySelectorAll('#tabs a[data-nav]').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
     const u = NAV_URLS[a.dataset.nav];
-    if (u && u.trim()) window.open(u.trim(), '_self');
+    if (u && u.trim()) window.top.location.href = u.trim();
   });
 });
 </script>
