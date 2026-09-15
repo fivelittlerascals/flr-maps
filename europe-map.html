@@ -126,11 +126,10 @@
   .trip-sec[open] > summary::before { transform:rotate(90deg); }
   .trip-sec .ts-year { letter-spacing:.02em; }
   .trip-sec.off { display:none; }
-  .stoplist { list-style:none; padding:14px 0 20px; margin:0; }
+  .stoplist { list-style:none; padding:14px 0 22px; margin:0; display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:18px; }
   .card { break-inside:avoid; margin:0 0 20px; padding:10px 12px; border-left:3px solid var(--c);
     border-radius:3px; transition:background .2s ease; }
-  .cthumb { width:100%; height:130px; object-fit:cover; border-radius:3px; margin:-4px 0 8px;
-    display:block; background:#eef2f6; }
+  .cthumb { width:100%; height:150px; object-fit:contain; border-radius:4px; margin:0 0 8px; display:block; background:#eef2f6; }
   .tooltip .t-img { width:100%; max-width:280px; height:120px; object-fit:cover; border-radius:5px;
     margin:0 0 7px; display:block; }
   .card.lit { background:#fbf3f1; }
