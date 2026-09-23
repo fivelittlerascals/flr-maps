@@ -197,6 +197,19 @@
 
   .cthumb { width:100%; height:130px; object-fit:cover; border-radius:3px; margin:-2px 0 8px; display:block; background:#eef2f6; }
   .tooltip .t-img, .tooltip img.tip-photo { width:100%; max-width:280px; height:120px; object-fit:cover; border-radius:5px; margin:0 0 7px; display:block; }
+
+  #trip-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 34px; align-items: start;
+    grid-template-areas: "ra rb" "ca cb"; }
+  #trip-cols > #rule-a { grid-area: ra; }
+  #trip-cols > #rule-b { grid-area: rb; }
+  #trip-cols > #cards  { grid-area: ca; }
+  #trip-cols > #cardsb { grid-area: cb; }
+  /* when a single trip is selected, collapse to one column */
+  .show-a #trip-cols { grid-template-columns: 1fr; grid-template-areas: "ra" "ca"; }
+  .show-b #trip-cols { grid-template-columns: 1fr; grid-template-areas: "rb" "cb"; }
+  @media (max-width: 720px) {
+    #trip-cols { grid-template-columns: 1fr; grid-template-areas: "ra" "ca" "rb" "cb"; }
+  }
 </style>
 
 <div class="wrap">
@@ -324,7 +337,8 @@
 </svg>
   </div>
 
-  <hr class="rule" id="rule-a">
+  <div id="trip-cols">
+<hr class="rule" id="rule-a">
   <ol id="cards">
     <li class="card" id="stop-1" data-n="1"><div class="chead"><span class="badge">1</span><span class="cname">Melbourne</span><span class="creg">VIC</span></div><div class="verse"><span class="ln">We’re off to Tasmania.  Why?  Just for fun.</span><span class="ln">There are six of us packed in the car--only one.</span><span class="ln">With all the kids screaming, I can’t hear myself think.</span><span class="ln">So I reach in the door—another sparkling water to drink.</span><span class="br"></span><span class="ln">Now we’ve made it to Vic—checked into AirBnB.</span><span class="ln">The view of the Harbour is two floors below 33.</span><span class="ln">Hard to find brekkie with shops closed for Boxing Day.</span><span class="ln">Finally found bagels sold by Indians, just to say.</span><span class="br"></span><span class="ln">The next day we hit the playground and gardens botanical</span><span class="ln">With ice cream and pizza, the kids are mostly full</span><span class="ln">With sore, tired feet Adeline wants a carry</span><span class="ln">As the sun floats towards the horizon, we head to the ferry.</span></div></li>
 <li class="card" id="stop-2" data-n="2"><div class="chead"><span class="badge">2</span><span class="cname">Bass Strait crossing</span><span class="creg">overnight ferry</span></div><div class="verse"><span class="ln">There’s Paw Patrol and Peppa, pizza and chips</span><span class="ln">Taking motion sickness pills to stop tummies from flips</span><span class="ln">The boat rocking us back and forth in the sea</span><span class="ln">Crammed in a bunk room—across one, two, three.</span></div></li>
@@ -380,7 +394,8 @@
   </ol>
 
   <hr class="rule">
-  <div id="coda"><span class="ln">A trip around Tassie is much more than places</span><span class="ln">As you look through the photos you can see on our faces:</span><span class="br"></span><span class="ln">CC sleeping and then singing her own songs.</span><span class="ln">Addy, lightning quick, can drop both her thongs.</span><span class="ln">Jack has a plan, has scavenged up some wood.</span><span class="ln">Lorelei coordinating, making sure others feel good.</span><span class="ln">Mummy throwing snacks to the back of the car.</span><span class="ln">And Daddy ordering a sparkling wine at the bar.</span><span class="br"></span><span class="ln">We tried beaches, animals encounters and also the city</span><span class="ln">It wasn’t perfect and it wasn’t always pretty</span><span class="ln">We sometimes had fights between sisters and the brother</span><span class="ln">But ultimately we’re grateful for quality time with each other.</span></div>
+  </div>
+<div id="coda"><span class="ln">A trip around Tassie is much more than places</span><span class="ln">As you look through the photos you can see on our faces:</span><span class="br"></span><span class="ln">CC sleeping and then singing her own songs.</span><span class="ln">Addy, lightning quick, can drop both her thongs.</span><span class="ln">Jack has a plan, has scavenged up some wood.</span><span class="ln">Lorelei coordinating, making sure others feel good.</span><span class="ln">Mummy throwing snacks to the back of the car.</span><span class="ln">And Daddy ordering a sparkling wine at the bar.</span><span class="br"></span><span class="ln">We tried beaches, animals encounters and also the city</span><span class="ln">It wasn’t perfect and it wasn’t always pretty</span><span class="ln">We sometimes had fights between sisters and the brother</span><span class="ln">But ultimately we’re grateful for quality time with each other.</span></div>
 </div>
 
 <script>
