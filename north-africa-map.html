@@ -181,7 +181,7 @@
   var LINES_AT_ALL = true;
   var SINGLE_TRIP = true;
   function setYear(y){
-    if(SINGLE_TRIP) y = (wrap.querySelector(".ychip[data-year]:not([data-year="all"])")||{dataset:{}}).dataset.year || y;
+    if(SINGLE_TRIP) y = (wrap.querySelector('.ychip[data-year]:not([data-year="all"])')||{dataset:{}}).dataset.year || y;
     chips.forEach(function(c){ c.setAttribute('aria-pressed', c.dataset.year===y); });
     var overview = (y==='all');
     if(mapsEl){
