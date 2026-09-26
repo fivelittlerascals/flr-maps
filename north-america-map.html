@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<base target="_top">
-<title>North America — Five Little Rascals</title>
-</head>
-<body>
 <!--
   ============================================================
   NORTH AMERICA — 2023, 2024 AND 2025
@@ -156,9 +147,8 @@
   
   
 
-  .cthumb { width:100%; aspect-ratio:1/1; height:auto; object-fit:cover; border-radius:4px; margin:0 0 8px;
-    display:block; background:#eef2f6; }
-  .tooltip .t-img, .tooltip img.tip-photo { width:120px; height:120px; object-fit:cover; border-radius:4px; margin:0 0 6px; display:block; }
+  .cthumb { width:100%; height:130px; object-fit:cover; border-radius:3px; margin:-2px 0 8px; display:block; background:#eef2f6; }
+  .tooltip .t-img, .tooltip img.tip-photo { width:100%; max-width:280px; height:120px; object-fit:cover; border-radius:5px; margin:0 0 7px; display:block; }
 
   #cards { padding:0; margin:0; }
   #cards .trip-sec { border-top:2px solid var(--c); margin:0 0 4px; }
@@ -169,13 +159,7 @@
   #cards .trip-sec > summary::before { content:"\25B8"; color:var(--c); transition:transform .15s ease; display:inline-block; }
   #cards .trip-sec[open] > summary::before { transform:rotate(90deg); }
   #cards .trip-sec.off { display:none; }
-  #cards .stoplist { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr));
-    gap:18px; padding:16px 0 22px; margin:0; list-style:none; }
-  #cards .trip-sec.has-verse .stoplist { display:block; }
-  #cards .trip-sec.has-verse .card { margin:0 0 16px; max-width:640px; }
-  #cards .card { break-inside:avoid; margin:0; border-left:3px solid var(--c);
-    border-radius:4px; padding:10px 12px; background:#faf8f5; }
-  #cards .stoplist { list-style:none; padding:14px 0 20px; margin:0;  column-gap:34px; }
+  #cards .stoplist { list-style:none; padding:14px 0 20px; margin:0; columns:2; column-gap:34px; }
   @media (max-width:720px){ #cards .stoplist { columns:1; } }
 </style>
 
@@ -841,7 +825,7 @@ document.querySelectorAll('#tabs a[data-nav]').forEach(a => {
   a.addEventListener('click', e => {
     e.preventDefault();
     const u = NAV_URLS[a.dataset.nav];
-    if (u && u.trim()) window.top.location.href = u.trim();
+    if (u && u.trim()) window.open(u.trim(), '_self');
   });
 });
 
@@ -855,7 +839,7 @@ svg.querySelectorAll('.stop').forEach(g => {
     g.classList.add('lit');
     const card = document.getElementById('stop-' + k);
     if (card) card.classList.add('lit');
-    let inner = (m.photo ? '<img class="tip-photo" src="' + m.photo + (m.photo.indexOf('?')>-1?'&':'?') + 'format=400w" alt="' + (m.name||'') + '" loading="lazy">' : '') + '<b>' + m.year + ' &middot; #' + g.dataset.n + ' &middot; ' +
+    let inner = (m.photo ? '<img class="tip-photo" src="' + m.photo + (m.photo.indexOf('?')>-1?'&':'?') + 'format=1000w" alt="' + (m.name||'') + '" loading="lazy">' : '') + '<b>' + m.year + ' &middot; #' + g.dataset.n + ' &middot; ' +
                 m.name + ', ' + m.region + '</b>';
     if (m.verse && m.verse.length) {
       inner += '<span class="tv">' + m.verse.map(l =>
@@ -884,17 +868,12 @@ svg.querySelectorAll('.stop').forEach(g => {
   });
   const open = () => {
     const meta = META[k] || {};
-    const overview = document.getElementById('namap').classList.contains('overview');
-    // STAGE 1: in the all-years overview, first click promotes this marker's trip (route + connectors)
-    if (overview) {
-      const yr = g.dataset.year || meta.year;
-      if (yr && typeof applyYear === 'function') { applyYear(yr); return; }
+    if (meta.photo && meta.url && meta.url.indexOf('fivelittlerascals.com/blog') !== -1) {
+      window.open(meta.url, '_blank', 'noopener'); return;
     }
-    // STAGE 2: already in a single-trip view -> open the blog if this stop has one
     if (meta.url && meta.url.indexOf('fivelittlerascals.com/blog') !== -1) {
-      window.top.location.href = meta.url; return;
+      window.open(meta.url, '_blank', 'noopener'); return;
     }
-    // otherwise (no blog): reveal its card
     const card = document.getElementById('stop-' + k);
     if (card) {
       const sec = card.closest('details.trip-sec');
@@ -921,7 +900,9 @@ function applyYear(y) {
   svg.querySelectorAll('.route').forEach(el => {
     el.classList.toggle('gone', y === 'all' || el.dataset.year !== y);
   });
-  // cards are shown/hidden by their collapsible <details> section, not by year 'gone'.
+  document.querySelectorAll('#cards li').forEach(li => {
+    li.classList.toggle('gone', y !== 'all' && li.dataset.year !== y);
+  });
 }
 document.querySelectorAll('#yearbar .ychip').forEach(chip => {
   chip.addEventListener('click', () => applyYear(chip.dataset.year));
@@ -975,7 +956,6 @@ tooltip.addEventListener('mouseleave', () => {
     var d = document.createElement('details');
     d.className = 'trip-sec y' + g.year;
     d.dataset.year = g.year;
-    if (g.cards.some(function(c){ return c.querySelector('.verse, .ln'); })) d.classList.add('has-verse');
     var sm = document.createElement('summary');
     sm.innerHTML = '<span class="ts-year">' + g.summary + '</span>';
     d.appendChild(sm);
@@ -998,10 +978,24 @@ tooltip.addEventListener('mouseleave', () => {
     };
   }
 })();
+// deep-link: honor ?year=  (or #year= / #2025) so external links open a specific trip
+(function(){
+  function pick(){
+    var v = '';
+    try {
+      var p = new URLSearchParams(window.location.search);
+      v = p.get('year') || p.get('y') || '';
+      if (!v && window.location.hash){
+        var m = window.location.hash.replace(/^#/,'').match(/(?:year=)?(\d{4}|all)/i);
+        if (m) v = m[1];
+      }
+    } catch(e){}
+    return (v||'').toLowerCase();
+  }
+  var y = pick();
+  if (!y) return;
+  if (document.querySelector('#yearbar .ychip[data-year="'+y+'"]') && typeof window.applyYear === 'function'){
+    window.applyYear(y);
+  }
+})();
 </script>
-
-<!-- iframe auto-height for embedding on Squarespace -->
-<script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/child@5.3.2"></script>
-
-</body>
-</html>
