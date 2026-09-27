@@ -301,9 +301,13 @@ const container = document.getElementById('map-container');
 const tooltip = document.getElementById('tooltip');
 const svg = document.getElementById('worldmap');
 
-function go(key) {
-  const url = LINKS[key];
-  if (url && url.trim()) window.top.location.href = url.trim();
+function go(key, year) {
+  let url = LINKS[key];
+  if (!url || !url.trim()) return;
+  url = url.trim();
+  // carry the trip year so the destination map opens on that trip, not its default
+  if (year) url += (url.indexOf('?') > -1 ? '&' : '?') + 'year=' + encodeURIComponent(year);
+  window.top.location.href = url;
 }
 
 function lite(i, on) {
@@ -336,9 +340,9 @@ svg.querySelectorAll('.jm').forEach(g => {
       '<br>' + m.note + '</span>');
   });
   g.addEventListener('mouseleave', () => { lite(i, false); hideTip(); });
-  g.addEventListener('click', e => { if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey) return; e.preventDefault(); go(m.key); });
+  g.addEventListener('click', e => { if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey) return; e.preventDefault(); go(m.key, m.year); });
   g.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(m.key); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(m.key, m.year); }
   });
 });
 
@@ -353,7 +357,7 @@ svg.querySelectorAll('.regiongrp').forEach(a => {
 
 document.querySelectorAll('.jlink').forEach(a => {
   const i = a.dataset.i;
-  a.addEventListener('click', e => { if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey) return; e.preventDefault(); go(a.dataset.key); });
+  a.addEventListener('click', e => { if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey) return; e.preventDefault(); go(a.dataset.key, (META[a.dataset.i]||{}).year); });
   a.addEventListener('mouseenter', () => lite(i, true));
   a.addEventListener('mouseleave', () => lite(i, false));
 });
@@ -402,6 +406,25 @@ tooltip.addEventListener('mouseleave', hideTip);
   if(chip) chip.click();
 })();
 </script>
+<script>
+/* Carry each journey's year on the static hrefs too, so Cmd/Ctrl-click (new tab)
+   opens the destination map on that trip rather than its default year. */
+(function(){
+  var XL='http://www.w3.org/1999/xlink';
+  function stamp(el, year){
+    if (!el || !year) return;
+    [null,XL].forEach(function(ns){
+      var v = ns ? el.getAttributeNS(ns,'href') : el.getAttribute('href');
+      if (!v || /[?&]year=/.test(v) || v.charAt(0) === '#') return;
+      var u = v + (v.indexOf('?') > -1 ? '&' : '?') + 'year=' + encodeURIComponent(year);
+      if (ns) el.setAttributeNS(ns,'href',u); else el.setAttribute('href',u);
+    });
+  }
+  document.querySelectorAll('.jm[data-year]').forEach(function(g){ stamp(g.closest('a'), g.dataset.year); });
+  document.querySelectorAll('.jcard[data-year] .jlink').forEach(function(a){ stamp(a, a.closest('.jcard').dataset.year); });
+})();
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/child@5.3.2"></script>
 </body>
 </html>
