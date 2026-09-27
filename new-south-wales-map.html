@@ -368,6 +368,52 @@ document.querySelectorAll('#tabs a[data-nav]').forEach(a => {
 </script>
 
 <!-- iframe auto-height for embedding on Squarespace -->
+<!-- FLR-STICKY-START: pins the tab + year rows under the Squarespace header while the parent page scrolls.
+     CSS position:sticky can't work here (the iframe is sized to full height, so it never scrolls itself).
+     Below 600px only the year row is pinned; pages with no year row keep their tabs row pinned. -->
+<style>.flr-pinned{position:relative;z-index:30;background:#fff;will-change:transform}</style>
+<script>
+(function(){
+  if (window.self === window.top) return;            // opened directly: native sticky applies
+  var PHONE = 600;
+  var yearRow = document.querySelector('#yearbar, #tripbar, #chips');
+  var tabs = document.getElementById('tabs');
+  var last = null;
+  // Squarespace fixed header bottom ≈ 29.7px + 2vw (measured 47.6px at 894px wide, Sep 2026)
+  function headerH(vw){ return Math.round(29.7 + 0.02 * vw); }
+  function natTop(el){ var t = 0; for (var n = el; n; n = n.offsetParent) t += n.offsetTop; return t; }
+  function apply(p){
+    if (p) last = p;
+    if (!last) return;
+    var vw = last.viewport.width * (last.viewport.scale || 1);
+    var top = last.iframe.top;
+    var rows = [];
+    if (tabs && !(yearRow && vw < PHONE)) rows.push(tabs);
+    if (yearRow) rows.push(yearRow);
+    [tabs, yearRow].forEach(function(el){
+      if (el && rows.indexOf(el) < 0){ el.style.transform = ''; el.classList.remove('flr-pinned'); }
+    });
+    var docH = document.documentElement.scrollHeight;
+    var stack = headerH(vw);
+    rows.forEach(function(el){
+      var nt = natTop(el), eh = el.offsetHeight;         // transforms don't move offsetTop
+      var shift = Math.max(0, stack - (top + nt));
+      shift = Math.min(shift, Math.max(0, docH - nt - eh));
+      el.classList.add('flr-pinned');
+      el.style.transform = shift ? 'translateY(' + shift + 'px)' : '';
+      stack += eh;
+    });
+  }
+  var cfg = window.iframeResizer = window.iframeResizer || {};
+  var prev = cfg.onReady;
+  cfg.onReady = function(){
+    if (prev) prev();
+    if (window.parentIframe && window.parentIframe.getParentProps) window.parentIframe.getParentProps(apply);
+  };
+  window.addEventListener('resize', function(){ apply(); });
+})();
+</script>
+<!-- FLR-STICKY-END -->
 <script src="https://cdn.jsdelivr.net/npm/@iframe-resizer/child@5.3.2"></script>
 
 </body>
