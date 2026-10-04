@@ -15,8 +15,9 @@
   files, nothing to load from another site. Paste the whole
   thing into a Squarespace Code block and it works.
 
-  Hovering a numbered stop shows the part of the poem written
-  about that place. Clicking it jumps to the full verse below.
+  Hovering a numbered stop shows its photo, a one-line description
+  and a link to the place's own site. Below the map: a Photos view
+  (default) and The poem view.
 
   TO EDIT A VERSE: find the STOPS array near the bottom and
   edit the "verse" lines, then edit the matching card in the
@@ -164,6 +165,43 @@
 
   .cthumb { width:100%; height:130px; object-fit:cover; border-radius:3px; margin:-2px 0 8px; display:block; background:#eef2f6; }
   .tooltip .t-img, .tooltip img.tip-photo { width:100%; max-width:280px; height:120px; object-fit:cover; border-radius:5px; margin:0 0 7px; display:block; }
+  [hidden] { display: none !important; }
+  /* ---- views under the map ---- */
+  .below { margin: 34px 0 0; border-top: 2px solid var(--ink); padding-top: 18px; }
+  .storylink { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0 0 18px; }
+  .storylink .lbl { font-size: .74rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; }
+  .storylink a { color: var(--ink); font-weight: 700; font-size: 1.02rem; text-decoration: none;
+    border-bottom: 1px solid currentColor; }
+  .storylink a:hover, .storylink a:focus { color: var(--accent); }
+  .viewbar { display: flex; gap: 8px; margin: 0 0 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .82rem; }
+  .viewbtn { padding: 6px 15px; border: 1px solid #d7dde6; border-radius: 999px;
+    background: #fff; color: var(--text); cursor: pointer; font: inherit; }
+  .viewbtn:hover { border-color: var(--ink); color: var(--ink); }
+  .viewbtn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 700; }
+  .viewbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #photos { list-style: none; padding: 0; margin: 0; display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; }
+  .pcard { margin: 0; border-left: 3px solid #dfe5ec; border-radius: 4px; padding: 10px 12px;
+    background: #faf8f5; transition: background .2s ease, border-color .2s ease; min-width: 0; }
+  .pcard.lit { background: #fbf3f1; border-left-color: var(--accent); }
+  .pcard .cthumb { width: 100%; aspect-ratio: 1/1; height: auto; object-fit: cover; object-position: 50% 30%;
+    border-radius: 4px; margin: 0 0 8px; display: block; background: #eef2f6; }
+  .pcard .nophoto { width: 100%; aspect-ratio: 1/1; border-radius: 4px; margin: 0 0 8px;
+    background: #eef2f6; display: flex; align-items: center; justify-content: center;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .78rem; color: var(--muted); }
+  .pcard.lit .badge { background: var(--accent); }
+  .pcard .desc { margin: 6px 0 4px; font-size: .88rem; line-height: 1.45; }
+  .pcard .site { display: inline-block; margin-top: 4px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .76rem; font-weight: 700; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
+  .pcard .site:hover, .pcard .site:focus { color: var(--accent); border-bottom-color: var(--accent); }
+  #tooltip .t-desc { display: block; font-size: .84rem; line-height: 1.45; }
+  .pcap { font-style: italic; font-size: .86rem; line-height: 1.4; color: #4a5566; margin-top: 4px; }
+  #tooltip img.tip-photo { width: 120px; height: 120px; object-fit: cover; object-position: 50% 30%;
+    border-radius: 4px; margin: 0 0 6px; display: block; background: #2a3c5c; }
+  @media (max-width: 520px) { #photos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
 </style>
 
 <div class="wrap">
@@ -175,7 +213,7 @@
 
   <div id="map-container">
     <div id="tooltip" role="status"></div>
-    <svg id="qldmap" viewBox="0 0 940 783" role="img" aria-label="Map of a Queensland trip with 9 numbered stops: an east-coast strip and a Hamilton Island panel. Every stop and its poem verse is also listed below the map.">
+    <svg id="qldmap" viewBox="0 0 940 783" role="img" aria-label="Map of a Queensland trip with 9 numbered stops: an east-coast strip and a Hamilton Island panel. Every stop is also listed below the map, with a photo and its poem verse.">
 <rect class="sea" x="0" y="0" width="940" height="783"/>
 <clipPath id="coastclip"><rect x="0" y="0" width="242" height="783"/></clipPath>
 <g clip-path="url(#coastclip)">
@@ -205,19 +243,26 @@
 <path class="route" d="M431.0,327.3 Q476.1,379.7 533.9,417.7"/>
 <path class="route" d="M533.9,417.7 Q498.8,376.6 453.7,346.7"/>
 <path class="route" d="M453.7,346.7 Q419.1,390.7 397.8,442.5"/>
-<g class="stop" data-n="1" tabindex="0" role="button" aria-label="Stop 1: Canberra. Show poem verse." transform="translate(48.5,729.7)"><circle r="13"/><text dy="0.34em">1</text></g>
-<g class="stop" data-n="2" tabindex="0" role="button" aria-label="Stop 2: Reef View Hotel. Show poem verse." transform="translate(503.3,381.9)"><circle r="13"/><text dy="0.34em">2</text></g>
-<g class="stop" data-n="3" tabindex="0" role="button" aria-label="Stop 3: Reefworld, Great Barrier Reef. Show poem verse." transform="translate(50.7,49.7)"><circle r="13"/><text dy="0.34em">3</text></g>
-<g class="stop" data-n="4" tabindex="0" role="button" aria-label="Stop 4: The Pool Terrace. Show poem verse." transform="translate(481.4,402.3)"><circle r="13"/><text dy="0.34em">4</text></g>
-<g class="stop" data-n="5" tabindex="0" role="button" aria-label="Stop 5: Cooinda Gardens. Show poem verse." transform="translate(431.0,327.3)"><circle r="13"/><text dy="0.34em">5</text></g>
-<g class="stop" data-n="6" tabindex="0" role="button" aria-label="Stop 6: Catseye Beach. Show poem verse." transform="translate(533.9,417.7)"><circle r="13"/><text dy="0.34em">6</text></g>
-<g class="stop" data-n="7" tabindex="0" role="button" aria-label="Stop 7: A round of mini-golf. Show poem verse." transform="translate(453.7,346.7)"><circle r="13"/><text dy="0.34em">7</text></g>
-<g class="stop" data-n="8" tabindex="0" role="button" aria-label="Stop 8: Hamilton Island Airport. Show poem verse." transform="translate(397.8,442.5)"><circle r="13"/><text dy="0.34em">8</text></g>
-<g class="stop" data-n="9" tabindex="0" role="button" aria-label="Stop 9: Brisbane. Show poem verse." transform="translate(198.9,375.4)"><circle r="13"/><text dy="0.34em">9</text></g>
+<g class="stop" data-n="1" tabindex="0" role="button" aria-label="Stop 1: Canberra. Show photo and link." transform="translate(48.5,729.7)"><circle r="13"/><text dy="0.34em">1</text></g>
+<g class="stop" data-n="2" tabindex="0" role="button" aria-label="Stop 2: Reef View Hotel. Show photo and link." transform="translate(503.3,381.9)"><circle r="13"/><text dy="0.34em">2</text></g>
+<g class="stop" data-n="3" tabindex="0" role="button" aria-label="Stop 3: Reefworld, Great Barrier Reef. Show photo and link." transform="translate(50.7,49.7)"><circle r="13"/><text dy="0.34em">3</text></g>
+<g class="stop" data-n="4" tabindex="0" role="button" aria-label="Stop 4: The Pool Terrace. Show photo and link." transform="translate(481.4,402.3)"><circle r="13"/><text dy="0.34em">4</text></g>
+<g class="stop" data-n="5" tabindex="0" role="button" aria-label="Stop 5: Cooinda Gardens. Show photo and link." transform="translate(431.0,327.3)"><circle r="13"/><text dy="0.34em">5</text></g>
+<g class="stop" data-n="6" tabindex="0" role="button" aria-label="Stop 6: Catseye Beach. Show photo and link." transform="translate(533.9,417.7)"><circle r="13"/><text dy="0.34em">6</text></g>
+<g class="stop" data-n="7" tabindex="0" role="button" aria-label="Stop 7: A round of mini-golf. Show photo and link." transform="translate(453.7,346.7)"><circle r="13"/><text dy="0.34em">7</text></g>
+<g class="stop" data-n="8" tabindex="0" role="button" aria-label="Stop 8: Hamilton Island Airport. Show photo and link." transform="translate(397.8,442.5)"><circle r="13"/><text dy="0.34em">8</text></g>
+<g class="stop" data-n="9" tabindex="0" role="button" aria-label="Stop 9: Brisbane. Show photo and link." transform="translate(198.9,375.4)"><circle r="13"/><text dy="0.34em">9</text></g>
 </svg>
   </div>
 
-  <hr class="rule">
+  <div class="below">
+    <p class="storylink"><span class="lbl">The full trip</span><a href="https://fivelittlerascals.com/blog/hamilton-island-whitsundays-with-kids" target="_top">Rain, Reef and Ping Pong: Hamilton Island with Kids &rarr;</a></p>
+    <div class="viewbar" role="group" aria-label="Show below the map">
+      <button class="viewbtn" type="button" data-view="photos" aria-pressed="true">Photos</button>
+      <button class="viewbtn" type="button" data-view="poem" aria-pressed="false">The poem</button>
+    </div>
+    <ol id="photos"></ol>
+    <div id="poemview" hidden>
   <ol id="cards">
     <li class="card" id="stop-1" data-n="1"><div class="chead"><span class="badge">1</span><span class="cname">Canberra</span><span class="creg">flying north</span></div><div class="verse"><span class="ln">Winter in Canberra got you singing the blues?</span><span class="ln">Flying north to Queensland was easy to choose,</span><span class="ln">Boarded the first plane, had to travel in twos,</span><span class="ln">A surgical mask, in Australia, we still had to use.</span></div></li>
 <li class="card" id="stop-2" data-n="2"><div class="chead"><span class="badge">2</span><span class="cname">Reef View Hotel</span><span class="creg">Hamilton Island</span></div><div class="verse"><span class="ln">Off to Hamilton Island to meet Karolina and Josh.</span><span class="ln">On the 17th floor of the Reef View is really quite posh.</span><span class="br"></span><span class="ln">With sealegs behind us, we began a brand-new day</span><span class="ln">Complimentary breakfast could fill much more than a tray</span><span class="ln">“More ping pong” was most prominently what Jack would say</span><span class="ln">And the rain meant more Uno and War did we play.</span></div></li>
@@ -229,12 +274,45 @@
 <li class="card" id="stop-8" data-n="8"><div class="chead"><span class="badge">8</span><span class="cname">Hamilton Island Airport</span><span class="creg">Hamilton Island</span></div><div class="verse"><span class="ln">Now off to the airport with our treasures and clothes in tow</span><span class="ln">If we went six across we’d take up a whole row.</span><span class="ln">The kids have headphones on, don’t interrupt their flow</span><span class="ln">All the way to Brissy, fortunately, that airplane did go.</span></div></li>
 <li class="card" id="stop-9" data-n="9"><div class="chead"><span class="badge">9</span><span class="cname">Brisbane</span><span class="creg">Marriott, Queen Street</span></div><div class="verse"><span class="ln">An airplane, an airtrain, pulling baggage up a hill</span><span class="ln">Tired kids, bedtime will always test your will</span><span class="ln">Have some sushi in the hotel room—please don’t spill.</span><span class="ln">Watch Encanto from your beds, to have some time to chill.</span><span class="br"></span><span class="ln">CC’s bday, cream filled donuts for a start</span><span class="ln">She’s content with two small presents for her part</span><span class="ln">Pool and hot tub—kids are happy, off the chart!</span><span class="ln">Out to eat, COVID ordering, at the table in your cart.</span><span class="br"></span><span class="ln">A gourmet breakfast, didn’t venture outside</span><span class="ln">Pancakes, eggs, fresh juice on the side</span><span class="ln">A morning of meetings, but pool time turned the tide</span><span class="ln">Hop on the glider board, we’re off for a ride.</span><span class="br"></span><span class="ln">Having pasta and pizza, in more Queensland rain</span><span class="ln">Even more aeroplane pasta to-go, but just keep it plain.</span><span class="ln">Too much time in the hotel room would make us insane</span><span class="ln">So mummy braves the cold pool, with four kids in train.</span><span class="br"></span><span class="ln">One last day for coffee and a snack</span><span class="ln">And into the hot tub for CC to put foam on my back</span><span class="ln">Up to the room for a final, all-in pack</span><span class="ln">Goodbye to Brissy, we’ll see you down the track.</span></div></li>
   </ol>
+    </div>
+  </div>
 
 
 </div>
 
 <script>
 const STOPS = [{"n": 1, "name": "Canberra", "region": "flying north", "verse": ["Winter in Canberra got you singing the blues?", "Flying north to Queensland was easy to choose,", "Boarded the first plane, had to travel in twos,", "A surgical mask, in Australia, we still had to use."]}, {"n": 2, "name": "Reef View Hotel", "region": "Hamilton Island", "verse": ["Off to Hamilton Island to meet Karolina and Josh.", "On the 17th floor of the Reef View is really quite posh.", "", "With sealegs behind us, we began a brand-new day", "Complimentary breakfast could fill much more than a tray", "“More ping pong” was most prominently what Jack would say", "And the rain meant more Uno and War did we play."]}, {"n": 3, "name": "Reefworld, Great Barrier Reef", "region": "Hardy Reef", "verse": ["Then onto a boat cruise to slip and to slosh", "Staring into a vomit bag…oh my gosh!", "", "We saw a Hawksbill turtle and a whole heap of fish.", "The girls to underwater viewing whenever they wish.", "Chocolate and pink lamingtons served freely on your dish", "And the boat endlessly rocking--a swish swish swish swish."]}, {"n": 4, "name": "The Pool Terrace", "region": "Hamilton Island", "verse": ["Hair braids and tattoos are the weather back-up plan", "The same Poolside Terrace menu merited a quick scan.", "The kids eat free limited the hotel tab that we ran", "And all kids with teeth said to pasta, “I’m a fan!”"]}, {"n": 5, "name": "Cooinda Gardens", "region": "Hamilton Island", "verse": ["Then homeless on Hamilton stuck in the cold rain", "Spring rolls again for Addy; she ate them plain.", "Our buggy tried the hill the sixth time, but it was in vain", "Karolina slid off the back and her left knee was in pain.", "", "Dancing by the pool with many, many twirls", "Pizza box turns to plate, as each one unfurls", "Blue shuttle time, with daddy and his girls", "Flying foxes at sunset with swoops and with swirls"]}, {"n": 6, "name": "Catseye Beach", "region": "Hamilton Island", "verse": ["Finally sunshine for a beach day at last", "We looked to the future, didn’t dwell on the past", "Paddleboards went quick so had to grab them fast", "Sandcastles and snorkeling, all ages had a blast.", "", "Less successful next day at the beach", "Tried to keep kids safe, but unfortunately had a breach", "CC backflipped off the table, hopefully a lesson it did teach", "Don’t sit up high and keep your toddler within reach.", "", "The good news is we had some cocktails by the pool", "Pina Coladas and mango mocktails, but not a Moscow Mule.", "Shuffling through shallow water—don’t be a fool", "Rays in the surf and fish swimming by the school.", "", "Up early, grab some chairs closer to the water", "Reserved with towels and a bucket, but little other fodder", "With the oldest son, middle and youngest daughter", "Then pastries, with an early start, the menu slightly broader.", "", "Time at the beach with paddleboards and with balls", "Finally had a day without any painful falls", "Mostly free but took a few work calls", "Then dinner at Tako where they opened up the walls."]}, {"n": 7, "name": "A round of mini-golf", "region": "Hamilton Island", "verse": ["What to do without the pool for the last few hours?", "No more orange hibiscus bling or rocking out with flowers.", "Checked out of the holiday home, now without any showers.", "A round of mini-golf to test out the kids’ powers."]}, {"n": 8, "name": "Hamilton Island Airport", "region": "Hamilton Island", "verse": ["Now off to the airport with our treasures and clothes in tow", "If we went six across we’d take up a whole row.", "The kids have headphones on, don’t interrupt their flow", "All the way to Brissy, fortunately, that airplane did go."]}, {"n": 9, "name": "Brisbane", "region": "Marriott, Queen Street", "verse": ["An airplane, an airtrain, pulling baggage up a hill", "Tired kids, bedtime will always test your will", "Have some sushi in the hotel room—please don’t spill.", "Watch Encanto from your beds, to have some time to chill.", "", "CC’s bday, cream filled donuts for a start", "She’s content with two small presents for her part", "Pool and hot tub—kids are happy, off the chart!", "Out to eat, COVID ordering, at the table in your cart.", "", "A gourmet breakfast, didn’t venture outside", "Pancakes, eggs, fresh juice on the side", "A morning of meetings, but pool time turned the tide", "Hop on the glider board, we’re off for a ride.", "", "Having pasta and pizza, in more Queensland rain", "Even more aeroplane pasta to-go, but just keep it plain.", "Too much time in the hotel room would make us insane", "So mummy braves the cold pool, with four kids in train.", "", "One last day for coffee and a snack", "And into the hot tub for CC to put foam on my back", "Up to the room for a final, all-in pack", "Goodbye to Brissy, we’ll see you down the track."]}];
+// ---------------- Photos ----------------
+// One photo per stop. To change a photo, put the file in img/queensland-2022/
+// and edit its entry here ("f" = file name, "cap" = caption).
+const IMG_BASE = "https://maps.fivelittlerascals.com/img/queensland-2022/";
+// One line and one outside link per stop ("d" = description, "l" = link text, "u" = address).
+const SITES = {"1": {"d": "Where the trip started, flying north out of Canberra's winter.", "l": "", "u": ""}, "2": {"d": "Hamilton Island's tower hotel above Catseye Beach, with views over the Whitsundays.", "l": "Reef View Hotel", "u": "https://www.hamiltonisland.com.au/accommodation/reef-view-hotel"}, "3": {"d": "A full day on the outer reef: a pontoon on Hardy Reef with snorkelling, an underwater observatory and a semi-sub.", "l": "Cruise Whitsundays reef trip", "u": "https://www.hamiltonisland.com.au/great-barrier-reef/great-barrier-reef-day-trip-to-reef-world"}, "4": {"d": "Family restaurant beside the Reef View Hotel pool, where kids eat free.", "l": "Pool Terrace", "u": "https://www.hamiltonisland.com.au/restaurants/pool-terrace"}, "5": {"d": "A holiday home up the hill, with a deck facing the sunsets.", "l": "", "u": ""}, "6": {"d": "Hamilton Island's main beach: paddleboards, sandcastles and rays in the shallows at low tide.", "l": "Hamilton Island beaches", "u": "https://www.hamiltonisland.com.au/community-and-development/community-facilities/parks-ovals-beaches"}, "7": {"d": "A tropical mini-golf course in the gardens beside the Reef View Hotel.", "l": "HI Putt & Play mini golf", "u": "https://www.hamiltonisland.com.au/golf/mini-golf"}, "8": {"d": "The island's own airport, with direct flights to Brisbane.", "l": "Hamilton Island Airport", "u": "https://www.hamiltonisland.com.au/getting-here/airport"}, "9": {"d": "Riverwalks, playgrounds and dinner under the Story Bridge.", "l": "Visit Brisbane", "u": "https://visit.brisbane.qld.au/"}};
+const PHOTOS = {"1": {"f": "flight-north.jpg", "cap": "Tablets out, masks on, flying north"}, "2": {"f": "reef-view-cockatoo.jpg", "cap": "A cockatoo drops in on the 17th-floor balcony"}, "3": {"f": "reefworld-pontoon.jpg", "cap": "Suited up on the Hardy Reef pontoon"}, "4": {"f": "pool-terrace-braids.jpg", "cap": "Hair braids, the rainy-day plan B"}, "5": {"f": "cooinda-deck.jpg", "cap": "Breakfast on the deck"}, "6": {"f": "catseye-shallows.jpg", "cap": "Low tide at Catseye Beach"}, "7": {"f": "mini-golf.jpg", "cap": "Lining up a putt"}, "8": {"f": "whitsundays-wing.jpg", "cap": "The Whitsundays from the plane"}, "9": {"f": "story-bridge-dinner.jpg", "cap": "Dinner under the Story Bridge"}};
+function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+const photoList = document.getElementById('photos');
+STOPS.forEach(s => {
+  const p = PHOTOS[s.n];
+  const li = document.createElement('li');
+  li.className = 'pcard'; li.id = 'photo-' + s.n; li.dataset.n = s.n;
+  li.innerHTML = (p ? '<img class="cthumb" loading="lazy" src="' + IMG_BASE + p.f + '" alt="' + esc(p.cap || s.name) + '">'
+                    : '<div class="nophoto" aria-hidden="true"></div>') +
+    '<div class="chead"><span class="badge">' + s.n + '</span><span class="cname">' + esc(s.name) + '</span>' +
+    '<span class="creg">' + esc(s.region || '') + '</span></div>' +
+    (SITES[s.n] && SITES[s.n].d ? '<p class="desc">' + esc(SITES[s.n].d) + '</p>' : '') +
+    (SITES[s.n] && SITES[s.n].u ? '<a class="site" href="' + SITES[s.n].u + '" target="_blank" rel="noopener">' + esc(SITES[s.n].l) + ' &#8599;</a>' : '');
+  photoList.appendChild(li);
+});
+let view = (location.hash === '#poem') ? 'poem' : 'photos';
+function setView(v){
+  view = v;
+  document.getElementById('photos').hidden = (v !== 'photos');
+  document.getElementById('poemview').hidden = (v !== 'poem');
+  document.querySelectorAll('.viewbtn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+}
+document.querySelectorAll('.viewbtn').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+setView(view);
+
 const byNum = new Map(STOPS.map(s => [s.n, s]));
 const svg = document.getElementById('qldmap');
 const container = document.getElementById('map-container');
@@ -257,16 +335,14 @@ function showTip(g) {
   clearTimeout(hideTimer);
   const s = byNum.get(Number(g.dataset.n));
   if (!s) return;
-  let inner = '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
-  if (s.verse && s.verse.length) {
-    const v = verseHTML(s.verse, MAXLINES);
-    inner += '<span class="t-verse">' + v.html +
-      (v.truncated ? '<span class="t-more">Click to read the rest &rarr;</span>'
-                   : '<span class="t-more">Click to jump to this verse &rarr;</span>') +
-      '</span>';
-  } else {
-    inner += '<span class="t-verse">A stop on the route with no verse of its own.</span>';
-  }
+  const ph = PHOTOS[s.n];
+  let inner = (ph ? '<img class="tip-photo" src="' + IMG_BASE + ph.f + '" alt="">' : '') +
+    '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
+  const site = SITES[s.n] || {};
+  if (site.d) inner += '<span class="t-desc">' + esc(site.d) + '</span>';
+  if (view === 'photos' && site.u) inner += '<span class="t-more">Click to visit ' + esc(site.l) + ' &#8599;</span>';
+  else if (view === 'poem') inner += '<span class="t-more">Click to jump to this verse &rarr;</span>';
+  else inner += '<span class="t-more">Click to see this stop below &rarr;</span>';
   tooltip.innerHTML = inner;
 
   const crect = container.getBoundingClientRect();
@@ -287,10 +363,15 @@ function hideTip() {
 }
 
 let litTimer = null;
+function openStop(n) {
+  const site = SITES[n] || {};
+  if (view === 'photos' && site.u) { window.open(site.u, '_blank', 'noopener'); return; }
+  goToVerse(n);
+}
 function goToVerse(n) {
-  const card = document.getElementById('stop-' + n);
+  const card = document.getElementById((view === 'photos' ? 'photo-' : 'stop-') + n);
   if (!card) return;
-  document.querySelectorAll('.card.lit').forEach(c => c.classList.remove('lit'));
+  document.querySelectorAll('.card.lit, .pcard.lit').forEach(c => c.classList.remove('lit'));
   card.classList.add('lit');
   card.scrollIntoView({ behavior: 'smooth', block: 'center' });
   clearTimeout(litTimer);
@@ -300,16 +381,16 @@ function goToVerse(n) {
 svg.querySelectorAll('g.stop').forEach(g => {
   g.addEventListener('mouseenter', () => showTip(g));
   g.addEventListener('mouseleave', hideTip);
-  g.addEventListener('click', () => goToVerse(Number(g.dataset.n)));
+  g.addEventListener('click', () => openStop(Number(g.dataset.n)));
   g.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToVerse(Number(g.dataset.n)); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openStop(Number(g.dataset.n)); }
   });
 });
 tooltip.addEventListener('mouseenter', () => clearTimeout(hideTimer));
 tooltip.addEventListener('mouseleave', hideTip);
 
 // hovering a verse card highlights its marker on the map
-document.querySelectorAll('.card').forEach(card => {
+document.querySelectorAll('.card, .pcard').forEach(card => {
   const g = svg.querySelector('g.stop[data-n="' + card.dataset.n + '"]');
   if (!g) return;
   card.addEventListener('mouseenter', () => g.classList.add('active'));
