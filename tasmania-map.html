@@ -15,8 +15,10 @@
   files, nothing to load from another site. Paste the whole
   thing into a Squarespace Code block and it works.
 
-  Hovering a numbered stop shows the part of the poem written
-  about that place. Clicking it jumps to the full verse below.
+  2021 stops: hovering shows the stop's photo and a one-line
+  description; clicking opens the place's own site (Photos view) or
+  jumps to the verse (The poem view, deep link #poem).
+  2024 stops: hovering shows the notes; clicking jumps to the card.
 
   TO EDIT A VERSE: find the STOPS array near the bottom and
   edit the "verse" lines, then edit the matching card in the
@@ -202,7 +204,6 @@
     grid-template-areas: "ra rb" "ca cb"; }
   #trip-cols > #rule-a { grid-area: ra; }
   #trip-cols > #rule-b { grid-area: rb; }
-  #trip-cols > #cards  { grid-area: ca; }
   #trip-cols > #cardsb { grid-area: cb; }
   /* when a single trip is selected, collapse to one column */
   .show-a #trip-cols { grid-template-columns: 1fr; grid-template-areas: "ra" "ca"; }
@@ -210,6 +211,42 @@
   @media (max-width: 720px) {
     #trip-cols { grid-template-columns: 1fr; grid-template-areas: "ra" "ca" "rb" "cb"; }
   }
+
+  [hidden] { display: none !important; }
+  /* ---- 2021: photos / poem views under the map ---- */
+  .storylink { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0 0 16px; }
+  .storylink .lbl { font-size: .74rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; }
+  .storylink a { color: var(--ink); font-weight: 700; font-size: 1.02rem; text-decoration: none;
+    border-bottom: 1px solid currentColor; }
+  .storylink a:hover, .storylink a:focus { color: var(--accent); }
+  .viewbar { display: flex; gap: 8px; margin: 0 0 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .82rem; }
+  .viewbtn { padding: 6px 15px; border: 1px solid #d7dde6; border-radius: 999px;
+    background: #fff; color: var(--text); cursor: pointer; font: inherit; }
+  .viewbtn:hover { border-color: var(--ink); color: var(--ink); }
+  .viewbtn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 700; }
+  .viewbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #photos { list-style: none; padding: 0; margin: 0; display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; }
+  .pcard { margin: 0; border-left: 3px solid #dfe5ec; border-radius: 4px; padding: 10px 12px;
+    background: #faf8f5; transition: background .2s ease, border-color .2s ease; min-width: 0; }
+  .pcard.lit { background: #fbf3f1; border-left-color: var(--accent); }
+  .pcard .cthumb { width: 100%; aspect-ratio: 1/1; height: auto; object-fit: cover; object-position: 50% 30%;
+    border-radius: 4px; margin: 0 0 8px; display: block; background: #eef2f6; }
+  .pcard .nophoto { width: 100%; aspect-ratio: 1/1; border-radius: 4px; margin: 0 0 8px; background: #eef2f6; }
+  .pcard.lit .badge { background: var(--accent); }
+  .pcard .desc { margin: 6px 0 4px; font-size: .88rem; line-height: 1.45; }
+  .pcard .site { display: inline-block; margin-top: 4px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .76rem; font-weight: 700; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
+  .pcard .site:hover, .pcard .site:focus { color: var(--accent); border-bottom-color: var(--accent); }
+  #tooltip .t-desc { display: block; font-size: .84rem; line-height: 1.45; }
+  #tooltip img.tip-photo { width: 120px; height: 120px; object-fit: cover; object-position: 50% 30%;
+    border-radius: 4px; margin: 0 0 6px; display: block; background: #2a3c5c; }
+  #trip-cols > #trip-a { grid-area: ca; min-width: 0; }
+  .show-b #trip-a { display: none; }
+  @media (max-width: 520px) { #photos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
 </style>
 
 <div class="wrap">
@@ -287,36 +324,36 @@
 <path class="route b" d="M593.1,397.9 Q577.3,397.5 561.9,401.6"/>
 <path class="route b" d="M561.9,401.6 Q551.5,360.1 530.1,323.2"/>
 <path class="route b" d="M530.1,323.2 Q481.1,324.1 434.2,338.5"/>
-<g class="stop a" data-trip="a" data-n="1" tabindex="0" role="button" aria-label="Stop 1: Melbourne. Show poem verse." transform="translate(318.2,73.6)"><circle r="13"/><text dy="0.34em">1</text></g>
-<g class="stop a" data-trip="a" data-n="2" tabindex="0" role="button" aria-label="Stop 2: Bass Strait crossing. Show poem verse." transform="translate(359.7,215.1)"><circle r="13"/><text dy="0.34em">2</text></g>
-<g class="stop a" data-trip="a" data-n="3" tabindex="0" role="button" aria-label="Stop 3: Devonport. Show poem verse." transform="translate(445.5,301.6)"><circle r="13"/><text dy="0.34em">3</text></g>
-<g class="stop a" data-trip="a" data-n="4" tabindex="0" role="button" aria-label="Stop 4: Cradle Mountain &amp; Dove Lake. Show poem verse." transform="translate(378.0,443.8)"><circle r="13"/><text dy="0.34em">4</text></g>
-<g class="stop a" data-trip="a" data-n="5" tabindex="0" role="button" aria-label="Stop 5: Queenstown. Show poem verse." transform="translate(309.4,539.0)"><circle r="13"/><text dy="0.34em">5</text></g>
-<g class="stop a" data-trip="a" data-n="6" tabindex="0" role="button" aria-label="Stop 6: Strahan. Show poem verse." transform="translate(277.8,554.5)"><circle r="13"/><text dy="0.34em">6</text></g>
-<g class="stop a" data-trip="a" data-n="7" tabindex="0" role="button" aria-label="Stop 7: Ocean Beach. Show poem verse." transform="translate(247.4,558.8)"><circle r="13"/><text dy="0.34em">7</text></g>
-<g class="stop a" data-trip="a" data-n="8" tabindex="0" role="button" aria-label="Stop 8: Tarraleah. Show poem verse." transform="translate(460.6,588.6)"><circle r="13"/><text dy="0.34em">8</text></g>
-<g class="stop a" data-trip="a" data-n="9" tabindex="0" role="button" aria-label="Stop 9: Hobart. Show poem verse." transform="translate(615.1,699.9)"><circle r="13"/><text dy="0.34em">9</text></g>
-<g class="stop a" data-trip="a" data-n="10" tabindex="0" role="button" aria-label="Stop 10: Tasmanian Devil Unzoo. Show poem verse." transform="translate(678.2,735.4)"><circle r="13"/><text dy="0.34em">10</text></g>
-<g class="stop a" data-trip="a" data-n="11" tabindex="0" role="button" aria-label="Stop 11: Stewarts Bay Lodge. Show poem verse." transform="translate(725.8,800.8)"><circle r="13"/><text dy="0.34em">11</text></g>
-<g class="stop a" data-trip="a" data-n="12" tabindex="0" role="button" aria-label="Stop 12: Port Arthur. Show poem verse." transform="translate(665.6,795.4)"><circle r="13"/><text dy="0.34em">12</text></g>
-<g class="stop a" data-trip="a" data-n="13" tabindex="0" role="button" aria-label="Stop 13: Tasman Arch &amp; Devils Kitchen. Show poem verse." transform="translate(737.5,740.7)"><circle r="13"/><text dy="0.34em">13</text></g>
-<g class="stop a" data-trip="a" data-n="14" tabindex="0" role="button" aria-label="Stop 14: Maria Island. Show poem verse." transform="translate(736.8,669.1)"><circle r="13"/><text dy="0.34em">14</text></g>
-<g class="stop a" data-trip="a" data-n="15" tabindex="0" role="button" aria-label="Stop 15: Bicheno by the Bay. Show poem verse." transform="translate(751.0,476.7)"><circle r="13"/><text dy="0.34em">15</text></g>
-<g class="stop a" data-trip="a" data-n="16" tabindex="0" role="button" aria-label="Stop 16: Bicheno Blowhole. Show poem verse." transform="translate(801.7,499.3)"><circle r="13"/><text dy="0.34em">16</text></g>
-<g class="stop a" data-trip="a" data-n="17" tabindex="0" role="button" aria-label="Stop 17: Bicheno penguin rookery. Show poem verse." transform="translate(770.9,500.1)"><circle r="13"/><text dy="0.34em">17</text></g>
-<g class="stop a" data-trip="a" data-n="18" tabindex="0" role="button" aria-label="Stop 18: Wineglass Bay, Freycinet. Show poem verse." transform="translate(777.5,585.1)"><circle r="13"/><text dy="0.34em">18</text></g>
-<g class="stop a" data-trip="a" data-n="19" tabindex="0" role="button" aria-label="Stop 19: Bay of Fires. Show poem verse." transform="translate(770.8,347.2)"><circle r="13"/><text dy="0.34em">19</text></g>
-<g class="stop a" data-trip="a" data-n="20" tabindex="0" role="button" aria-label="Stop 20: Tamar Valley wineries. Show poem verse." transform="translate(562.2,318.6)"><circle r="13"/><text dy="0.34em">20</text></g>
-<g class="stop a" data-trip="a" data-n="21" tabindex="0" role="button" aria-label="Stop 21: Low Head Lighthouse. Show poem verse." transform="translate(521.5,293.6)"><circle r="13"/><text dy="0.34em">21</text></g>
-<g class="stop a" data-trip="a" data-n="22" tabindex="0" role="button" aria-label="Stop 22: Platypus House, Beauty Point. Show poem verse." transform="translate(525.9,353.7)"><circle r="13"/><text dy="0.34em">22</text></g>
-<g class="stop a" data-trip="a" data-n="23" tabindex="0" role="button" aria-label="Stop 23: Gravelly Beach. Show poem verse." transform="translate(553.4,367.5)"><circle r="13"/><text dy="0.34em">23</text></g>
-<g class="stop a" data-trip="a" data-n="24" tabindex="0" role="button" aria-label="Stop 24: Seahorse World, Beauty Point. Show poem verse." transform="translate(499.3,317.5)"><circle r="13"/><text dy="0.34em">24</text></g>
-<g class="stop a" data-trip="a" data-n="25" tabindex="0" role="button" aria-label="Stop 25: Launceston. Show poem verse." transform="translate(584.2,368.4)"><circle r="13"/><text dy="0.34em">25</text></g>
-<g class="stop a" data-trip="a" data-n="26" tabindex="0" role="button" aria-label="Stop 26: Winery near Launceston. Show poem verse." transform="translate(577.8,429.6)"><circle r="13"/><text dy="0.34em">26</text></g>
-<g class="stop a" data-trip="a" data-n="27" tabindex="0" role="button" aria-label="Stop 27: Stanley &amp; The Nut. Show poem verse." transform="translate(274.0,229.7)"><circle r="13"/><text dy="0.34em">27</text></g>
-<g class="stop a" data-trip="a" data-n="28" tabindex="0" role="button" aria-label="Stop 28: Devonport. Show poem verse." transform="translate(438.0,369.0)"><circle r="13"/><text dy="0.34em">28</text></g>
-<g class="stop a" data-trip="a" data-n="29" tabindex="0" role="button" aria-label="Stop 29: Bass Strait crossing. Show poem verse." transform="translate(449.0,200.8)"><circle r="13"/><text dy="0.34em">29</text></g>
-<g class="stop a" data-trip="a" data-n="30" tabindex="0" role="button" aria-label="Stop 30: Melbourne, then home. Show poem verse." transform="translate(409.3,73.9)"><circle r="13"/><text dy="0.34em">30</text></g>
+<g class="stop a" data-trip="a" data-n="1" tabindex="0" role="button" aria-label="Stop 1: Melbourne. Show photo and link." transform="translate(318.2,73.6)"><circle r="13"/><text dy="0.34em">1</text></g>
+<g class="stop a" data-trip="a" data-n="2" tabindex="0" role="button" aria-label="Stop 2: Bass Strait crossing. Show photo and link." transform="translate(359.7,215.1)"><circle r="13"/><text dy="0.34em">2</text></g>
+<g class="stop a" data-trip="a" data-n="3" tabindex="0" role="button" aria-label="Stop 3: Devonport. Show photo and link." transform="translate(445.5,301.6)"><circle r="13"/><text dy="0.34em">3</text></g>
+<g class="stop a" data-trip="a" data-n="4" tabindex="0" role="button" aria-label="Stop 4: Cradle Mountain &amp; Dove Lake. Show photo and link." transform="translate(378.0,443.8)"><circle r="13"/><text dy="0.34em">4</text></g>
+<g class="stop a" data-trip="a" data-n="5" tabindex="0" role="button" aria-label="Stop 5: Queenstown. Show photo and link." transform="translate(309.4,539.0)"><circle r="13"/><text dy="0.34em">5</text></g>
+<g class="stop a" data-trip="a" data-n="6" tabindex="0" role="button" aria-label="Stop 6: Strahan. Show photo and link." transform="translate(277.8,554.5)"><circle r="13"/><text dy="0.34em">6</text></g>
+<g class="stop a" data-trip="a" data-n="7" tabindex="0" role="button" aria-label="Stop 7: Ocean Beach. Show photo and link." transform="translate(247.4,558.8)"><circle r="13"/><text dy="0.34em">7</text></g>
+<g class="stop a" data-trip="a" data-n="8" tabindex="0" role="button" aria-label="Stop 8: Tarraleah. Show photo and link." transform="translate(460.6,588.6)"><circle r="13"/><text dy="0.34em">8</text></g>
+<g class="stop a" data-trip="a" data-n="9" tabindex="0" role="button" aria-label="Stop 9: Hobart. Show photo and link." transform="translate(615.1,699.9)"><circle r="13"/><text dy="0.34em">9</text></g>
+<g class="stop a" data-trip="a" data-n="10" tabindex="0" role="button" aria-label="Stop 10: Tasmanian Devil Unzoo. Show photo and link." transform="translate(678.2,735.4)"><circle r="13"/><text dy="0.34em">10</text></g>
+<g class="stop a" data-trip="a" data-n="11" tabindex="0" role="button" aria-label="Stop 11: Stewarts Bay Lodge. Show photo and link." transform="translate(725.8,800.8)"><circle r="13"/><text dy="0.34em">11</text></g>
+<g class="stop a" data-trip="a" data-n="12" tabindex="0" role="button" aria-label="Stop 12: Port Arthur. Show photo and link." transform="translate(665.6,795.4)"><circle r="13"/><text dy="0.34em">12</text></g>
+<g class="stop a" data-trip="a" data-n="13" tabindex="0" role="button" aria-label="Stop 13: Tasman Arch &amp; Devils Kitchen. Show photo and link." transform="translate(737.5,740.7)"><circle r="13"/><text dy="0.34em">13</text></g>
+<g class="stop a" data-trip="a" data-n="14" tabindex="0" role="button" aria-label="Stop 14: Maria Island. Show photo and link." transform="translate(736.8,669.1)"><circle r="13"/><text dy="0.34em">14</text></g>
+<g class="stop a" data-trip="a" data-n="15" tabindex="0" role="button" aria-label="Stop 15: Bicheno by the Bay. Show photo and link." transform="translate(751.0,476.7)"><circle r="13"/><text dy="0.34em">15</text></g>
+<g class="stop a" data-trip="a" data-n="16" tabindex="0" role="button" aria-label="Stop 16: Bicheno Blowhole. Show photo and link." transform="translate(801.7,499.3)"><circle r="13"/><text dy="0.34em">16</text></g>
+<g class="stop a" data-trip="a" data-n="17" tabindex="0" role="button" aria-label="Stop 17: Bicheno penguin rookery. Show photo and link." transform="translate(770.9,500.1)"><circle r="13"/><text dy="0.34em">17</text></g>
+<g class="stop a" data-trip="a" data-n="18" tabindex="0" role="button" aria-label="Stop 18: Wineglass Bay, Freycinet. Show photo and link." transform="translate(777.5,585.1)"><circle r="13"/><text dy="0.34em">18</text></g>
+<g class="stop a" data-trip="a" data-n="19" tabindex="0" role="button" aria-label="Stop 19: Bay of Fires. Show photo and link." transform="translate(770.8,347.2)"><circle r="13"/><text dy="0.34em">19</text></g>
+<g class="stop a" data-trip="a" data-n="20" tabindex="0" role="button" aria-label="Stop 20: Tamar Valley wineries. Show photo and link." transform="translate(562.2,318.6)"><circle r="13"/><text dy="0.34em">20</text></g>
+<g class="stop a" data-trip="a" data-n="21" tabindex="0" role="button" aria-label="Stop 21: Low Head Lighthouse. Show photo and link." transform="translate(521.5,293.6)"><circle r="13"/><text dy="0.34em">21</text></g>
+<g class="stop a" data-trip="a" data-n="22" tabindex="0" role="button" aria-label="Stop 22: Platypus House, Beauty Point. Show photo and link." transform="translate(525.9,353.7)"><circle r="13"/><text dy="0.34em">22</text></g>
+<g class="stop a" data-trip="a" data-n="23" tabindex="0" role="button" aria-label="Stop 23: Gravelly Beach. Show photo and link." transform="translate(553.4,367.5)"><circle r="13"/><text dy="0.34em">23</text></g>
+<g class="stop a" data-trip="a" data-n="24" tabindex="0" role="button" aria-label="Stop 24: Seahorse World, Beauty Point. Show photo and link." transform="translate(499.3,317.5)"><circle r="13"/><text dy="0.34em">24</text></g>
+<g class="stop a" data-trip="a" data-n="25" tabindex="0" role="button" aria-label="Stop 25: Launceston. Show photo and link." transform="translate(584.2,368.4)"><circle r="13"/><text dy="0.34em">25</text></g>
+<g class="stop a" data-trip="a" data-n="26" tabindex="0" role="button" aria-label="Stop 26: Winery near Launceston. Show photo and link." transform="translate(577.8,429.6)"><circle r="13"/><text dy="0.34em">26</text></g>
+<g class="stop a" data-trip="a" data-n="27" tabindex="0" role="button" aria-label="Stop 27: Stanley &amp; The Nut. Show photo and link." transform="translate(274.0,229.7)"><circle r="13"/><text dy="0.34em">27</text></g>
+<g class="stop a" data-trip="a" data-n="28" tabindex="0" role="button" aria-label="Stop 28: Devonport. Show photo and link." transform="translate(438.0,369.0)"><circle r="13"/><text dy="0.34em">28</text></g>
+<g class="stop a" data-trip="a" data-n="29" tabindex="0" role="button" aria-label="Stop 29: Bass Strait crossing. Show photo and link." transform="translate(449.0,200.8)"><circle r="13"/><text dy="0.34em">29</text></g>
+<g class="stop a" data-trip="a" data-n="30" tabindex="0" role="button" aria-label="Stop 30: Melbourne, then home. Show photo and link." transform="translate(409.3,73.9)"><circle r="13"/><text dy="0.34em">30</text></g>
 <g class="stop b" data-trip="b" data-n="1" tabindex="0" role="button" aria-label="2024 trip, stop 1: Geelong. Show details." transform="translate(232.4,78.2)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">1</text></g>
 <g class="stop b" data-trip="b" data-n="2" tabindex="0" role="button" aria-label="2024 trip, stop 2: Devonport. Show details." transform="translate(462.8,327.1)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">2</text></g>
 <g class="stop b" data-trip="b" data-n="3" tabindex="0" role="button" aria-label="2024 trip, stop 3: Stanley. Show details." transform="translate(260.5,257.3)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">3</text></g>
@@ -339,6 +376,14 @@
 
   <div id="trip-cols">
 <hr class="rule" id="rule-a">
+  <div id="trip-a">
+    <p class="storylink"><span class="lbl">The full 2021 trip</span><a href="https://fivelittlerascals.com/blog/tasmania-road-trip-with-kids" target="_top">Cold Mornings, Empty Beaches and Penguins After Bedtime: Tasmania with Kids &rarr;</a></p>
+    <div class="viewbar" role="group" aria-label="Show under the map">
+      <button class="viewbtn" type="button" data-view="photos" aria-pressed="true">Photos</button>
+      <button class="viewbtn" type="button" data-view="poem" aria-pressed="false">The poem</button>
+    </div>
+    <ol id="photos"></ol>
+    <div id="poemview" hidden>
   <ol id="cards">
     <li class="card" id="stop-1" data-n="1"><div class="chead"><span class="badge">1</span><span class="cname">Melbourne</span><span class="creg">VIC</span></div><div class="verse"><span class="ln">We’re off to Tasmania.  Why?  Just for fun.</span><span class="ln">There are six of us packed in the car--only one.</span><span class="ln">With all the kids screaming, I can’t hear myself think.</span><span class="ln">So I reach in the door—another sparkling water to drink.</span><span class="br"></span><span class="ln">Now we’ve made it to Vic—checked into AirBnB.</span><span class="ln">The view of the Harbour is two floors below 33.</span><span class="ln">Hard to find brekkie with shops closed for Boxing Day.</span><span class="ln">Finally found bagels sold by Indians, just to say.</span><span class="br"></span><span class="ln">The next day we hit the playground and gardens botanical</span><span class="ln">With ice cream and pizza, the kids are mostly full</span><span class="ln">With sore, tired feet Adeline wants a carry</span><span class="ln">As the sun floats towards the horizon, we head to the ferry.</span></div></li>
 <li class="card" id="stop-2" data-n="2"><div class="chead"><span class="badge">2</span><span class="cname">Bass Strait crossing</span><span class="creg">overnight ferry</span></div><div class="verse"><span class="ln">There’s Paw Patrol and Peppa, pizza and chips</span><span class="ln">Taking motion sickness pills to stop tummies from flips</span><span class="ln">The boat rocking us back and forth in the sea</span><span class="ln">Crammed in a bunk room—across one, two, three.</span></div></li>
@@ -371,6 +416,8 @@
 <li class="card" id="stop-29" data-n="29"><div class="chead"><span class="badge">29</span><span class="cname">Bass Strait crossing</span><span class="creg">return</span></div><div class="verse"><span class="ln">Then it’s off to the ferry for playground and Paw Patrol</span><span class="ln">The kids sway watching TV, packed tightly like a shoal.</span><span class="ln">We head ‘cross the strait, the waves banging on the hull</span><span class="ln">The cabin rocking back and forth, the rhythm doubling as a lull</span></div></li>
 <li class="card" id="stop-30" data-n="30"><div class="chead"><span class="badge">30</span><span class="cname">Melbourne, then home</span><span class="creg">VIC → ACT</span></div><div class="verse"><span class="ln">Back on land, head to Maccas, just ‘cause it’s open at this time</span><span class="ln">Eating sugar as a meal, one would think it is a crime</span><span class="ln">Temper tantrums, changing pants, a giant koala statue too</span><span class="ln">Negotiating with tired children, oh what else can you do?</span><span class="br"></span><span class="ln">Roll into Canberra with memories in tow</span><span class="ln">With our supply of snacks getting desperately low</span><span class="ln">Lots of postcards, stuffies and seashells to show</span><span class="ln">We’re now back at home, planning the next place to go.</span></div></li>
   </ol>
+    </div>
+  </div>
 
   <hr class="rule" id="rule-b">
   <ol id="cardsb">
@@ -407,6 +454,40 @@ const NAV_URLS = {
 document.addEventListener('DOMContentLoaded', () => {});
 const STOPS = [{"n": 1, "name": "Melbourne", "region": "VIC", "verse": ["We’re off to Tasmania.  Why?  Just for fun.", "There are six of us packed in the car--only one.", "With all the kids screaming, I can’t hear myself think.", "So I reach in the door—another sparkling water to drink.", "", "Now we’ve made it to Vic—checked into AirBnB.", "The view of the Harbour is two floors below 33.", "Hard to find brekkie with shops closed for Boxing Day.", "Finally found bagels sold by Indians, just to say.", "", "The next day we hit the playground and gardens botanical", "With ice cream and pizza, the kids are mostly full", "With sore, tired feet Adeline wants a carry", "As the sun floats towards the horizon, we head to the ferry."]}, {"n": 2, "name": "Bass Strait crossing", "region": "overnight ferry", "verse": ["There’s Paw Patrol and Peppa, pizza and chips", "Taking motion sickness pills to stop tummies from flips", "The boat rocking us back and forth in the sea", "Crammed in a bunk room—across one, two, three."]}, {"n": 3, "name": "Devonport", "region": "TAS", "verse": ["We’re off onto Tassie, heading west for the hills"]}, {"n": 4, "name": "Cradle Mountain & Dove Lake", "region": "TAS", "verse": ["Walking around Cradle Mountain in the rain with the chills.", "Addy falls asleep in Dad’s arms halfway through", "Just keep truckin’, jumpin’ puddles, what else can you do?"]}, {"n": 5, "name": "Queenstown", "region": "TAS", "verse": ["We’re now off to Queenstown, but we didn’t book", "The Wild Western Railroad ‘cause we just didn’t look"]}, {"n": 6, "name": "Strahan", "region": "TAS", "verse": ["So we head off to Strahan to learn about Huon pines", "See the giant saw cutting, pulled right on the lines"]}, {"n": 7, "name": "Ocean Beach", "region": "TAS", "verse": ["Then off to the beach, long and flat, full of shells", "Home to the highest waves, some 20 metre swells", "South America’s the next thing to see looking west", "Though it’d be closer going east, or stay put probably best."]}, {"n": 8, "name": "Tarraleah", "region": "TAS", "verse": ["We’re off from the green house doing hike after hike", "Strollers, hiking pack, but certainly not a bike", "CC walks two miles in a unicorn dress", "Amazing for the smallest one, anyone would confess", "", "Echidna on the path, with the quills off his back", "Digging for ants in the dirt, just a foot off the track", "Mountain lake, glassy finish with the sun setting soon", "We’re off to the hydro plant to welcome the moon.", "", "It’s New Years, champagne, reflections by the fire", "Kids dreaming new dreams, can’t help but inspire", "Next golfing with three, Addy hits Jack in the head", "CC tries to sleep with Addy in the king bed.", "", "Next day it’s back to the links for more fun", "Ensure we slop sunscreen for a day in the sun.", "Then fly fishing with Jack in a high mountain lake", "Catch and release four--not allowed to take."]}, {"n": 9, "name": "Hobart", "region": "TAS", "verse": ["Now off to Hobart to stay by the beach", "Restaurants, bagels and WiFi just within reach.", "Mornings with Pademelons munching by the bay", "Slow to get started, wait for warmth on beach day.", "", "Morning cartoons, then head off to the water", "Keeping a close eye on the bold youngest daughter", "Climbing on rocks, building a castle on the cliffs up high", "He’s an enterprising Jack; he’s just that kind of a guy.", "", "Too cold to stay for more than an hour", "Three kids who can talk, begging for a hot shower.", "Staying ‘round the house would make kids too giddy", "And to avoid washing dishes, we head to dinner in the city.", "", "Who knew a table could be so hard to find?", "Could have reserved one, but no way to rewind", "Found sushi and ate Covid Safe outside", "Then ice cream from a boat, the first time we tried.", "", "Morning coffee, huge croissant, a playground by the sea", "Then east away from city streets looking to be free"]}, {"n": 10, "name": "Tasmanian Devil Unzoo", "region": "Taranna", "verse": ["Kangaroos, Tassie Devils both in the unzoo", "Not in a cage, but on a walk, who is viewing who?"]}, {"n": 11, "name": "Stewarts Bay Lodge", "region": "TAS", "verse": ["Finding Stewarts Bay is quite a nice surprise", "Even closer to the beach, provides a brief reprise", "Of sandy feet, chattering teeth, run into the surf", "Even a slightly chilly time can’t extinguish the mirth."]}, {"n": 12, "name": "Port Arthur", "region": "TAS", "verse": ["Next day--march to prison, sentenced transport for seven,", "Hard labour, rehabilitate, preached of hell and heaven.", "A crumbling cell, whipping post, what a gruesome feature.", "Then a silver lining. Serendipitous.  We see L’s Year 1 Teacher.", "", "Mommy’s into history, stays a few more hours", "Daddy takes the kids to do some chores, with persuasion powers"]}, {"n": 13, "name": "Tasman Arch & Devils Kitchen", "region": "TAS", "verse": ["Tasman’s Arch, Devils Kitchen—now it’s getting late.", "Addy falls asleep at 6; dinner’s a Two-Kid-Daddy-date."]}, {"n": 14, "name": "Maria Island", "region": "TAS", "verse": ["We make a plan, hit the road, take off before eight,", "Maria Island ferry bound, how could this not be great?", "To painted cliffs, past blue bottled jellies, another pristine swim", "Finally see a baby wombat, when we’re heading in."]}, {"n": 15, "name": "Bicheno by the Bay", "region": "TAS", "verse": ["Another drive, Bicheno near, margheritas and micro beer", "Try to see the penguins, but so far the beach is clear", "Swimming in the pool’s their jam, perhaps their favourite thing", "And playing on the pirate ship, without a baby swing."]}, {"n": 16, "name": "Bicheno Blowhole", "region": "TAS", "verse": ["The blowhole’s spraying, Jack’s content, to watch it for an hour", "We found just the place where we could stand to avoid a shower", "Addy had a rough sports day with three hits to the head", "So when the time finally came, she was rightly quick to bed."]}, {"n": 17, "name": "Bicheno penguin rookery", "region": "TAS", "verse": ["Half of us went to see the fairies come to shore", "Out for the day, and in by dusk, penguins by the score.", "The smallest, flightless waterbirds the world has ever known", "Have come to make their home in this sleepy seaside town."]}, {"n": 18, "name": "Wineglass Bay, Freycinet", "region": "TAS", "verse": ["The morning is for pool swimming, since all the kids do like", "But we cannot sit still for long so we head off for a hike.", "To Freycinet Park, it takes us half a day", "And worth the uphill walk to see famous Wineglass Bay", "Then the blowhole by morning, just can’t stay away", "The tide was low so not as mighty of a spray."]}, {"n": 19, "name": "Bay of Fires", "region": "TAS", "verse": ["Heading further north to see the Bay of Fires", "Park the car in the gravel lot because we don’t have sand tires", "Kids lounging in the lagoon, it’s slightly brown but not as cold", "Parents jumping off the sand bank, because you can never be too old."]}, {"n": 20, "name": "Tamar Valley wineries", "region": "TAS", "verse": ["Runs by the harbour then off to see vines", "Kids run in the sprinkler while the parents taste wines", "One, two, three stops, we follow the signs", "For the final seated tasting, the kids try to colour in the lines."]}, {"n": 21, "name": "Low Head Lighthouse", "region": "TAS", "verse": ["Finally reach the lighthouse cottage as the sun is setting", "Kids hopping on the rocks as they all are getting", "Tired of winetasting without any playgrounds", "Now surrounded by paddies, penguins and more ocean sounds."]}, {"n": 22, "name": "Platypus House, Beauty Point", "region": "TAS", "verse": ["Another animal stop, I’m sensing there’s a theme", "But this time the focus is upon the monotreme", "A platypus couple in the midst of breeding season", "Unlikely for captive babies, so possibly without a reason."]}, {"n": 23, "name": "Gravelly Beach", "region": "TAS", "verse": ["We find a spot to have some lunch out on the Tamar river", "Fortunately warm enough so the kids don’t even shiver", "They stage a vineyard protest—a detour not to take", "Instead we simply spoil each one, with a chocolate shake."]}, {"n": 24, "name": "Seahorse World, Beauty Point", "region": "TAS", "verse": ["Back on the pier for seahorses early in the morn", "Thousands and thousands of the creatures are weekly being born", "The males carry the babies, the ladies share the eggs", "Funny we call them horses when they don’t have any legs."]}, {"n": 25, "name": "Launceston", "region": "TAS", "verse": ["We attempt a trendy lunch, out in Launceston", "Oh, the screaming and complaining, we simply should have known.", "At least the house we booked has a massive swimming pool", "But it’s Tassie in the summer, so it’s mighty cool."]}, {"n": 26, "name": "Winery near Launceston", "region": "TAS", "verse": ["To the kids dismay we attempt a winery by noon", "But when they start to see the perks, they sing a different tune.", "Feeding apples to the pigs, and berries to the mummy", "They’re more than a bit elated to put a fudge bar in the tummy.", "A pasta course, an evening swim, we finish out the day", "Enjoy it while you have it, the last pool where we’ll stay."]}, {"n": 27, "name": "Stanley & The Nut", "region": "TAS", "verse": ["Winery by 10, then straight off to Stanley", "Climbing the Nut without a chairlift, could make us seem manly.", "Resolved to eat dino pasta, too hard to eat out", "Cold beach walk, jacuzzi tub—only if you don’t shout.", "", "Next morning dip our toes in northern waters", "Half are sleeping, so Dad goes with the two awake daughters"]}, {"n": 28, "name": "Devonport", "region": "departure", "verse": ["Pack it up, head for chocolate, a winery by three", "Chase through grapevines, piggy back, four filled with glee."]}, {"n": 29, "name": "Bass Strait crossing", "region": "return", "verse": ["Then it’s off to the ferry for playground and Paw Patrol", "The kids sway watching TV, packed tightly like a shoal.", "We head ‘cross the strait, the waves banging on the hull", "The cabin rocking back and forth, the rhythm doubling as a lull"]}, {"n": 30, "name": "Melbourne, then home", "region": "VIC → ACT", "verse": ["Back on land, head to Maccas, just ‘cause it’s open at this time", "Eating sugar as a meal, one would think it is a crime", "Temper tantrums, changing pants, a giant koala statue too", "Negotiating with tired children, oh what else can you do?", "", "Roll into Canberra with memories in tow", "With our supply of snacks getting desperately low", "Lots of postcards, stuffies and seashells to show", "We’re now back at home, planning the next place to go."]}];
 const STOPSB = [{"n": 1, "name": "Geelong", "region": "Spirit of Tasmania", "status": "confirmed", "notes": ["The overnight sailing across Bass Strait from Geelong to Devonport."], "link": [["Spirit of Tasmania", "https://www.spiritoftasmania.com.au/"]]}, {"n": 2, "name": "Devonport", "region": "arrival", "status": "confirmed", "notes": ["The ferry terminal, and the start of the loop around the island."], "link": []}, {"n": 3, "name": "Stanley", "region": "north-west", "status": "confirmed", "notes": ["Climbing the Nut, the core of an extinct volcano. No dogs.", "Highfield Historic Site, the first European settlement in north-west Tasmania.", "A one-hour self-guided heritage walk."], "link": [["The Nut State Reserve", "https://parks.tas.gov.au/explore-our-parks/the-nut-state-reserve"], ["Highfield Historic Site", "https://parks.tas.gov.au/Pages/Highfield-Historic-Site.aspx"]]}, {"n": 4, "name": "Kingston", "region": "Hobart base", "status": "confirmed", "notes": ["A beach suburb just south of Hobart."], "link": []}, {"n": 5, "name": "Hobart", "region": "", "status": "confirmed", "notes": ["Antarctic exploration on the waterfront, and the harbour."], "link": []}, {"n": 6, "name": "Stewarts Bay", "region": "Tasman Peninsula", "status": "confirmed", "notes": ["A beach cove within walking distance of Port Arthur."], "link": [["Stewarts Bay Lodge", "https://stewartsbaylodge.com.au"]]}, {"n": 7, "name": "Port Arthur", "region": "Tasman Peninsula", "status": "confirmed", "notes": ["The historic penitentiary, and boat cruises from the jetty."], "link": [["Port Arthur Historic Site", "https://portarthur.org.au"]]}, {"n": 8, "name": "The Unzoo", "region": "Taranna", "status": "confirmed", "notes": ["Devils and kangaroos on a walk rather than in cages."], "link": [["Tasmanian Devil Unzoo", "https://tasmaniandevilunzoo.com.au"]]}, {"n": 9, "name": "Remarkable Cave", "region": "Tasman Peninsula", "status": "confirmed", "notes": ["A short overlook walk to a sea cave cut through the cliff."], "link": [["Remarkable Cave", "https://parks.tas.gov.au/explore-our-parks/tasman-national-park/remarkable-cave"]]}, {"n": 10, "name": "Tasman Arch & Devils Kitchen", "region": "Tasman Peninsula", "status": "confirmed", "notes": ["Two rock formations on the coast road.", "Northern entrance to the Tasman Coastal Trail — Devils Kitchen to Waterfall Bay, two to three hours."], "link": [["Tasman National Park", "https://parks.tas.gov.au/explore-our-parks/tasman-national-park"]]}, {"n": 11, "name": "Coles Bay", "region": "east coast", "status": "confirmed", "notes": ["The town at the foot of the Hazards, with dog-friendly beaches nearby."], "link": []}, {"n": 12, "name": "Wineglass Bay", "region": "Freycinet", "status": "confirmed", "notes": ["The lookout climb and the descent to the beach, in Freycinet National Park. No dogs."], "link": [["Freycinet National Park", "https://parks.tas.gov.au/explore-our-parks/freycinet-national-park"]]}, {"n": 13, "name": "Launceston", "region": "north", "status": "confirmed", "notes": ["The northern city on the Tamar."], "link": []}, {"n": 14, "name": "Cataract Gorge", "region": "Launceston", "status": "confirmed", "notes": ["A walk through the gorge in the middle of town."], "link": [["Cataract Gorge", "https://www.launcestoncataractgorge.com.au"]]}, {"n": 15, "name": "Seahorse World & Platypus House", "region": "Beauty Point", "status": "confirmed", "notes": ["Seahorses on the pier and platypus indoors, at Beauty Point."], "link": [["Seahorse World", "https://www.seahorseworld.com.au"], ["Platypus House", "https://platypushouse.com.au"]]}, {"n": 16, "name": "Devonport", "region": "departure", "status": "confirmed", "notes": ["Back to the ferry terminal for the overnight crossing."], "link": []}, {"n": 17, "name": "Melbourne", "region": "and home", "status": "confirmed", "notes": ["Off the ferry and on the road home."], "link": []}];
+
+// ---------------- 2021 photos ----------------
+// One photo per 2021 stop. To change one, put the file in img/tasmania-2021/
+// and edit its entry ("f" = file name, "cap" = caption).
+const IMG_BASE = "https://maps.fivelittlerascals.com/img/tasmania-2021/";
+// One line and one outside link per 2021 stop ("d" = description, "l" = link text, "u" = address).
+const SITES = {"1": {"d": "Botanic gardens, playgrounds and the Yarra before the evening ferry.", "l": "Royal Botanic Gardens Victoria", "u": "https://www.rbg.vic.gov.au/melbourne-gardens/"}, "2": {"d": "The overnight Spirit of Tasmania from Melbourne to Devonport.", "l": "Spirit of Tasmania", "u": "https://www.spiritoftasmania.com.au/"}, "3": {"d": "Ferry port on the Mersey River and the gateway to the north-west.", "l": "Visit Devonport", "u": "https://www.devonport.tas.gov.au/visit-devonport/"}, "4": {"d": "The Dove Lake circuit below Cradle Mountain, rain or shine.", "l": "Cradle Mountain (Parks Tasmania)", "u": "https://parks.tas.gov.au/explore-our-parks/cradle-mountain"}, "5": {"d": "Copper-mining town in the bare hills, start of the West Coast Wilderness Railway.", "l": "West Coast Wilderness Railway", "u": "https://wcwr.com.au/"}, "6": {"d": "Harbour town on Macquarie Harbour, home of the Huon pine sawmill.", "l": "Morrison's Huon Pine Sawmill", "u": "https://morrisonshuonpine.com.au/"}, "7": {"d": "Tasmania's longest beach, facing straight into the Roaring Forties.", "l": "Ocean Beach (West Coast Tasmania)", "u": "https://westcoasttas.com.au/listings/ocean-beach"}, "8": {"d": "Highland hydro village with walks, a golf course and trout lakes.", "l": "Tarraleah", "u": "https://tarraleah.com/"}, "9": {"d": "Beach days at Kingston, then the waterfront and Antarctic history in the city.", "l": "Mawson's Huts Replica Museum", "u": "https://www.mawsons-huts.org.au/replica-museum/"}, "10": {"d": "Devils and kangaroos on a bush walk rather than in cages.", "l": "Tasmanian Devil Unzoo", "u": "https://tasmaniandevilunzoo.com.au"}, "11": {"d": "A sheltered beach cove a short walk from Port Arthur.", "l": "Stewarts Bay Lodge", "u": "https://stewartsbaylodge.com.au"}, "12": {"d": "The convict penitentiary and a harbour cruise from the jetty.", "l": "Port Arthur Historic Site", "u": "https://portarthur.org.au"}, "13": {"d": "Sea arches and blowholes along the Tasman Peninsula coast road.", "l": "Tasman National Park", "u": "https://parks.tas.gov.au/explore-our-parks/tasman-national-park"}, "14": {"d": "Ferry from Triabunna to the Painted Cliffs, beaches and wombats.", "l": "Maria Island National Park", "u": "https://parks.tas.gov.au/explore-our-parks/maria-island-national-park"}, "15": {"d": "Bayside cabins with a pool, a playground boat and orange-lichen rocks.", "l": "Bicheno by the Bay", "u": "https://www.bichenobythebay.com.au/"}, "16": {"d": "Granite ledge where the swell bursts up through a gap in the rock.", "l": "Bicheno Blowhole (East Coast Tasmania)", "u": "https://eastcoasttasmania.com/atdw_listings/bicheno-blowhole/"}, "17": {"d": "Little penguins coming ashore after dark.", "l": "Bicheno Penguin Tours", "u": "https://bichenopenguintours.com.au/"}, "18": {"d": "The lookout climb above Wineglass Bay in Freycinet National Park.", "l": "Freycinet National Park", "u": "https://parks.tas.gov.au/explore-our-parks/freycinet-national-park"}, "19": {"d": "White sand, orange-lichen boulders and a tea-coloured lagoon.", "l": "Bay of Fires Conservation Area", "u": "https://parks.tas.gov.au/explore-our-parks/bay-of-fires-conservation-area"}, "20": {"d": "Cellar doors around Pipers River in the Tamar Valley.", "l": "Tamar Valley Wine Trail", "u": "https://winetasmania.com.au/wine-trails/tamar-valley-trail"}, "21": {"d": "Striped lighthouse and pilot cottages at the mouth of the Tamar.", "l": "Low Head Pilot Station", "u": "https://lowheadpilotstation.com.au/the-area"}, "22": {"d": "Platypus and echidnas up close on the Beauty Point wharf.", "l": "Platypus House", "u": "https://platypushouse.com.au"}, "23": {"d": "Lunch on the banks of the Tamar River.", "l": "", "u": ""}, "24": {"d": "Seahorse farm and touch tanks on the Beauty Point pier.", "l": "Seahorse World", "u": "https://www.seahorseworld.com.au"}, "25": {"d": "Tasmania's northern city at the head of the Tamar.", "l": "Visit Northern Tasmania", "u": "https://visitnortherntasmania.com.au/"}, "26": {"d": "Tamar Valley cellar door with pigs to feed.", "l": "Holm Oak Vineyards", "u": "https://holmoakvineyards.com.au/visit/"}, "27": {"d": "Climbing the Nut, an old volcanic plug, above the town of Stanley.", "l": "The Nut State Reserve", "u": "https://parks.tas.gov.au/explore-our-parks/the-nut-state-reserve"}, "28": {"d": "A chocolate factory in Latrobe, then one more vineyard before the ferry.", "l": "Anvers Chocolate Factory", "u": "https://anvers-chocolate.com.au/"}, "29": {"d": "The evening ferry back across Bass Strait.", "l": "Spirit of Tasmania", "u": "https://www.spiritoftasmania.com.au/"}, "30": {"d": "Off the ferry at dawn and the long drive home.", "l": "", "u": ""}};
+const PHOTOS = {"1": {"f": "melbourne-botanic-gardens.jpg", "cap": "Four in the Royal Botanic Gardens"}, "2": {"f": "ferry-deck-skyline.jpg", "cap": "Melbourne skyline from the ferry deck"}, "3": {"f": "devonport-mall.jpg", "cap": "Walking the Devonport mall"}, "4": {"f": "dove-lake.jpg", "cap": "Everyone at Dove Lake in the drizzle"}, "5": {"f": "queenstown-lookout.jpg", "cap": "Lookout over Queenstown"}, "6": {"f": "strahan-wharf.jpg", "cap": "On the Strahan wharf"}, "7": {"f": "ocean-beach.jpg", "cap": "Four on Ocean Beach"}, "8": {"f": "tarraleah-trout.jpg", "cap": "Catch and release: a rainbow trout"}, "9": {"f": "hobart-waterfront.jpg", "cap": "Ice cream on the waterfront"}, "10": {"f": "unzoo-kangaroo.jpg", "cap": "Hand-feeding a kangaroo"}, "11": {"f": "stewarts-bay.jpg", "cap": "Stewarts Bay cove"}, "12": {"f": "port-arthur.jpg", "cap": "The penitentiary across the cove"}, "13": {"f": "tasman-peninsula-lookout.jpg", "cap": "Family at the lookout"}, "14": {"f": "maria-island-painted-cliffs.jpg", "cap": "At the Painted Cliffs"}, "15": {"f": "bicheno-rocks.jpg", "cap": "Three on the orange rocks"}, "16": {"f": "bicheno-blowhole.jpg", "cap": "Watching the blowhole spray"}, "18": {"f": "wineglass-bay.jpg", "cap": "Wineglass Bay lookout"}, "19": {"f": "bay-of-fires.jpg", "cap": "White sand and blue water"}, "20": {"f": "tamar-tasting.jpg", "cap": "Colouring at the seated tasting"}, "21": {"f": "low-head-lighthouse.jpg", "cap": "Low Head Lighthouse"}, "22": {"f": "platypus-house.jpg", "cap": "Platypus swimming"}, "23": {"f": "tamar-lunch.jpg", "cap": "Lunch by the Tamar"}, "24": {"f": "seahorse-world.jpg", "cap": "Seahorses"}, "25": {"f": "launceston-lunch.jpg", "cap": "Drawing at the trendy lunch"}, "26": {"f": "winery-pigs.jpg", "cap": "Feeding the pigs"}, "27": {"f": "the-nut.jpg", "cap": "Family with the Nut behind"}, "28": {"f": "vineyard-piggyback.jpg", "cap": "Piggyback in the vines"}, "29": {"f": "leaving-the-mersey.jpg", "cap": "Leaving the Mersey"}, "30": {"f": "melbourne-dawn.jpg", "cap": "Dawn arrival in Melbourne"}};
+function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+const photoList = document.getElementById('photos');
+STOPS.forEach(s => {
+  const p = PHOTOS[s.n], site = SITES[s.n] || {};
+  const li = document.createElement('li');
+  li.className = 'pcard'; li.id = 'photo-' + s.n; li.dataset.n = s.n; li.dataset.trip = 'a';
+  if (!p) { li.innerHTML = '<div class="nophoto" aria-hidden="true"></div>'; }
+  else {
+    li.innerHTML = '<img class="cthumb" loading="lazy" src="' + IMG_BASE + p.f + '" alt="' + esc(p.cap || s.name) + '">';
+  }
+  li.innerHTML += '<div class="chead"><span class="badge">' + s.n + '</span><span class="cname">' + esc(s.name) + '</span>' +
+    '<span class="creg">' + esc(s.region || '') + '</span></div>' +
+    (site.d ? '<p class="desc">' + esc(site.d) + '</p>' : '') +
+    (site.u ? '<a class="site" href="' + site.u + '" target="_blank" rel="noopener">' + esc(site.l) + ' &#8599;</a>' : '');
+  photoList.appendChild(li);
+});
+let view = (location.hash === '#poem') ? 'poem' : 'photos';
+function setView(v){
+  view = v;
+  document.getElementById('photos').hidden = (v !== 'photos');
+  document.getElementById('poemview').hidden = (v !== 'poem');
+  document.querySelectorAll('.viewbtn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+}
+document.querySelectorAll('.viewbtn').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+setView(view);
+
 const byKey = new Map();
 STOPS.forEach(s => byKey.set('a' + s.n, s));
 STOPSB.forEach(s => byKey.set('b' + s.n, Object.assign({}, s, { verse: s.notes, trip: 'b' })));
@@ -431,6 +512,18 @@ function showTip(g) {
   clearTimeout(hideTimer);
   const s = byKey.get(g.dataset.trip + g.dataset.n);
   if (!s) return;
+  if (g.dataset.trip === 'a') {
+    const ph = PHOTOS[s.n], site = SITES[s.n] || {};
+    let inner = (ph ? '<img class="tip-photo" src="' + IMG_BASE + ph.f + '" alt="">' : '') +
+      '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
+    if (site.d) inner += '<span class="t-desc">' + esc(site.d) + '</span>';
+    if (view === 'photos' && site.u) inner += '<span class="t-more">Click to visit ' + esc(site.l) + ' &#8599;</span>';
+    else if (view === 'poem') inner += '<span class="t-more">Click to jump to this verse &rarr;</span>';
+    else inner += '<span class="t-more">Click to see this stop below &rarr;</span>';
+    tooltip.innerHTML = inner;
+    placeTip(g);
+    return;
+  }
   let inner = '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
   if (s.verse && s.verse.length) {
     const v = verseHTML(s.verse, MAXLINES);
@@ -442,7 +535,9 @@ function showTip(g) {
     inner += '<span class="t-verse">A stop on the route with no verse of its own.</span>';
   }
   tooltip.innerHTML = inner;
-
+  placeTip(g);
+}
+function placeTip(g) {
   const crect = container.getBoundingClientRect();
   const mrect = g.getBoundingClientRect();
   tooltip.style.opacity = 1;
@@ -461,10 +556,15 @@ function hideTip() {
 }
 
 let litTimer = null;
+function openStop(trip, n) {
+  const site = SITES[n] || {};
+  if (trip !== 'b' && view === 'photos' && site.u) { window.open(site.u, '_blank', 'noopener'); return; }
+  goToVerse(trip, n);
+}
 function goToVerse(trip, n) {
-  const card = document.getElementById((trip === 'b' ? 'stopb-' : 'stop-') + n);
+  const card = document.getElementById((trip === 'b' ? 'stopb-' : (view === 'photos' ? 'photo-' : 'stop-')) + n);
   if (!card) return;
-  document.querySelectorAll('.card.lit').forEach(c => c.classList.remove('lit'));
+  document.querySelectorAll('.card.lit, .pcard.lit').forEach(c => c.classList.remove('lit'));
   card.classList.add('lit');
   card.scrollIntoView({ behavior: 'smooth', block: 'center' });
   clearTimeout(litTimer);
@@ -474,9 +574,9 @@ function goToVerse(trip, n) {
 svg.querySelectorAll('g.stop').forEach(g => {
   g.addEventListener('mouseenter', () => showTip(g));
   g.addEventListener('mouseleave', hideTip);
-  g.addEventListener('click', () => goToVerse(g.dataset.trip, g.dataset.n));
+  g.addEventListener('click', () => openStop(g.dataset.trip, g.dataset.n));
   g.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToVerse(g.dataset.trip, g.dataset.n); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openStop(g.dataset.trip, g.dataset.n); }
   });
 });
 tooltip.addEventListener('mouseenter', () => clearTimeout(hideTimer));
@@ -495,7 +595,7 @@ document.querySelectorAll('#tripbar button').forEach(btn => {
 });
 
 // hovering a verse card highlights its marker on the map
-document.querySelectorAll('.card').forEach(card => {
+document.querySelectorAll('.card, .pcard').forEach(card => {
   const trip = card.dataset.trip || 'a';
   const g = svg.querySelector('g.stop[data-trip="' + trip + '"][data-n="' + card.dataset.n + '"]');
   if (!g) return;
