@@ -177,6 +177,34 @@
     border-radius:4px; padding:10px 12px; background:#faf8f5; }
   #cards .stoplist { list-style:none; padding:14px 0 20px; margin:0;  column-gap:34px; }
   @media (max-width:720px){ #cards .stoplist { columns:1; } }
+  [hidden] { display: none !important; }
+  /* ---- 2023 Colorado & Wyoming leg: photos / poem views ---- */
+  #cards li.legblock { list-style: none; margin: 4px 0 24px; padding: 16px 0 4px; border-top: 1px solid #e3e8ef; border-bottom: 1px solid #e3e8ef; max-width: none; }
+  .legblock .leghead { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .74rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--c); font-weight: 700; margin: 0 0 8px; }
+  .storylink { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0 0 16px; }
+  .storylink .lbl { font-size: .74rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .storylink a { color: var(--ink); font-weight: 700; font-size: 1.02rem; text-decoration: none; border-bottom: 1px solid currentColor; }
+  .storylink a:hover, .storylink a:focus { color: var(--accent); }
+  .viewbar { display: flex; gap: 8px; margin: 0 0 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .82rem; }
+  .viewbtn { padding: 6px 15px; border: 1px solid #d7dde6; border-radius: 999px; background: #fff; color: var(--text); cursor: pointer; font: inherit; }
+  .viewbtn:hover { border-color: var(--ink); color: var(--ink); }
+  .viewbtn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 700; }
+  .viewbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #photos { list-style: none; padding: 0; margin: 0 0 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; }
+  .pcard { margin: 0; border-left: 3px solid var(--c); border-radius: 4px; padding: 10px 12px; background: #faf8f5; transition: background .2s ease; min-width: 0; }
+  .pcard.lit { background: #fbf3f1; border-left-color: var(--accent); }
+  .pcard .cthumb { width: 100%; aspect-ratio: 1/1; height: auto; object-fit: cover; object-position: 50% 30%; border-radius: 4px; margin: 0 0 8px; display: block; background: #eef2f6; }
+  .pcard .nophoto { width: 100%; aspect-ratio: 1/1; border-radius: 4px; margin: 0 0 8px; background: #eef2f6; }
+  .pcard.lit .badge { background: var(--accent); }
+  .pcard .desc { margin: 6px 0 4px; font-size: .88rem; line-height: 1.45; }
+  .pcard .site { display: inline-block; margin-top: 4px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .76rem; font-weight: 700; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
+  .pcard .site:hover, .pcard .site:focus { color: var(--accent); border-bottom-color: var(--accent); }
+  #tooltip .t-desc { display: block; font-size: .84rem; line-height: 1.45; }
+  #tooltip img.tip-photo { width: 120px; height: 120px; object-fit: cover; object-position: 50% 30%; border-radius: 4px; margin: 0 0 6px; display: block; background: #2a3c5c; }
+  @media (max-width: 520px) { #photos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
 </style>
 
 <div class="wrap">
@@ -683,6 +711,15 @@
 <li class="card y2023" id="stop-2023-5" data-year="2023" data-n="5"><div class="chead"><span class="badge y2023">5</span><span class="cname">Lizard Lake</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">A bonsai tree, upon a stump, in the middle of a lake</span><span class="ln">A trail lost to time and shrubs, so a hike we didn’t take.</span><span class="ln">Instead ‘round Lizard Lake we follow blue and yellow blaze.</span><span class="ln">But when they’re gone we go ‘round a bit, in a coniferous maze.</span></div></li>
 <li class="card y2023" id="stop-2023-6" data-year="2023" data-n="6"><div class="chead"><span class="badge y2023">6</span><span class="cname">The Renfrew Pub</span><span class="creg">Port Renfrew</span></div><div class="verse"><span class="ln">The last night here, we treat ourselves at the local Renfru Pub</span><span class="ln">The scene is good, the space is nice, and above average grub.</span><span class="ln">Then pack the car, the morning comes in just a few more hours,</span><span class="ln">We send the kids quickly to bed, and mostly without showers.</span></div></li>
 <li class="card y2023" id="stop-2023-7" data-year="2023" data-n="7"><div class="chead"><span class="badge y2023">7</span><span class="cname">Swartz Bay &amp; the ferry</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">Wake before daybreak to get us on our way</span><span class="ln">A two-and-a-half-hour drive at sunrise just to start the day</span><span class="ln">At the Ferry Terminal before six in the morn</span><span class="ln">Then off to the mainland as the ship sounds its horn.</span><span class="br"></span><span class="ln">The day shifts back from ship to car</span><span class="ln">Then a plane ‘cause we need to go far</span><span class="ln">Far but not as far as we went before</span><span class="ln">Three hours by air, with delay, so it’s more.</span></div></li>
+<li class="legblock y2023" id="leg-rockies" data-year="2023">
+  <p class="leghead">Stops 8&ndash;21 &middot; Colorado &amp; Wyoming</p>
+  <p class="storylink"><span class="lbl">The full Rockies leg</span><a href="https://fivelittlerascals.com/blog/rocky-mountains-colorado-wyoming-with-kids" target="_top">Hail, Horses and Capture the Flag: The Rockies with Kids and Cousins &rarr;</a></p>
+  <div class="viewbar" role="group" aria-label="Show for stops 8 to 21">
+    <button class="viewbtn" type="button" data-view="photos" aria-pressed="true">Photos</button>
+    <button class="viewbtn" type="button" data-view="poem" aria-pressed="false">The poem</button>
+  </div>
+  <ol id="photos"></ol>
+</li>
 <li class="card y2023" id="stop-2023-8" data-year="2023" data-n="8"><div class="chead"><span class="badge y2023">8</span><span class="cname">Colorado Springs</span><span class="creg">Colorado</span></div><div class="verse"><span class="ln">Get to Colorado another hour to go</span><span class="ln">Cram the bags in the car, can’t fit much mo’</span><span class="ln">Bagels ‘to go’ attempting to avoid a food whine</span><span class="ln">Finally, the hotel lobby and cousins, just after nine.</span><span class="br"></span><span class="ln">Back to a cloudy hotel pool for swimming and play</span><span class="ln">A late, after thought dinner – take-out Chick-Fil-A.</span><span class="ln">Then let’s go to bed and wish there are less clouds tomorrow</span><span class="ln">Or we’ll miss Garden of the Gods and would wallow in sorrow.</span><span class="br"></span><span class="ln">Some lightning bolts over Pikes Peak make a glorious sight</span><span class="ln">Then off to Target for Round 2 of shop-a-thon delight</span><span class="ln">A 40th Birthday at a Brewery makes old age seem near</span><span class="ln">And James dumps a Unicorn purse in the toilet, CC’s greatest fear.</span></div></li>
 <li class="card y2023" id="stop-2023-9" data-year="2023" data-n="9"><div class="chead"><span class="badge y2023">9</span><span class="cname">Rock Ledge Ranch</span><span class="creg">Colorado Springs</span></div><div class="verse"><span class="ln">We mobilise after breakfast to arrive round about 10.</span><span class="ln">Wouldn’t have helped much if we had arrived before then.</span><span class="ln">The boys speeding ahead; when you’re young you have to be fast</span><span class="ln">With teepee, homestead and blacksmith to learn ‘bout the past.</span></div></li>
 <li class="card y2023" id="stop-2023-10" data-year="2023" data-n="10"><div class="chead"><span class="badge y2023">10</span><span class="cname">Manitou Cliff Dwellings</span><span class="creg">Manitou Springs</span></div><div class="verse"><span class="ln">Then to climb ladders and hop through a window and door</span><span class="ln">A cliff dwelling nearby, none of us had been there before</span><span class="ln">Shopping for souvenirs in the pueblo; glow in the dark t-shirts galore</span><span class="ln">Then run to the car in the midst of a torrential downpour.</span></div></li>
@@ -846,6 +883,65 @@ document.querySelectorAll('#tabs a[data-nav]').forEach(a => {
 });
 
 let hideTimer = null;
+
+// ---------------- 2023 Colorado & Wyoming leg (stops 8-21): photos ----------------
+// One photo per stop. To change one, put the file in img/north-america-2023/
+// and edit its entry ("f" = file name, "cap" = caption).
+const LEG_YEAR = "2023";
+const IMG_BASE = "https://maps.fivelittlerascals.com/img/north-america-2023/";
+// One line and one outside link per stop ("d" = description, "l" = link text, "u" = address).
+const SITES = {"8": {"d": "Base camp below Pikes Peak, with a brewery patio facing the Front Range.", "l": "Visit Colorado Springs", "u": "https://www.visitcos.com/"}, "9": {"d": "Living-history ranch with a teepee, a homestead cabin, a blacksmith and farm animals.", "l": "Rock Ledge Ranch Historic Site", "u": "https://rockledgeranch.com/about/"}, "10": {"d": "Ancestral Puebloan cliff dwellings to climb through, ladders, windows and all.", "l": "Manitou Cliff Dwellings", "u": "https://www.cliffdwellingsmuseum.com/"}, "11": {"d": "Red sandstone fins and towers with Pikes Peak behind.", "l": "Garden of the Gods Park", "u": "https://coloradosprings.gov/gog"}, "12": {"d": "A rooftop lunch under the Flatirons, Pearl Street's bronze bears and a climbing gym.", "l": "Visit Boulder", "u": "https://www.bouldercoloradousa.com/"}, "13": {"d": "A town north of Denver, and an evening of backyard climbing.", "l": "", "u": ""}, "14": {"d": "Mountain lodge and cabins with mini golf, crafts, archery and elk on the lawn.", "l": "YMCA of the Rockies, Estes Park Center", "u": "https://www.ymcarockies.org/our-locations/estes-park-center"}, "15": {"d": "The loop around Bear Lake, Alberta Falls, and snow on the trail in June.", "l": "Bear Lake Trail (NPS)", "u": "https://www.nps.gov/places/bear-lake-trail.htm"}, "16": {"d": "The white hotel on the hill above Estes Park, the inspiration for The Shining.", "l": "The Stanley Hotel", "u": "https://www.stanleyhotel.com/"}, "17": {"d": "Wyoming's capital on the high plains, where the drive north begins.", "l": "Visit Cheyenne", "u": "https://www.cheyenne.org/"}, "18": {"d": "A night in Casper on the way north.", "l": "Visit Casper", "u": "https://www.visitcasper.com/"}, "19": {"d": "Covered wagons, handcarts and a river crossing from the Oregon, California, Mormon and Pony Express trails.", "l": "National Historic Trails Interpretive Center (BLM)", "u": "https://www.blm.gov/visit/national-historic-trails-interpretive-center"}, "20": {"d": "A dude ranch in the Bighorn Mountains: trail rides, wildflower mesas, fishing and a rodeo.", "l": "Paradise Guest Ranch", "u": "https://www.paradiseranch.com/"}, "21": {"d": "Hand-feeding bison from a little train on the high plains.", "l": "Terry Bison Ranch", "u": "https://terrybisonranch.com/bison-train-tours"}};
+const PHOTOS = {"8": {"f": "colorado-springs-brewery.jpg", "cap": "Brewery windows onto the Front Range"}, "9": {"f": "rock-ledge-ranch-teepee.jpg", "cap": "At the teepee, Rock Ledge Ranch"}, "10": {"f": "manitou-cliff-dwellings.jpg", "cap": "The Manitou cliff dwellings"}, "11": {"f": "garden-of-the-gods.jpg", "cap": "Pikes Peak over Garden of the Gods"}, "12": {"f": "boulder-rooftop.jpg", "cap": "Rooftop lunch with the Flatirons"}, "13": {"f": "erie-climbing-wall.jpg", "cap": "Rings on the backyard climbing wall"}, "14": {"f": "ymca-elk.jpg", "cap": "Elk grazing on the YMCA lawn"}, "15": {"f": "bear-lake.jpg", "cap": "Bear Lake"}, "16": {"f": "stanley-hotel.jpg", "cap": "On the Stanley Hotel steps"}, "17": {"f": "cheyenne-wyoming-shirt.jpg", "cap": "A Wyoming shirt in Cheyenne"}, "19": {"f": "trails-center-wagon.jpg", "cap": "Packed into a covered wagon"}, "20": {"f": "paradise-ranch-sunrise.jpg", "cap": "Sunrise over the ranch valley"}, "21": {"f": "terry-bison-ranch.jpg", "cap": "Bison up close from the train"}};
+const LEG_STOPS = Object.keys(SITES).map(Number);
+function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+function inLeg(k){ const p = k.split('-'); return p[0] === LEG_YEAR && SITES[p[1]] !== undefined; }
+let legView = (location.hash === '#poem') ? 'poem' : 'photos';
+(function buildLeg(){
+  const list = document.getElementById('photos'); if (!list) return;
+  LEG_STOPS.forEach(n => {
+    const m = META[LEG_YEAR + '-' + n] || {}, p = PHOTOS[n], site = SITES[n] || {};
+    const li = document.createElement('li');
+    li.className = 'pcard'; li.id = 'photo-' + LEG_YEAR + '-' + n; li.dataset.n = n;
+    li.innerHTML = (p ? '<img class="cthumb" loading="lazy" src="' + IMG_BASE + p.f + '" alt="' + esc(p.cap || m.name || '') + '">'
+                      : '<div class="nophoto" aria-hidden="true"></div>') +
+      '<div class="chead"><span class="badge y2023">' + n + '</span><span class="cname">' + esc(m.name || '') + '</span>' +
+      '<span class="creg">' + esc(m.region || '') + '</span></div>' +
+      (site.d ? '<p class="desc">' + esc(site.d) + '</p>' : '') +
+      (site.u ? '<a class="site" href="' + site.u + '" target="_blank" rel="noopener">' + esc(site.l) + ' &#8599;</a>' : '');
+    li.addEventListener('mouseenter', () => { const g = svg.querySelector('g.stop[data-year="' + LEG_YEAR + '"][data-n="' + n + '"]'); if (g) g.classList.add('lit'); });
+    li.addEventListener('mouseleave', () => { const g = svg.querySelector('g.stop[data-year="' + LEG_YEAR + '"][data-n="' + n + '"]'); if (g) g.classList.remove('lit'); });
+    list.appendChild(li);
+  });
+})();
+function setLegView(v){
+  legView = v;
+  const ph = document.getElementById('photos'); if (ph) ph.hidden = (v !== 'photos');
+  LEG_STOPS.forEach(n => { const c = document.getElementById('stop-' + LEG_YEAR + '-' + n); if (c) c.hidden = (v === 'photos'); });
+  document.querySelectorAll('#leg-rockies .viewbtn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+}
+document.querySelectorAll('#leg-rockies .viewbtn').forEach(b => b.addEventListener('click', () => setLegView(b.dataset.view)));
+setLegView(legView);
+function legTip(k, n){
+  const m = META[k] || {}, ph = PHOTOS[n], site = SITES[n] || {};
+  let inner = (ph ? '<img class="tip-photo" src="' + IMG_BASE + ph.f + '" alt="">' : '') +
+    '<b>' + m.year + ' &middot; #' + n + ' &middot; ' + m.name + ', ' + m.region + '</b>';
+  if (site.d) inner += '<span class="t-desc">' + esc(site.d) + '</span>';
+  if (legView === 'photos' && site.u) inner += '<span class="tm">Click to visit ' + esc(site.l) + ' &#8599;</span>';
+  else if (legView === 'poem') inner += '<span class="tm">Click to jump to this verse &rarr;</span>';
+  else inner += '<span class="tm">Click to see this stop below &rarr;</span>';
+  return inner;
+}
+function legOpen(k, n){
+  const site = SITES[n] || {};
+  if (legView === 'photos' && site.u) { window.open(site.u, '_blank', 'noopener'); return; }
+  const el = document.getElementById((legView === 'photos' ? 'photo-' : 'stop-') + k);
+  if (!el) return;
+  const sec = el.closest('details.trip-sec'); if (sec) sec.open = true;
+  document.querySelectorAll('.card.lit, .pcard.lit').forEach(c => c.classList.remove('lit'));
+  el.classList.add('lit');
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => el.classList.remove('lit'), 3500);
+}
 function key(g) { return g.dataset.year + '-' + g.dataset.n; }
 
 svg.querySelectorAll('.stop').forEach(g => {
@@ -855,9 +951,10 @@ svg.querySelectorAll('.stop').forEach(g => {
     g.classList.add('lit');
     const card = document.getElementById('stop-' + k);
     if (card) card.classList.add('lit');
-    let inner = (m.photo ? '<img class="tip-photo" src="' + m.photo + (m.photo.indexOf('?')>-1?'&':'?') + 'format=400w" alt="' + (m.name||'') + '" loading="lazy">' : '') + '<b>' + m.year + ' &middot; #' + g.dataset.n + ' &middot; ' +
-                m.name + ', ' + m.region + '</b>';
-    if (m.verse && m.verse.length) {
+    let inner = inLeg(k) ? legTip(k, g.dataset.n) : ((m.photo ? '<img class="tip-photo" src="' + m.photo + (m.photo.indexOf('?')>-1?'&':'?') + 'format=400w" alt="' + (m.name||'') + '" loading="lazy">' : '') + '<b>' + m.year + ' &middot; #' + g.dataset.n + ' &middot; ' +
+                m.name + ', ' + m.region + '</b>');
+    if (inLeg(k)) { /* leg stops: photo, description and link only */ }
+    else if (m.verse && m.verse.length) {
       inner += '<span class="tv">' + m.verse.map(l =>
         l ? '<span>' + l + '</span>' : '<span>&nbsp;</span>').join('') +
         '<span class="tm">Click to read it all &rarr;</span></span>';
@@ -890,6 +987,7 @@ svg.querySelectorAll('.stop').forEach(g => {
       const yr = g.dataset.year || meta.year;
       if (yr && typeof applyYear === 'function') { applyYear(yr); return; }
     }
+    if (inLeg(k)) { legOpen(k, g.dataset.n); return; }
     // STAGE 2: already in a single-trip view -> open the blog if this stop has one
     if (meta.url && meta.url.indexOf('fivelittlerascals.com/blog') !== -1) {
       window.open(meta.url, '_blank', 'noopener'); return;
@@ -1016,6 +1114,7 @@ tooltip.addEventListener('mouseleave', () => {
     return (v||'').toLowerCase();
   }
   var y = pick();
+  if (!y && window.location.hash === '#poem') y = '2023'; // #poem opens the 2023 Rockies verse
   if (!y) return;
   if (document.querySelector('#yearbar .ychip[data-year="'+y+'"]') && typeof window.applyYear === 'function'){
     window.applyYear(y);
