@@ -334,7 +334,7 @@ STOPS.forEach(s => {
   const li = document.createElement('li');
   li.className = 'pcard'; li.id = 'photo-' + s.n; li.dataset.n = s.n;
   li.innerHTML = (p ? '<img class="cthumb" loading="lazy" src="' + IMG_BASE + p.f + '" alt="' + esc(p.cap || s.name) + '">'
-                    : '<div class="nophoto">No photo for this stop</div>') +
+                    : '<div class="nophoto" aria-hidden="true"></div>') +
     '<div class="chead"><span class="badge">' + s.n + '</span><span class="cname">' + esc(s.name) + '</span>' +
     '<span class="creg">' + esc(s.region || '') + '</span></div>' +
     (p && p.cap ? '<div class="pcap">' + esc(p.cap) + '</div>' : '');
