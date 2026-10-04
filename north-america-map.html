@@ -19,8 +19,8 @@
    2. The blog addresses live in the cards themselves; to add
       one, edit the href on that stop's "Read the story" link.
 
-  2023, Vancouver Island (stops 1-7): under the 2023 heading, a link to
-  the full trip post, then Photos (default) and The poem buttons.
+  2023, Vancouver Island (stops 1-7): under the 2023 heading, Photos
+  (default) and The poem buttons (no trip-post link until the post exists).
   Hovering one of those stops shows its photo, a one-line description
   and its outside link; clicking opens the site (Photos view) or the
   verse (The poem, deep link #poem). Data: SITES23 / PHOTOS23 in the
@@ -892,6 +892,7 @@ document.querySelectorAll('#tabs a[data-nav]').forEach(a => {
 // One photo per stop. To change one, put the file in img/vancouver-island-2023/
 // and edit its entry ("f" = file name, "cap" = caption).
 const IMG_BASE23 = "https://maps.fivelittlerascals.com/img/vancouver-island-2023/";
+// Trip post not published yet: when it is, add a storylink line to the part23 block using POST23.
 const POST23 = { label: "Toothbrushes, Tide Pools and a Black Bear: Vancouver Island with Kids",
   url: "https://fivelittlerascals.com/blog/vancouver-island-port-renfrew-with-kids" };
 // One line and one outside link per stop ("d" = description, "l" = link text, "u" = address).
@@ -1115,8 +1116,6 @@ tooltip.addEventListener('mouseleave', () => {
   var part = document.createElement('div');
   part.className = 'part23';
   part.innerHTML =
-    '<p class="storylink"><span class="lbl">Vancouver Island &middot; stops 1&ndash;7</span>' +
-    '<a href="' + POST23.url + '" target="_top">' + esc23(POST23.label) + ' &rarr;</a></p>' +
     '<div class="viewbar" role="group" aria-label="Show for the Vancouver Island stops">' +
     '<button class="viewbtn" type="button" data-view="photos" aria-pressed="true">Photos</button>' +
     '<button class="viewbtn" type="button" data-view="poem" aria-pressed="false">The poem</button></div>' +
