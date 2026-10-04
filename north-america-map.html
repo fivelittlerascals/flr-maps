@@ -192,7 +192,7 @@
   .viewbtn:hover { border-color: var(--ink); color: var(--ink); }
   .viewbtn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 700; }
   .viewbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  #photos { list-style: none; padding: 0; margin: 0 0 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; }
+  #rkphotos { list-style: none; padding: 0; margin: 0 0 12px; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; }
   .pcard { margin: 0; border-left: 3px solid var(--c); border-radius: 4px; padding: 10px 12px; background: #faf8f5; transition: background .2s ease; min-width: 0; }
   .pcard.lit { background: #fbf3f1; border-left-color: var(--accent); }
   .pcard .cthumb { width: 100%; aspect-ratio: 1/1; height: auto; object-fit: cover; object-position: 50% 30%; border-radius: 4px; margin: 0 0 8px; display: block; background: #eef2f6; }
@@ -204,7 +204,7 @@
   .pcard .site:hover, .pcard .site:focus { color: var(--accent); border-bottom-color: var(--accent); }
   #tooltip .t-desc { display: block; font-size: .84rem; line-height: 1.45; }
   #tooltip img.tip-photo { width: 120px; height: 120px; object-fit: cover; object-position: 50% 30%; border-radius: 4px; margin: 0 0 6px; display: block; background: #2a3c5c; }
-  @media (max-width: 520px) { #photos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
+  @media (max-width: 520px) { #rkphotos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
 </style>
 
 <div class="wrap">
@@ -718,7 +718,7 @@
     <button class="viewbtn" type="button" data-view="photos" aria-pressed="true">Photos</button>
     <button class="viewbtn" type="button" data-view="poem" aria-pressed="false">The poem</button>
   </div>
-  <ol id="photos"></ol>
+  <ol id="rkphotos"></ol>
 </li>
 <li class="card y2023" id="stop-2023-8" data-year="2023" data-n="8"><div class="chead"><span class="badge y2023">8</span><span class="cname">Colorado Springs</span><span class="creg">Colorado</span></div><div class="verse"><span class="ln">Get to Colorado another hour to go</span><span class="ln">Cram the bags in the car, can’t fit much mo’</span><span class="ln">Bagels ‘to go’ attempting to avoid a food whine</span><span class="ln">Finally, the hotel lobby and cousins, just after nine.</span><span class="br"></span><span class="ln">Back to a cloudy hotel pool for swimming and play</span><span class="ln">A late, after thought dinner – take-out Chick-Fil-A.</span><span class="ln">Then let’s go to bed and wish there are less clouds tomorrow</span><span class="ln">Or we’ll miss Garden of the Gods and would wallow in sorrow.</span><span class="br"></span><span class="ln">Some lightning bolts over Pikes Peak make a glorious sight</span><span class="ln">Then off to Target for Round 2 of shop-a-thon delight</span><span class="ln">A 40th Birthday at a Brewery makes old age seem near</span><span class="ln">And James dumps a Unicorn purse in the toilet, CC’s greatest fear.</span></div></li>
 <li class="card y2023" id="stop-2023-9" data-year="2023" data-n="9"><div class="chead"><span class="badge y2023">9</span><span class="cname">Rock Ledge Ranch</span><span class="creg">Colorado Springs</span></div><div class="verse"><span class="ln">We mobilise after breakfast to arrive round about 10.</span><span class="ln">Wouldn’t have helped much if we had arrived before then.</span><span class="ln">The boys speeding ahead; when you’re young you have to be fast</span><span class="ln">With teepee, homestead and blacksmith to learn ‘bout the past.</span></div></li>
@@ -887,52 +887,52 @@ let hideTimer = null;
 // ---------------- 2023 Colorado & Wyoming leg (stops 8-21): photos ----------------
 // One photo per stop. To change one, put the file in img/north-america-2023/
 // and edit its entry ("f" = file name, "cap" = caption).
-const LEG_YEAR = "2023";
-const IMG_BASE = "https://maps.fivelittlerascals.com/img/north-america-2023/";
+const RK_YEAR = "2023";
+const RK_IMG_BASE = "https://maps.fivelittlerascals.com/img/north-america-2023/";
 // One line and one outside link per stop ("d" = description, "l" = link text, "u" = address).
-const SITES = {"8": {"d": "Base camp below Pikes Peak, with a brewery patio facing the Front Range.", "l": "Visit Colorado Springs", "u": "https://www.visitcos.com/"}, "9": {"d": "Living-history ranch with a teepee, a homestead cabin, a blacksmith and farm animals.", "l": "Rock Ledge Ranch Historic Site", "u": "https://rockledgeranch.com/about/"}, "10": {"d": "Ancestral Puebloan cliff dwellings to climb through, ladders, windows and all.", "l": "Manitou Cliff Dwellings", "u": "https://www.cliffdwellingsmuseum.com/"}, "11": {"d": "Red sandstone fins and towers with Pikes Peak behind.", "l": "Garden of the Gods Park", "u": "https://coloradosprings.gov/gog"}, "12": {"d": "A rooftop lunch under the Flatirons, Pearl Street's bronze bears and a climbing gym.", "l": "Visit Boulder", "u": "https://www.bouldercoloradousa.com/"}, "13": {"d": "A town north of Denver, and an evening of backyard climbing.", "l": "", "u": ""}, "14": {"d": "Mountain lodge and cabins with mini golf, crafts, archery and elk on the lawn.", "l": "YMCA of the Rockies, Estes Park Center", "u": "https://www.ymcarockies.org/our-locations/estes-park-center"}, "15": {"d": "The loop around Bear Lake, Alberta Falls, and snow on the trail in June.", "l": "Bear Lake Trail (NPS)", "u": "https://www.nps.gov/places/bear-lake-trail.htm"}, "16": {"d": "The white hotel on the hill above Estes Park, the inspiration for The Shining.", "l": "The Stanley Hotel", "u": "https://www.stanleyhotel.com/"}, "17": {"d": "Wyoming's capital on the high plains, where the drive north begins.", "l": "Visit Cheyenne", "u": "https://www.cheyenne.org/"}, "18": {"d": "A night in Casper on the way north.", "l": "Visit Casper", "u": "https://www.visitcasper.com/"}, "19": {"d": "Covered wagons, handcarts and a river crossing from the Oregon, California, Mormon and Pony Express trails.", "l": "National Historic Trails Interpretive Center (BLM)", "u": "https://www.blm.gov/visit/national-historic-trails-interpretive-center"}, "20": {"d": "A dude ranch in the Bighorn Mountains: trail rides, wildflower mesas, fishing and a rodeo.", "l": "Paradise Guest Ranch", "u": "https://www.paradiseranch.com/"}, "21": {"d": "Hand-feeding bison from a little train on the high plains.", "l": "Terry Bison Ranch", "u": "https://terrybisonranch.com/bison-train-tours"}};
-const PHOTOS = {"8": {"f": "colorado-springs-brewery.jpg", "cap": "Brewery windows onto the Front Range"}, "9": {"f": "rock-ledge-ranch-teepee.jpg", "cap": "At the teepee, Rock Ledge Ranch"}, "10": {"f": "manitou-cliff-dwellings.jpg", "cap": "The Manitou cliff dwellings"}, "11": {"f": "garden-of-the-gods.jpg", "cap": "Pikes Peak over Garden of the Gods"}, "12": {"f": "boulder-rooftop.jpg", "cap": "Rooftop lunch with the Flatirons"}, "13": {"f": "erie-climbing-wall.jpg", "cap": "Rings on the backyard climbing wall"}, "14": {"f": "ymca-elk.jpg", "cap": "Elk grazing on the YMCA lawn"}, "15": {"f": "bear-lake.jpg", "cap": "Bear Lake"}, "16": {"f": "stanley-hotel.jpg", "cap": "On the Stanley Hotel steps"}, "17": {"f": "cheyenne-wyoming-shirt.jpg", "cap": "A Wyoming shirt in Cheyenne"}, "19": {"f": "trails-center-wagon.jpg", "cap": "Packed into a covered wagon"}, "20": {"f": "paradise-ranch-sunrise.jpg", "cap": "Sunrise over the ranch valley"}, "21": {"f": "terry-bison-ranch.jpg", "cap": "Bison up close from the train"}};
-const LEG_STOPS = Object.keys(SITES).map(Number);
-function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
-function inLeg(k){ const p = k.split('-'); return p[0] === LEG_YEAR && SITES[p[1]] !== undefined; }
+const RK_SITES = {"8": {"d": "Base camp below Pikes Peak, with a brewery patio facing the Front Range.", "l": "Visit Colorado Springs", "u": "https://www.visitcos.com/"}, "9": {"d": "Living-history ranch with a teepee, a homestead cabin, a blacksmith and farm animals.", "l": "Rock Ledge Ranch Historic Site", "u": "https://rockledgeranch.com/about/"}, "10": {"d": "Ancestral Puebloan cliff dwellings to climb through, ladders, windows and all.", "l": "Manitou Cliff Dwellings", "u": "https://www.cliffdwellingsmuseum.com/"}, "11": {"d": "Red sandstone fins and towers with Pikes Peak behind.", "l": "Garden of the Gods Park", "u": "https://coloradosprings.gov/gog"}, "12": {"d": "A rooftop lunch under the Flatirons, Pearl Street's bronze bears and a climbing gym.", "l": "Visit Boulder", "u": "https://www.bouldercoloradousa.com/"}, "13": {"d": "A town north of Denver, and an evening of backyard climbing.", "l": "", "u": ""}, "14": {"d": "Mountain lodge and cabins with mini golf, crafts, archery and elk on the lawn.", "l": "YMCA of the Rockies, Estes Park Center", "u": "https://www.ymcarockies.org/our-locations/estes-park-center"}, "15": {"d": "The loop around Bear Lake, Alberta Falls, and snow on the trail in June.", "l": "Bear Lake Trail (NPS)", "u": "https://www.nps.gov/places/bear-lake-trail.htm"}, "16": {"d": "The white hotel on the hill above Estes Park, the inspiration for The Shining.", "l": "The Stanley Hotel", "u": "https://www.stanleyhotel.com/"}, "17": {"d": "Wyoming's capital on the high plains, where the drive north begins.", "l": "Visit Cheyenne", "u": "https://www.cheyenne.org/"}, "18": {"d": "A night in Casper on the way north.", "l": "Visit Casper", "u": "https://www.visitcasper.com/"}, "19": {"d": "Covered wagons, handcarts and a river crossing from the Oregon, California, Mormon and Pony Express trails.", "l": "National Historic Trails Interpretive Center (BLM)", "u": "https://www.blm.gov/visit/national-historic-trails-interpretive-center"}, "20": {"d": "A dude ranch in the Bighorn Mountains: trail rides, wildflower mesas, fishing and a rodeo.", "l": "Paradise Guest Ranch", "u": "https://www.paradiseranch.com/"}, "21": {"d": "Hand-feeding bison from a little train on the high plains.", "l": "Terry Bison Ranch", "u": "https://terrybisonranch.com/bison-train-tours"}};
+const RK_PHOTOS = {"8": {"f": "colorado-springs-brewery.jpg", "cap": "Brewery windows onto the Front Range"}, "9": {"f": "rock-ledge-ranch-teepee.jpg", "cap": "At the teepee, Rock Ledge Ranch"}, "10": {"f": "manitou-cliff-dwellings.jpg", "cap": "The Manitou cliff dwellings"}, "11": {"f": "garden-of-the-gods.jpg", "cap": "Pikes Peak over Garden of the Gods"}, "12": {"f": "boulder-rooftop.jpg", "cap": "Rooftop lunch with the Flatirons"}, "13": {"f": "erie-climbing-wall.jpg", "cap": "Rings on the backyard climbing wall"}, "14": {"f": "ymca-elk.jpg", "cap": "Elk grazing on the YMCA lawn"}, "15": {"f": "bear-lake.jpg", "cap": "Bear Lake"}, "16": {"f": "stanley-hotel.jpg", "cap": "On the Stanley Hotel steps"}, "17": {"f": "cheyenne-wyoming-shirt.jpg", "cap": "A Wyoming shirt in Cheyenne"}, "19": {"f": "trails-center-wagon.jpg", "cap": "Packed into a covered wagon"}, "20": {"f": "paradise-ranch-sunrise.jpg", "cap": "Sunrise over the ranch valley"}, "21": {"f": "terry-bison-ranch.jpg", "cap": "Bison up close from the train"}};
+const RK_STOPS = Object.keys(RK_SITES).map(Number);
+function rkEsc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+function inLeg(k){ const p = k.split('-'); return p[0] === RK_YEAR && RK_SITES[p[1]] !== undefined; }
 let legView = (location.hash === '#poem') ? 'poem' : 'photos';
 (function buildLeg(){
-  const list = document.getElementById('photos'); if (!list) return;
-  LEG_STOPS.forEach(n => {
-    const m = META[LEG_YEAR + '-' + n] || {}, p = PHOTOS[n], site = SITES[n] || {};
+  const list = document.getElementById('rkphotos'); if (!list) return;
+  RK_STOPS.forEach(n => {
+    const m = META[RK_YEAR + '-' + n] || {}, p = RK_PHOTOS[n], site = RK_SITES[n] || {};
     const li = document.createElement('li');
-    li.className = 'pcard'; li.id = 'photo-' + LEG_YEAR + '-' + n; li.dataset.n = n;
-    li.innerHTML = (p ? '<img class="cthumb" loading="lazy" src="' + IMG_BASE + p.f + '" alt="' + esc(p.cap || m.name || '') + '">'
+    li.className = 'pcard'; li.id = 'photo-' + RK_YEAR + '-' + n; li.dataset.n = n;
+    li.innerHTML = (p ? '<img class="cthumb" loading="lazy" src="' + RK_IMG_BASE + p.f + '" alt="' + rkEsc(p.cap || m.name || '') + '">'
                       : '<div class="nophoto" aria-hidden="true"></div>') +
-      '<div class="chead"><span class="badge y2023">' + n + '</span><span class="cname">' + esc(m.name || '') + '</span>' +
-      '<span class="creg">' + esc(m.region || '') + '</span></div>' +
-      (site.d ? '<p class="desc">' + esc(site.d) + '</p>' : '') +
-      (site.u ? '<a class="site" href="' + site.u + '" target="_blank" rel="noopener">' + esc(site.l) + ' &#8599;</a>' : '');
-    li.addEventListener('mouseenter', () => { const g = svg.querySelector('g.stop[data-year="' + LEG_YEAR + '"][data-n="' + n + '"]'); if (g) g.classList.add('lit'); });
-    li.addEventListener('mouseleave', () => { const g = svg.querySelector('g.stop[data-year="' + LEG_YEAR + '"][data-n="' + n + '"]'); if (g) g.classList.remove('lit'); });
+      '<div class="chead"><span class="badge y2023">' + n + '</span><span class="cname">' + rkEsc(m.name || '') + '</span>' +
+      '<span class="creg">' + rkEsc(m.region || '') + '</span></div>' +
+      (site.d ? '<p class="desc">' + rkEsc(site.d) + '</p>' : '') +
+      (site.u ? '<a class="site" href="' + site.u + '" target="_blank" rel="noopener">' + rkEsc(site.l) + ' &#8599;</a>' : '');
+    li.addEventListener('mouseenter', () => { const g = svg.querySelector('g.stop[data-year="' + RK_YEAR + '"][data-n="' + n + '"]'); if (g) g.classList.add('lit'); });
+    li.addEventListener('mouseleave', () => { const g = svg.querySelector('g.stop[data-year="' + RK_YEAR + '"][data-n="' + n + '"]'); if (g) g.classList.remove('lit'); });
     list.appendChild(li);
   });
 })();
 function setLegView(v){
   legView = v;
-  const ph = document.getElementById('photos'); if (ph) ph.hidden = (v !== 'photos');
-  LEG_STOPS.forEach(n => { const c = document.getElementById('stop-' + LEG_YEAR + '-' + n); if (c) c.hidden = (v === 'photos'); });
+  const ph = document.getElementById('rkphotos'); if (ph) ph.hidden = (v !== 'photos');
+  RK_STOPS.forEach(n => { const c = document.getElementById('stop-' + RK_YEAR + '-' + n); if (c) c.hidden = (v === 'photos'); });
   document.querySelectorAll('#leg-rockies .viewbtn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
 }
 document.querySelectorAll('#leg-rockies .viewbtn').forEach(b => b.addEventListener('click', () => setLegView(b.dataset.view)));
 setLegView(legView);
 function legTip(k, n){
-  const m = META[k] || {}, ph = PHOTOS[n], site = SITES[n] || {};
-  let inner = (ph ? '<img class="tip-photo" src="' + IMG_BASE + ph.f + '" alt="">' : '') +
+  const m = META[k] || {}, ph = RK_PHOTOS[n], site = RK_SITES[n] || {};
+  let inner = (ph ? '<img class="tip-photo" src="' + RK_IMG_BASE + ph.f + '" alt="">' : '') +
     '<b>' + m.year + ' &middot; #' + n + ' &middot; ' + m.name + ', ' + m.region + '</b>';
-  if (site.d) inner += '<span class="t-desc">' + esc(site.d) + '</span>';
-  if (legView === 'photos' && site.u) inner += '<span class="tm">Click to visit ' + esc(site.l) + ' &#8599;</span>';
+  if (site.d) inner += '<span class="t-desc">' + rkEsc(site.d) + '</span>';
+  if (legView === 'photos' && site.u) inner += '<span class="tm">Click to visit ' + rkEsc(site.l) + ' &#8599;</span>';
   else if (legView === 'poem') inner += '<span class="tm">Click to jump to this verse &rarr;</span>';
   else inner += '<span class="tm">Click to see this stop below &rarr;</span>';
   return inner;
 }
 function legOpen(k, n){
-  const site = SITES[n] || {};
+  const site = RK_SITES[n] || {};
   if (legView === 'photos' && site.u) { window.open(site.u, '_blank', 'noopener'); return; }
   const el = document.getElementById((legView === 'photos' ? 'photo-' : 'stop-') + k);
   if (!el) return;
