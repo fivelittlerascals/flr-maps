@@ -9,7 +9,10 @@
 <body>
 <!--
   ============================================================
-  NORTH AMERICA — 2023, 2024 AND 2025
+  NORTH AMERICA — 2005, 2010, 2023, 2024, 2025 AND 2026
+  2010 stops: hovering shows the stop's photo and a one-line
+  description; clicking opens the place's own site (Photos view) or
+  opens its card (The blog posts view; deep link #2010posts).
   ============================================================
   Self-contained: no external scripts, no data files. Paste the
   whole thing into a Squarespace Code block.
@@ -177,6 +180,26 @@
     border-radius:4px; padding:10px 12px; background:#faf8f5; }
   #cards .stoplist { list-style:none; padding:14px 0 20px; margin:0;  column-gap:34px; }
   @media (max-width:720px){ #cards .stoplist { columns:1; } }
+  /* ---- 2010: photos / blog posts views (South Australia pattern, PR #6) ---- */
+  #tooltip img.tip-photo { width:120px; height:120px; object-fit:cover; object-position:50% 30%;
+    border-radius:4px; margin:0 0 6px; display:block; background:#2a3c5c; }
+  #tooltip .t-desc { display:block; font-size:.84rem; line-height:1.45; }
+  .viewbar { display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 4px;
+    font-family:'Helvetica Neue', Helvetica, Arial, sans-serif; font-size:.82rem; }
+  .viewbtn { padding:6px 15px; border:1px solid #d7dde6; border-radius:999px;
+    background:#fff; color:var(--text); cursor:pointer; font:inherit; }
+  .viewbtn:hover { border-color:var(--ink); color:var(--ink); }
+  .viewbtn[aria-pressed="true"] { background:var(--ink); border-color:var(--ink); color:#fff; font-weight:700; }
+  .viewbtn:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  #photos2010 { list-style:none; padding:16px 0 22px; margin:0; display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:18px; }
+  .pcard { margin:0; border-left:3px solid var(--c); border-radius:4px; padding:10px 12px;
+    background:#faf8f5; transition:background .2s ease; min-width:0; }
+  .pcard.lit { background:#fbf3f1; }
+  .pcard .cthumb { object-position:50% 30%; }
+  .pcard .nophoto { width:100%; max-width:100%; aspect-ratio:1/1; border-radius:4px; margin:0 0 8px; background:#eef2f6; }
+  .pcard .desc { margin:6px 0 4px; font-size:.88rem; line-height:1.45; }
+  @media (max-width:520px) { #photos2010 { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:12px; } }
 </style>
 
 <div class="wrap">
@@ -451,32 +474,32 @@
 <circle class="tiedot y2026" data-year="2026" cx="776" cy="399" r="2.2"/>
 <line class="leader y2026" data-year="2026" x1="551" y1="534" x2="540" y2="540"/>
 <circle class="tiedot y2026" data-year="2026" cx="551" cy="534" r="2.2"/>
-<g class="stop y2010 nolink" data-year="2010" data-n="1" tabindex="0" role="button" aria-label="2010, stop 1: New York City, New York." transform="translate(1008,291)"><circle r="11.5"/><text dy="0.34em">1</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="2" tabindex="0" role="button" aria-label="2010, stop 2: New Canaan, Connecticut." transform="translate(1024,271)"><circle r="11.5"/><text dy="0.34em">2</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="3" tabindex="0" role="button" aria-label="2010, stop 3: Carlisle, Pennsylvania." transform="translate(950,298)"><circle r="11.5"/><text dy="0.34em">3</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="4" tabindex="0" role="button" aria-label="2010, stop 4: Nashville, Tennessee." transform="translate(768,398)"><circle r="11.5"/><text dy="0.34em">4</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="5" tabindex="0" role="button" aria-label="2010, stop 5: Memphis, Tennessee." transform="translate(704,423)"><circle r="11.5"/><text dy="0.34em">5</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="6" tabindex="0" role="button" aria-label="2010, stop 6: Houston, Texas." transform="translate(604,543)"><circle r="11.5"/><text dy="0.34em">6</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="7" tabindex="0" role="button" aria-label="2010, stop 7: San Antonio, Texas." transform="translate(543,551)"><circle r="11.5"/><text dy="0.34em">7</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="8" tabindex="0" role="button" aria-label="2010, stop 8: El Paso, Texas." transform="translate(390,498)"><circle r="11.5"/><text dy="0.34em">8</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="9" tabindex="0" role="button" aria-label="2010, stop 9: Cochiti Lake, New Mexico." transform="translate(384,412)"><circle r="11.5"/><text dy="0.34em">9</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="10" tabindex="0" role="button" aria-label="2010, stop 10: Santa Fe, New Mexico." transform="translate(410,407)"><circle r="11.5"/><text dy="0.34em">10</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="11" tabindex="0" role="button" aria-label="2010, stop 11: Petrified Forest, Arizona." transform="translate(327,426)"><circle r="11.5"/><text dy="0.34em">11</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="12" tabindex="0" role="button" aria-label="2010, stop 12: Sedona, Arizona." transform="translate(290,428)"><circle r="11.5"/><text dy="0.34em">12</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="13" tabindex="0" role="button" aria-label="2010, stop 13: Grand Canyon, Arizona." transform="translate(282,400)"><circle r="11.5"/><text dy="0.34em">13</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="14" tabindex="0" role="button" aria-label="2010, stop 14: Hoover Dam, Nevada." transform="translate(242,403)"><circle r="11.5"/><text dy="0.34em">14</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="15" tabindex="0" role="button" aria-label="2010, stop 15: Las Vegas, Nevada." transform="translate(217,395)"><circle r="11.5"/><text dy="0.34em">15</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="16" tabindex="0" role="button" aria-label="2010, stop 16: Los Angeles, California." transform="translate(161,447)"><circle r="11.5"/><text dy="0.34em">16</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="17" tabindex="0" role="button" aria-label="2010, stop 17: Palo Alto, California." transform="translate(105,360)"><circle r="11.5"/><text dy="0.34em">17</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="18" tabindex="0" role="button" aria-label="2010, stop 18: Big Basin Redwoods, California." transform="translate(86,383)"><circle r="11.5"/><text dy="0.34em">18</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="19" tabindex="0" role="button" aria-label="2010, stop 19: San Francisco, California." transform="translate(76,359)"><circle r="11.5"/><text dy="0.34em">19</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="20" tabindex="0" role="button" aria-label="2010, stop 20: Napa Valley, California." transform="translate(90,337)"><circle r="11.5"/><text dy="0.34em">20</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="21" tabindex="0" role="button" aria-label="2010, stop 21: Salt Lake City, Utah." transform="translate(287,285)"><circle r="11.5"/><text dy="0.34em">21</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="22" tabindex="0" role="button" aria-label="2010, stop 22: Colorado, the Rockies." transform="translate(420,311)"><circle r="11.5"/><text dy="0.34em">22</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="23" tabindex="0" role="button" aria-label="2010, stop 23: Rockford, Illinois." transform="translate(722,247)"><circle r="11.5"/><text dy="0.34em">23</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="24" tabindex="0" role="button" aria-label="2010, stop 24: Toronto, Ontario." transform="translate(909,210)"><circle r="11.5"/><text dy="0.34em">24</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="25" tabindex="0" role="button" aria-label="2010, stop 25: Montréal, Québec." transform="translate(1020,162)"><circle r="11.5"/><text dy="0.34em">25</text></g>
-<g class="stop y2010 nolink" data-year="2010" data-n="26" tabindex="0" role="button" aria-label="2010, stop 26: Washington, DC, the end of the road." transform="translate(953,331)"><circle r="11.5"/><text dy="0.34em">26</text></g>
+<g class="stop y2010" data-year="2010" data-n="1" tabindex="0" role="button" aria-label="2010, stop 1: New York City, New York. Show photo and link." transform="translate(1008,291)"><circle r="11.5"/><text dy="0.34em">1</text></g>
+<g class="stop y2010" data-year="2010" data-n="2" tabindex="0" role="button" aria-label="2010, stop 2: New Canaan, Connecticut. Show photo and link." transform="translate(1024,271)"><circle r="11.5"/><text dy="0.34em">2</text></g>
+<g class="stop y2010" data-year="2010" data-n="3" tabindex="0" role="button" aria-label="2010, stop 3: Carlisle, Pennsylvania. Show photo and link." transform="translate(950,298)"><circle r="11.5"/><text dy="0.34em">3</text></g>
+<g class="stop y2010" data-year="2010" data-n="4" tabindex="0" role="button" aria-label="2010, stop 4: Nashville, Tennessee. Show photo and link." transform="translate(768,398)"><circle r="11.5"/><text dy="0.34em">4</text></g>
+<g class="stop y2010" data-year="2010" data-n="5" tabindex="0" role="button" aria-label="2010, stop 5: Memphis, Tennessee. Show photo and link." transform="translate(704,423)"><circle r="11.5"/><text dy="0.34em">5</text></g>
+<g class="stop y2010" data-year="2010" data-n="6" tabindex="0" role="button" aria-label="2010, stop 6: Houston, Texas. Show photo and link." transform="translate(604,543)"><circle r="11.5"/><text dy="0.34em">6</text></g>
+<g class="stop y2010" data-year="2010" data-n="7" tabindex="0" role="button" aria-label="2010, stop 7: San Antonio, Texas. Show photo and link." transform="translate(543,551)"><circle r="11.5"/><text dy="0.34em">7</text></g>
+<g class="stop y2010" data-year="2010" data-n="8" tabindex="0" role="button" aria-label="2010, stop 8: El Paso, Texas. Show photo and link." transform="translate(390,498)"><circle r="11.5"/><text dy="0.34em">8</text></g>
+<g class="stop y2010" data-year="2010" data-n="9" tabindex="0" role="button" aria-label="2010, stop 9: Cochiti Lake, New Mexico. Show photo and link." transform="translate(384,412)"><circle r="11.5"/><text dy="0.34em">9</text></g>
+<g class="stop y2010" data-year="2010" data-n="10" tabindex="0" role="button" aria-label="2010, stop 10: Santa Fe, New Mexico. Show photo and link." transform="translate(410,407)"><circle r="11.5"/><text dy="0.34em">10</text></g>
+<g class="stop y2010" data-year="2010" data-n="11" tabindex="0" role="button" aria-label="2010, stop 11: Petrified Forest, Arizona. Show photo and link." transform="translate(327,426)"><circle r="11.5"/><text dy="0.34em">11</text></g>
+<g class="stop y2010" data-year="2010" data-n="12" tabindex="0" role="button" aria-label="2010, stop 12: Sedona, Arizona. Show photo and link." transform="translate(290,428)"><circle r="11.5"/><text dy="0.34em">12</text></g>
+<g class="stop y2010" data-year="2010" data-n="13" tabindex="0" role="button" aria-label="2010, stop 13: Grand Canyon, Arizona. Show photo and link." transform="translate(282,400)"><circle r="11.5"/><text dy="0.34em">13</text></g>
+<g class="stop y2010" data-year="2010" data-n="14" tabindex="0" role="button" aria-label="2010, stop 14: Hoover Dam, Nevada. Show photo and link." transform="translate(242,403)"><circle r="11.5"/><text dy="0.34em">14</text></g>
+<g class="stop y2010" data-year="2010" data-n="15" tabindex="0" role="button" aria-label="2010, stop 15: Las Vegas, Nevada. Show photo and link." transform="translate(217,395)"><circle r="11.5"/><text dy="0.34em">15</text></g>
+<g class="stop y2010" data-year="2010" data-n="16" tabindex="0" role="button" aria-label="2010, stop 16: Los Angeles, California. Show photo and link." transform="translate(161,447)"><circle r="11.5"/><text dy="0.34em">16</text></g>
+<g class="stop y2010" data-year="2010" data-n="17" tabindex="0" role="button" aria-label="2010, stop 17: Palo Alto, California. Show photo and link." transform="translate(105,360)"><circle r="11.5"/><text dy="0.34em">17</text></g>
+<g class="stop y2010" data-year="2010" data-n="18" tabindex="0" role="button" aria-label="2010, stop 18: Big Basin Redwoods, California. Show photo and link." transform="translate(86,383)"><circle r="11.5"/><text dy="0.34em">18</text></g>
+<g class="stop y2010" data-year="2010" data-n="19" tabindex="0" role="button" aria-label="2010, stop 19: San Francisco, California. Show photo and link." transform="translate(76,359)"><circle r="11.5"/><text dy="0.34em">19</text></g>
+<g class="stop y2010" data-year="2010" data-n="20" tabindex="0" role="button" aria-label="2010, stop 20: Napa Valley, California. Show photo and link." transform="translate(90,337)"><circle r="11.5"/><text dy="0.34em">20</text></g>
+<g class="stop y2010" data-year="2010" data-n="21" tabindex="0" role="button" aria-label="2010, stop 21: Salt Lake City, Utah. Show photo and link." transform="translate(287,285)"><circle r="11.5"/><text dy="0.34em">21</text></g>
+<g class="stop y2010" data-year="2010" data-n="22" tabindex="0" role="button" aria-label="2010, stop 22: Colorado, the Rockies. Show photo and link." transform="translate(420,311)"><circle r="11.5"/><text dy="0.34em">22</text></g>
+<g class="stop y2010" data-year="2010" data-n="23" tabindex="0" role="button" aria-label="2010, stop 23: Rockford, Illinois. Show photo and link." transform="translate(722,247)"><circle r="11.5"/><text dy="0.34em">23</text></g>
+<g class="stop y2010" data-year="2010" data-n="24" tabindex="0" role="button" aria-label="2010, stop 24: Toronto, Ontario. Show photo and link." transform="translate(909,210)"><circle r="11.5"/><text dy="0.34em">24</text></g>
+<g class="stop y2010" data-year="2010" data-n="25" tabindex="0" role="button" aria-label="2010, stop 25: Montréal, Québec. Show photo and link." transform="translate(1020,162)"><circle r="11.5"/><text dy="0.34em">25</text></g>
+<g class="stop y2010" data-year="2010" data-n="26" tabindex="0" role="button" aria-label="2010, stop 26: Washington, DC, the end of the road. Show photo and link." transform="translate(953,331)"><circle r="11.5"/><text dy="0.34em">26</text></g>
 <g class="stop y2023" data-year="2023" data-n="1" tabindex="0" role="button" aria-label="2023, stop 1: Vancouver, British Columbia." transform="translate(78,44)"><circle r="11.5"/><text dy="0.34em">1</text></g>
 <g class="stop y2023" data-year="2023" data-n="2" tabindex="0" role="button" aria-label="2023, stop 2: Port Renfrew Seaside Cottages, Vancouver Island." transform="translate(17,75)"><circle r="11.5"/><text dy="0.34em">2</text></g>
 <g class="stop y2023" data-year="2023" data-n="3" tabindex="0" role="button" aria-label="2023, stop 3: Mystic Beach, Vancouver Island." transform="translate(88,68)"><circle r="11.5"/><text dy="0.34em">3</text></g>
@@ -857,7 +880,13 @@ svg.querySelectorAll('.stop').forEach(g => {
     if (card) card.classList.add('lit');
     let inner = (m.photo ? '<img class="tip-photo" src="' + m.photo + (m.photo.indexOf('?')>-1?'&':'?') + 'format=400w" alt="' + (m.name||'') + '" loading="lazy">' : '') + '<b>' + m.year + ' &middot; #' + g.dataset.n + ' &middot; ' +
                 m.name + ', ' + m.region + '</b>';
-    if (m.verse && m.verse.length) {
+    if (m.year === '2010' && typeof PHOTOS_2010 !== 'undefined') {
+      const ph = PHOTOS_2010[g.dataset.n], site = SITES_2010[g.dataset.n] || {};
+      inner = (ph ? '<img class="tip-photo" src="' + IMG_BASE_2010 + ph.f + '" alt="">' : '') + '<b>2010 &middot; #' + g.dataset.n + ' &middot; ' + m.name + ', ' + m.region + '</b>';
+      if (site.d) inner += '<span class="t-desc">' + site.d + '</span>';
+      if (view2010 === 'photos' && site.u) inner += '<span class="tm">Click to visit ' + site.l + ' &#8599;</span>';
+      else inner += '<span class="tm">Click to read the blog post &rarr;</span>';
+    } else if (m.verse && m.verse.length) {
       inner += '<span class="tv">' + m.verse.map(l =>
         l ? '<span>' + l + '</span>' : '<span>&nbsp;</span>').join('') +
         '<span class="tm">Click to read it all &rarr;</span></span>';
@@ -893,6 +922,11 @@ svg.querySelectorAll('.stop').forEach(g => {
     // STAGE 2: already in a single-trip view -> open the blog if this stop has one
     if (meta.url && meta.url.indexOf('fivelittlerascals.com/blog') !== -1) {
       window.open(meta.url, '_blank', 'noopener'); return;
+    }
+    // 2010: Photos view opens the place's own site; The blog posts view reveals the card
+    if (meta.year === '2010' && typeof SITES_2010 !== 'undefined') {
+      const site = SITES_2010[g.dataset.n] || {};
+      if (view2010 === 'photos' && site.u) { window.open(site.u, '_blank', 'noopener'); return; }
     }
     // otherwise (no blog): reveal its card
     const card = document.getElementById('stop-' + k);
@@ -999,6 +1033,57 @@ tooltip.addEventListener('mouseleave', () => {
   }
 })();
 </script>
+
+<script>
+/* ---- 2010 "America - Out and Back": Photos view (default) + The blog posts view ----
+   One photo per stop. To change a photo, put the file in img/north-america-2010/ and edit
+   its entry here ("f" = file name, "cap" = caption). SITES: one line and one outside link per stop. */
+const IMG_BASE_2010 = "https://maps.fivelittlerascals.com/img/north-america-2010/";
+const PHOTOS_2010 = {"2": {"f": "new-canaan-snow.jpg", "cap": "Snowy send-off in New Canaan"}, "4": {"f": "nashville-spare-tire.jpg", "cap": "Swapping on the spare"}, "5": {"f": "graceland-gold-records.jpg", "cap": "Gold records at Graceland"}, "6": {"f": "houston-overpasses.jpg", "cap": "Stacked overpasses on the Houston freeway"}, "7": {"f": "alamo.jpg", "cap": "In front of the Alamo"}, "8": {"f": "el-paso-border-checkpoint.jpg", "cap": "Border Patrol checkpoint north of El Paso"}, "9": {"f": "cochiti-mesa-ruins.jpg", "cap": "Pueblo ruins on the mesa, in the snow"}, "10": {"f": "santa-fe-mountains.jpg", "cap": "Mountains outside Santa Fe"}, "11": {"f": "petrified-logs.jpg", "cap": "Petrified logs in the badlands"}, "12": {"f": "sedona-red-rocks.jpg", "cap": "Looking out over Sedona's red rocks"}, "13": {"f": "grand-canyon-sunset.jpg", "cap": "Last light on the Grand Canyon rim"}, "14": {"f": "hoover-dam.jpg", "cap": "Hoover Dam intake towers"}, "15": {"f": "las-vegas-bellagio.jpg", "cap": "Bellagio fountains and the Eiffel Tower"}, "16": {"f": "hollywood-oscar.jpg", "cap": "With an Oscar statue in Hollywood"}, "17": {"f": "route-1-hills.jpg", "cap": "Green hills off Route 1"}, "18": {"f": "big-basin-hollow-redwood.jpg", "cap": "Inside a hollow redwood"}, "19": {"f": "golden-gate.jpg", "cap": "Golden Gate from the Marin side"}, "20": {"f": "napa-vineyard.jpg", "cap": "In a Napa vineyard"}, "21": {"f": "salt-lake-temple.jpg", "cap": "Salt Lake Temple at dusk"}, "24": {"f": "toronto-lake-ontario.jpg", "cap": "Lake Ontario from the hotel window"}, "25": {"f": "montreal-mount-royal.jpg", "cap": "Mount Royal lookout over Montréal"}, "26": {"f": "washington-swearing-in.jpg", "cap": "Swearing-in day"}};
+const SITES_2010 = {"1": {"d": "The trip's starting line: the city we left to drive across the country.", "l": "NYC Tourism", "u": "https://www.nyctourism.com/"}, "2": {"d": "A New England town an hour up the coast from Manhattan.", "l": "Welcome to New Canaan", "u": "https://www.newcanaan.info/"}, "3": {"d": "Liberal arts college in south-central Pennsylvania, founded in 1773.", "l": "Dickinson College", "u": "https://www.dickinson.edu/"}, "4": {"d": "Music City, home of the Grand Ole Opry and Vanderbilt University.", "l": "Visit Music City", "u": "https://www.visitmusiccity.com/"}, "5": {"d": "Elvis Presley's home and museum in Memphis.", "l": "Graceland", "u": "https://www.graceland.com/"}, "6": {"d": "Texas's largest city, laced with layered freeway interchanges.", "l": "Visit Houston", "u": "https://www.visithoustontexas.com/"}, "7": {"d": "The 1718 mission where the 1836 battle for Texas independence was fought.", "l": "The Alamo", "u": "https://www.thealamo.org/"}, "8": {"d": "Border city on the Rio Grande, across from Ciudad Juárez.", "l": "Visit El Paso", "u": "https://visitelpaso.com/"}, "9": {"d": "Reservoir and recreation area on the Rio Grande, southwest of Santa Fe.", "l": "Cochiti Lake", "u": "https://www.spa.usace.army.mil/Missions/Civil-Works/Recreation/Cochiti-Lake/"}, "10": {"d": "New Mexico's capital, known for adobe streets and its gallery scene.", "l": "Tourism Santa Fe", "u": "https://www.santafe.org/"}, "11": {"d": "Painted Desert badlands and fossil logs on old Route 66.", "l": "Petrified Forest National Park", "u": "https://www.nps.gov/pefo/index.htm"}, "12": {"d": "Red rock buttes and trails, including Cathedral Rock.", "l": "Visit Sedona", "u": "https://visitsedona.com/"}, "13": {"d": "A mile-deep canyon cut by the Colorado River.", "l": "Grand Canyon National Park", "u": "https://www.nps.gov/grca/index.htm"}, "14": {"d": "The 1936 concrete dam that holds back the Colorado to form Lake Mead.", "l": "Hoover Dam", "u": "https://www.usbr.gov/lc/hooverdam/"}, "15": {"d": "The Strip's casinos, fountains and replica skylines.", "l": "Visit Las Vegas", "u": "https://www.visitlasvegas.com/"}, "16": {"d": "Hollywood, the Walk of Fame and the Pacific at Santa Monica.", "l": "Discover Los Angeles", "u": "https://www.discoverlosangeles.com/"}, "17": {"d": "Home of Stanford University, at the top of the coast road.", "l": "Stanford University", "u": "https://www.stanford.edu/"}, "18": {"d": "California's oldest state park, a forest of old-growth coast redwoods.", "l": "Big Basin Redwoods State Park", "u": "https://www.parks.ca.gov/?page_id=540"}, "19": {"d": "The waterfront, the Ferry Building and the Golden Gate.", "l": "San Francisco Travel", "u": "https://www.sftravel.com/"}, "20": {"d": "Wine country north of San Francisco Bay.", "l": "Visit Napa Valley", "u": "https://www.visitnapavalley.com/"}, "21": {"d": "Temple Square downtown, with ski resorts half an hour away.", "l": "Visit Salt Lake", "u": "https://www.visitsaltlake.com/"}, "22": {"d": "The Rockies, crossed on the drive back east.", "l": "Colorado.com", "u": "https://www.colorado.com/"}, "23": {"d": "Northern Illinois city on the Rock River.", "l": "Go Rockford", "u": "https://www.gorockford.com/"}, "24": {"d": "Canada's largest city, on the shore of Lake Ontario.", "l": "Destination Toronto", "u": "https://www.destinationtoronto.com/"}, "25": {"d": "Québec's largest city, home of McGill University and Mount Royal.", "l": "Tourisme Montréal", "u": "https://www.mtl.org/en"}, "26": {"d": "The capital, and the end of the road.", "l": "Washington, DC", "u": "https://washington.org/"}};
+let view2010 = /posts/i.test(location.hash) ? 'posts' : 'photos';
+(function(){
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+  var sec = document.querySelector('#cards details.trip-sec.y2010');
+  if (!sec) return;
+  var posts = sec.querySelector('ol.stoplist');
+  var bar = document.createElement('div');
+  bar.className = 'viewbar'; bar.setAttribute('role','group'); bar.setAttribute('aria-label','Show for 2010');
+  bar.innerHTML = '<button type="button" class="viewbtn" data-view="photos" aria-pressed="true">Photos</button>' +
+                  '<button type="button" class="viewbtn" data-view="posts" aria-pressed="false">The blog posts</button>';
+  var grid = document.createElement('ol'); grid.id = 'photos2010';
+  Object.keys(META).filter(function(k){ return k.indexOf('2010-') === 0; })
+    .sort(function(a,b){ return Number(a.split('-')[1]) - Number(b.split('-')[1]); })
+    .forEach(function(k){
+      var n = k.split('-')[1], m = META[k], p = PHOTOS_2010[n], site = SITES_2010[n] || {};
+      var li = document.createElement('li');
+      li.className = 'pcard'; li.id = 'photo-2010-' + n; li.dataset.n = n;
+      li.innerHTML = (p ? '<img class="cthumb" loading="lazy" src="' + IMG_BASE_2010 + p.f + '" alt="' + esc(p.cap || m.name) + '">'
+                        : '<div class="nophoto" aria-hidden="true"></div>') +
+        '<div class="chead"><span class="badge">' + n + '</span><span class="cname">' + esc(m.name) + '</span>' +
+        '<span class="creg">' + esc(m.region || '') + '</span></div>' +
+        (p && site.d ? '<p class="desc">' + esc(site.d) + '</p>' : '') +
+        (p && site.u ? '<a class="site" href="' + site.u + '" target="_blank" rel="noopener">' + esc(site.l) + ' &#8599;</a>' : '');
+      grid.appendChild(li);
+      var g = document.querySelector('#namap g.stop[data-year="2010"][data-n="' + n + '"]');
+      if (g) {
+        li.addEventListener('mouseenter', function(){ g.classList.add('lit'); });
+        li.addEventListener('mouseleave', function(){ g.classList.remove('lit'); });
+      }
+    });
+  sec.insertBefore(bar, posts);
+  sec.insertBefore(grid, posts);
+  window.setView2010 = function(v){
+    view2010 = v;
+    grid.hidden = (v !== 'photos');
+    posts.hidden = (v !== 'posts');
+    bar.querySelectorAll('.viewbtn').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.view === v)); });
+  };
+  bar.querySelectorAll('.viewbtn').forEach(function(b){ b.addEventListener('click', function(){ window.setView2010(b.dataset.view); }); });
+  window.setView2010(view2010);
+})();
+</script>
+
 
 <script>
 // deep-link: honor ?year=  (or #year= / #2025) so external links open a specific trip
