@@ -191,6 +191,11 @@
     background: #eef2f6; display: flex; align-items: center; justify-content: center;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .78rem; color: var(--muted); }
   .pcard.lit .badge { background: var(--accent); }
+  .pcard .desc { margin: 6px 0 4px; font-size: .88rem; line-height: 1.45; }
+  .pcard .site { display: inline-block; margin-top: 4px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .76rem; font-weight: 700; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
+  .pcard .site:hover, .pcard .site:focus { color: var(--accent); border-bottom-color: var(--accent); }
+  #tooltip .t-desc { display: block; font-size: .84rem; line-height: 1.45; }
   .pcap { font-style: italic; font-size: .86rem; line-height: 1.4; color: #4a5566; margin-top: 4px; }
   #tooltip img.tip-photo { width: 120px; height: 120px; object-fit: cover; object-position: 50% 30%;
     border-radius: 4px; margin: 0 0 6px; display: block; background: #2a3c5c; }
@@ -246,33 +251,33 @@
 <path class="route" d="M346.9,77.9 Q358.9,101.0 376.8,119.9"/>
 <text class="pin" x="814" y="224" text-anchor="middle">Hay</text>
 <text class="pin" x="893" y="335" text-anchor="middle">Canberra</text>
-<g class="stop" data-n="1" tabindex="0" role="button" aria-label="Stop 1: Yarralumla, Canberra. Show photo and poem verse." transform="translate(893.7,278.0)"><circle r="13"/><text dy="0.34em">1</text></g>
-<g class="stop" data-n="2" tabindex="0" role="button" aria-label="Stop 2: Hay. Show photo and poem verse." transform="translate(813.5,167.3)"><circle r="13"/><text dy="0.34em">2</text></g>
-<g class="stop" data-n="3" tabindex="0" role="button" aria-label="Stop 3: Pink Lakes, Murray-Sunset. Show photo and poem verse." transform="translate(762.0,228.0)"><circle r="13"/><text dy="0.34em">3</text></g>
-<g class="stop" data-n="4" tabindex="0" role="button" aria-label="Stop 4: The South Australian border. Show photo and poem verse." transform="translate(732.3,146.2)"><circle r="13"/><text dy="0.34em">4</text></g>
-<g class="stop" data-n="5" tabindex="0" role="button" aria-label="Stop 5: Cape Jervis. Show photo and poem verse." transform="translate(289.1,423.9)"><circle r="13"/><text dy="0.34em">5</text></g>
-<g class="stop" data-n="6" tabindex="0" role="button" aria-label="Stop 6: Ferry to Penneshaw. Show photo and poem verse." transform="translate(237.3,447.7)"><circle r="13"/><text dy="0.34em">6</text></g>
-<g class="stop" data-n="7" tabindex="0" role="button" aria-label="Stop 7: Kangaroo Island Wildlife Park. Show photo and poem verse." transform="translate(168.9,480.9)"><circle r="13"/><text dy="0.34em">7</text></g>
-<g class="stop" data-n="8" tabindex="0" role="button" aria-label="Stop 8: Cape Willoughby &amp; Seymour Cottage. Show photo and poem verse." transform="translate(283.3,481.7)"><circle r="13"/><text dy="0.34em">8</text></g>
-<g class="stop" data-n="9" tabindex="0" role="button" aria-label="Stop 9: Prospect Hill &amp; the beach below. Show photo and poem verse." transform="translate(235.5,477.3)"><circle r="13"/><text dy="0.34em">9</text></g>
-<g class="stop" data-n="10" tabindex="0" role="button" aria-label="Stop 10: Seal Bay. Show photo and poem verse." transform="translate(147.3,509.5)"><circle r="13"/><text dy="0.34em">10</text></g>
-<g class="stop" data-n="11" tabindex="0" role="button" aria-label="Stop 11: A winery on the road home. Show photo and poem verse." transform="translate(208.5,468.2)"><circle r="13"/><text dy="0.34em">11</text></g>
-<g class="stop" data-n="12" tabindex="0" role="button" aria-label="Stop 12: A vineyard above the sea. Show photo and poem verse." transform="translate(260.8,464.2)"><circle r="13"/><text dy="0.34em">12</text></g>
-<g class="stop" data-n="13" tabindex="0" role="button" aria-label="Stop 13: Back across to Cape Jervis. Show photo and poem verse." transform="translate(263.3,435.8)"><circle r="13"/><text dy="0.34em">13</text></g>
-<g class="stop" data-n="14" tabindex="0" role="button" aria-label="Stop 14: Semaphore Park. Show photo and poem verse." transform="translate(311.9,276.5)"><circle r="13"/><text dy="0.34em">14</text></g>
-<g class="stop" data-n="15" tabindex="0" role="button" aria-label="Stop 15: Adelaide. Show photo and poem verse." transform="translate(367.8,307.0)"><circle r="13"/><text dy="0.34em">15</text></g>
-<g class="stop" data-n="16" tabindex="0" role="button" aria-label="Stop 16: South Australian Museum. Show photo and poem verse." transform="translate(339.6,303.4)"><circle r="13"/><text dy="0.34em">16</text></g>
-<g class="stop" data-n="17" tabindex="0" role="button" aria-label="Stop 17: Port Adelaide. Show photo and poem verse." transform="translate(367.6,266.5)"><circle r="13"/><text dy="0.34em">17</text></g>
-<g class="stop" data-n="18" tabindex="0" role="button" aria-label="Stop 18: National Railway Museum. Show photo and poem verse." transform="translate(340.4,274.9)"><circle r="13"/><text dy="0.34em">18</text></g>
-<g class="stop" data-n="19" tabindex="0" role="button" aria-label="Stop 19: Jacob’s Creek, Rowland Flat. Show photo and poem verse." transform="translate(415.0,217.6)"><circle r="13"/><text dy="0.34em">19</text></g>
-<g class="stop" data-n="20" tabindex="0" role="button" aria-label="Stop 20: Pindarie, Gomersal. Show photo and poem verse." transform="translate(392.7,199.9)"><circle r="13"/><text dy="0.34em">20</text></g>
-<g class="stop" data-n="21" tabindex="0" role="button" aria-label="Stop 21: Penwortham. Show photo and poem verse." transform="translate(352.0,105.9)"><circle r="13"/><text dy="0.34em">21</text></g>
-<g class="stop" data-n="22" tabindex="0" role="button" aria-label="Stop 22: Bungaree Station. Show photo and poem verse." transform="translate(359.1,52.1)"><circle r="13"/><text dy="0.34em">22</text></g>
-<g class="stop" data-n="23" tabindex="0" role="button" aria-label="Stop 23: Sevenhill. Show photo and poem verse." transform="translate(375.7,83.4)"><circle r="13"/><text dy="0.34em">23</text></g>
-<g class="stop" data-n="24" tabindex="0" role="button" aria-label="Stop 24: Mini golf in the rain. Show photo and poem verse." transform="translate(346.9,77.9)"><circle r="13"/><text dy="0.34em">24</text></g>
-<g class="stop" data-n="25" tabindex="0" role="button" aria-label="Stop 25: Taylors, Auburn. Show photo and poem verse." transform="translate(376.8,119.9)"><circle r="13"/><text dy="0.34em">25</text></g>
-<g class="stop" data-n="26" tabindex="0" role="button" aria-label="Stop 26: Hay. Show photo and poem verse." transform="translate(814.4,198.0)"><circle r="13"/><text dy="0.34em">26</text></g>
-<g class="stop" data-n="27" tabindex="0" role="button" aria-label="Stop 27: Yarralumla, Canberra. Show photo and poem verse." transform="translate(892.3,308.4)"><circle r="13"/><text dy="0.34em">27</text></g>
+<g class="stop" data-n="1" tabindex="0" role="button" aria-label="Stop 1: Yarralumla, Canberra. Show photo and link." transform="translate(893.7,278.0)"><circle r="13"/><text dy="0.34em">1</text></g>
+<g class="stop" data-n="2" tabindex="0" role="button" aria-label="Stop 2: Hay. Show photo and link." transform="translate(813.5,167.3)"><circle r="13"/><text dy="0.34em">2</text></g>
+<g class="stop" data-n="3" tabindex="0" role="button" aria-label="Stop 3: Pink Lakes, Murray-Sunset. Show photo and link." transform="translate(762.0,228.0)"><circle r="13"/><text dy="0.34em">3</text></g>
+<g class="stop" data-n="4" tabindex="0" role="button" aria-label="Stop 4: The South Australian border. Show photo and link." transform="translate(732.3,146.2)"><circle r="13"/><text dy="0.34em">4</text></g>
+<g class="stop" data-n="5" tabindex="0" role="button" aria-label="Stop 5: Cape Jervis. Show photo and link." transform="translate(289.1,423.9)"><circle r="13"/><text dy="0.34em">5</text></g>
+<g class="stop" data-n="6" tabindex="0" role="button" aria-label="Stop 6: Ferry to Penneshaw. Show photo and link." transform="translate(237.3,447.7)"><circle r="13"/><text dy="0.34em">6</text></g>
+<g class="stop" data-n="7" tabindex="0" role="button" aria-label="Stop 7: Kangaroo Island Wildlife Park. Show photo and link." transform="translate(168.9,480.9)"><circle r="13"/><text dy="0.34em">7</text></g>
+<g class="stop" data-n="8" tabindex="0" role="button" aria-label="Stop 8: Cape Willoughby &amp; Seymour Cottage. Show photo and link." transform="translate(283.3,481.7)"><circle r="13"/><text dy="0.34em">8</text></g>
+<g class="stop" data-n="9" tabindex="0" role="button" aria-label="Stop 9: Prospect Hill &amp; the beach below. Show photo and link." transform="translate(235.5,477.3)"><circle r="13"/><text dy="0.34em">9</text></g>
+<g class="stop" data-n="10" tabindex="0" role="button" aria-label="Stop 10: Seal Bay. Show photo and link." transform="translate(147.3,509.5)"><circle r="13"/><text dy="0.34em">10</text></g>
+<g class="stop" data-n="11" tabindex="0" role="button" aria-label="Stop 11: A winery on the road home. Show photo and link." transform="translate(208.5,468.2)"><circle r="13"/><text dy="0.34em">11</text></g>
+<g class="stop" data-n="12" tabindex="0" role="button" aria-label="Stop 12: A vineyard above the sea. Show photo and link." transform="translate(260.8,464.2)"><circle r="13"/><text dy="0.34em">12</text></g>
+<g class="stop" data-n="13" tabindex="0" role="button" aria-label="Stop 13: Back across to Cape Jervis. Show photo and link." transform="translate(263.3,435.8)"><circle r="13"/><text dy="0.34em">13</text></g>
+<g class="stop" data-n="14" tabindex="0" role="button" aria-label="Stop 14: Semaphore Park. Show photo and link." transform="translate(311.9,276.5)"><circle r="13"/><text dy="0.34em">14</text></g>
+<g class="stop" data-n="15" tabindex="0" role="button" aria-label="Stop 15: Adelaide. Show photo and link." transform="translate(367.8,307.0)"><circle r="13"/><text dy="0.34em">15</text></g>
+<g class="stop" data-n="16" tabindex="0" role="button" aria-label="Stop 16: South Australian Museum. Show photo and link." transform="translate(339.6,303.4)"><circle r="13"/><text dy="0.34em">16</text></g>
+<g class="stop" data-n="17" tabindex="0" role="button" aria-label="Stop 17: Port Adelaide. Show photo and link." transform="translate(367.6,266.5)"><circle r="13"/><text dy="0.34em">17</text></g>
+<g class="stop" data-n="18" tabindex="0" role="button" aria-label="Stop 18: National Railway Museum. Show photo and link." transform="translate(340.4,274.9)"><circle r="13"/><text dy="0.34em">18</text></g>
+<g class="stop" data-n="19" tabindex="0" role="button" aria-label="Stop 19: Jacob’s Creek, Rowland Flat. Show photo and link." transform="translate(415.0,217.6)"><circle r="13"/><text dy="0.34em">19</text></g>
+<g class="stop" data-n="20" tabindex="0" role="button" aria-label="Stop 20: Pindarie, Gomersal. Show photo and link." transform="translate(392.7,199.9)"><circle r="13"/><text dy="0.34em">20</text></g>
+<g class="stop" data-n="21" tabindex="0" role="button" aria-label="Stop 21: Penwortham. Show photo and link." transform="translate(352.0,105.9)"><circle r="13"/><text dy="0.34em">21</text></g>
+<g class="stop" data-n="22" tabindex="0" role="button" aria-label="Stop 22: Bungaree Station. Show photo and link." transform="translate(359.1,52.1)"><circle r="13"/><text dy="0.34em">22</text></g>
+<g class="stop" data-n="23" tabindex="0" role="button" aria-label="Stop 23: Sevenhill. Show photo and link." transform="translate(375.7,83.4)"><circle r="13"/><text dy="0.34em">23</text></g>
+<g class="stop" data-n="24" tabindex="0" role="button" aria-label="Stop 24: Mini golf in the rain. Show photo and link." transform="translate(346.9,77.9)"><circle r="13"/><text dy="0.34em">24</text></g>
+<g class="stop" data-n="25" tabindex="0" role="button" aria-label="Stop 25: Taylors, Auburn. Show photo and link." transform="translate(376.8,119.9)"><circle r="13"/><text dy="0.34em">25</text></g>
+<g class="stop" data-n="26" tabindex="0" role="button" aria-label="Stop 26: Hay. Show photo and link." transform="translate(814.4,198.0)"><circle r="13"/><text dy="0.34em">26</text></g>
+<g class="stop" data-n="27" tabindex="0" role="button" aria-label="Stop 27: Yarralumla, Canberra. Show photo and link." transform="translate(892.3,308.4)"><circle r="13"/><text dy="0.34em">27</text></g>
 </svg>
   </div>
 
@@ -326,6 +331,8 @@ const STOPS = [{"n": 1, "name": "Yarralumla, Canberra", "region": "ACT · depart
 // One photo per stop. To change a photo, put the file in img/south-australia-2021/
 // and edit its entry here ("f" = file name, "cap" = caption).
 const IMG_BASE = "https://maps.fivelittlerascals.com/img/south-australia-2021/";
+// One line and one outside link per stop ("d" = description, "l" = link text, "u" = address).
+const SITES = {"1": {"d": "Where the road trip started.", "l": "", "u": ""}, "2": {"d": "First night's stop on the long drive west.", "l": "Visit Hay", "u": "https://www.visithay.com.au/"}, "3": {"d": "Salt lakes in Murray-Sunset National Park that glow pink in the sun.", "l": "Murray-Sunset National Park", "u": "https://www.parks.vic.gov.au/places-to-see/parks/murray---sunset-national-park"}, "4": {"d": "Fruit fly quarantine: fresh fruit and veg go in the bin before you cross.", "l": "SA fruit fly rules for travellers", "u": "https://fruitfly.sa.gov.au/travelling-restrictions"}, "5": {"d": "Ferry town at the tip of the Fleurieu Peninsula.", "l": "Cape Jervis", "u": "https://southaustralia.com/products/fleurieu-peninsula/destination-information/cape-jervis"}, "6": {"d": "SeaLink car ferry across Backstairs Passage to Penneshaw.", "l": "SeaLink Kangaroo Island ferry", "u": "https://www.sealink.com.au/kangaroo-island/sealink-kangaroo-island-ferry/"}, "7": {"d": "Hand-feed kangaroos and wallabies, hold a python, meet the koalas.", "l": "Kangaroo Island Wildlife Park", "u": "https://kangarooislandwildlifepark.com/"}, "8": {"d": "South Australia's first lighthouse (1852), with keepers' cottages to stay in.", "l": "Cape Willoughby Conservation Park", "u": "https://www.parks.sa.gov.au/parks/cape-willoughby-conservation-park"}, "9": {"d": "Timber stairs up a sand hill, with views over Pennington Bay.", "l": "Prospect Hill", "u": "https://www.kangarooisland.sa.gov.au/recreation/parks-reserves-and-ovals/prospect-hill"}, "10": {"d": "Boardwalk and guided beach walks among a colony of Australian sea lions.", "l": "Seal Bay Conservation Park", "u": "https://www.parks.sa.gov.au/experiences/seal-bay"}, "11": {"d": "Family-friendly cellar door with a playground.", "l": "False Cape Wines", "u": "https://www.falsecapewines.com.au/visit/"}, "12": {"d": "Cellar door above Backstairs Passage, with a golf tee over the valley.", "l": "Dudley Wines", "u": "https://www.dudleywines.com.au/"}, "13": {"d": "The ferry back to the mainland.", "l": "SeaLink ferry timetable", "u": "https://www.sealink.com.au/kangaroo-island/timetable/"}, "14": {"d": "Beachfront holiday park with a jumping pillow, heated pool and go-karts.", "l": "Discovery Parks Adelaide Beachfront", "u": "https://www.discoveryholidayparks.com.au/caravan-parks/south-australia/adelaide/adelaide-beachfront"}, "15": {"d": "A rainy city day along the Torrens and North Terrace.", "l": "Visit Adelaide", "u": "https://southaustralia.com/destinations/adelaide"}, "16": {"d": "Free natural history museum on North Terrace, giant squid included.", "l": "South Australian Museum", "u": "https://www.samuseum.sa.gov.au/"}, "17": {"d": "Historic harbour with a red lighthouse and the maritime museum.", "l": "Port Adelaide", "u": "https://southaustralia.com/destinations/adelaide/places/port-adelaide"}, "18": {"d": "Australia's largest railway museum, with trains on all three track gauges.", "l": "National Railway Museum", "u": "https://nrm.org.au/"}, "19": {"d": "Barossa cellar door beside the creek where the first vines went in in 1847.", "l": "Jacob's Creek", "u": "https://www.jacobscreek.com/"}, "20": {"d": "Barossa farm cellar door and kitchen, hay bales out front.", "l": "Pindarie", "u": "https://pindarie.com.au/"}, "21": {"d": "Our Clare Valley base among the vineyards.", "l": "Penwortham, Clare Valley", "u": "https://www.clarevalley.com.au/explore/regions-towns/penwortham"}, "22": {"d": "Merino sheep station founded in 1841, with its own stone church.", "l": "Bungaree Station", "u": "https://bungareestation.com.au/"}, "23": {"d": "Founded by Jesuits in 1851 and still making sacramental wine.", "l": "Sevenhill Cellars", "u": "https://www.sevenhill.com.au/cellar-door"}, "24": {"d": "Mini golf and a café at Rices Creek in Auburn.", "l": "Rices Creek Mini Golf & Cafe", "u": "https://www.clarevalley.com.au/directory/rices-creek-mini-golf-cafe"}, "25": {"d": "Family winery near Auburn; look for the seahorse on the door.", "l": "Taylors Wines", "u": "https://www.taylorswines.com.au/"}, "26": {"d": "Last overnight stop before home.", "l": "Visit Hay", "u": "https://www.visithay.com.au/"}, "27": {"d": "Home again.", "l": "", "u": ""}};
 const PHOTOS = {"3": {"f": "pink-lake.jpg", "cap": "All five on the pink salt crust"}, "5": {"f": "cape-jervis-cubby.jpg", "cap": "The cubby house, with the boat sandpit"}, "6": {"f": "penneshaw-welcome.jpg", "cap": "Welcome to Kangaroo Island sign"}, "7": {"f": "wildlife-park-kangaroo.jpg", "cap": "Hand-feeding a kangaroo, flat palm"}, "8": {"f": "cape-willoughby-lighthouse.jpg", "cap": "Lighthouse at sunset, shell-lined path"}, "9": {"f": "prospect-hill.jpg", "cap": "Whole family on the Prospect Hill lookout"}, "10": {"f": "seal-bay-pup.jpg", "cap": "Pup tucked under a rock ledge"}, "11": {"f": "ki-winery.jpg", "cap": "Lawn and garden panorama"}, "12": {"f": "vineyard-golf.jpg", "cap": "The six-iron shot over the valley to the sea"}, "13": {"f": "ferry-home.jpg", "cap": "Windswept on the back deck, wake behind"}, "14": {"f": "semaphore-jumping-pillow.jpg", "cap": "The jumping pillow"}, "15": {"f": "adelaide-torrens.jpg", "cap": "Footbridge over the Torrens toward Adelaide Oval"}, "16": {"f": "sa-museum.jpg", "cap": "In the museum galleries (only one shot found)"}, "17": {"f": "port-adelaide-lighthouse.jpg", "cap": "The red Port Adelaide lighthouse"}, "18": {"f": "railway-museum-gauges.jpg", "cap": "Splits across two different rail gauges"}, "19": {"f": "jacobs-creek-vines.jpg", "cap": "Heritage vines and signboard"}, "20": {"f": "pindarie-hay-bales.jpg", "cap": "On the PINDARIE hay bales"}, "21": {"f": "penwortham-drive.jpg", "cap": "Three walking the tree-lined drive"}, "22": {"f": "bungaree-church.jpg", "cap": "Bungaree's stone church"}, "23": {"f": "sevenhill.jpg", "cap": "The Sevenhill est. 1851 wall"}, "24": {"f": "auburn-mini-golf.jpg", "cap": "Everyone with a putter"}, "25": {"f": "taylors-auburn.jpg", "cap": "Hot cross bun on the lawn (no seahorse door found)"}, "26": {"f": "hay-playground.jpg", "cap": "Playground slide after sunset"}};
 function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
 const photoList = document.getElementById('photos');
@@ -337,7 +344,8 @@ STOPS.forEach(s => {
                     : '<div class="nophoto" aria-hidden="true"></div>') +
     '<div class="chead"><span class="badge">' + s.n + '</span><span class="cname">' + esc(s.name) + '</span>' +
     '<span class="creg">' + esc(s.region || '') + '</span></div>' +
-    (p && p.cap ? '<div class="pcap">' + esc(p.cap) + '</div>' : '');
+    (SITES[s.n] && SITES[s.n].d ? '<p class="desc">' + esc(SITES[s.n].d) + '</p>' : '') +
+    (SITES[s.n] && SITES[s.n].u ? '<a class="site" href="' + SITES[s.n].u + '" target="_blank" rel="noopener">' + esc(SITES[s.n].l) + ' &#8599;</a>' : '');
   photoList.appendChild(li);
 });
 let view = (location.hash === '#poem') ? 'poem' : 'photos';
@@ -375,15 +383,11 @@ function showTip(g) {
   const ph = PHOTOS[s.n];
   let inner = (ph ? '<img class="tip-photo" src="' + IMG_BASE + ph.f + '" alt="">' : '') +
     '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
-  if (s.verse && s.verse.length) {
-    const v = verseHTML(s.verse, ph ? 6 : MAXLINES);
-    inner += '<span class="t-verse">' + v.html +
-      (view === 'photos' ? '<span class="t-more">Click to see this stop below &rarr;</span>' : v.truncated ? '<span class="t-more">Click to read the rest &rarr;</span>'
-                   : '<span class="t-more">Click to jump to this verse &rarr;</span>') +
-      '</span>';
-  } else {
-    inner += '<span class="t-verse">A stop on the route with no verse of its own.</span>';
-  }
+  const site = SITES[s.n] || {};
+  if (site.d) inner += '<span class="t-desc">' + esc(site.d) + '</span>';
+  if (view === 'photos' && site.u) inner += '<span class="t-more">Click to visit ' + esc(site.l) + ' &#8599;</span>';
+  else if (view === 'poem') inner += '<span class="t-more">Click to jump to this verse &rarr;</span>';
+  else inner += '<span class="t-more">Click to see this stop below &rarr;</span>';
   tooltip.innerHTML = inner;
 
   const crect = container.getBoundingClientRect();
@@ -404,6 +408,11 @@ function hideTip() {
 }
 
 let litTimer = null;
+function openStop(n) {
+  const site = SITES[n] || {};
+  if (view === 'photos' && site.u) { window.open(site.u, '_blank', 'noopener'); return; }
+  goToVerse(n);
+}
 function goToVerse(n) {
   const card = document.getElementById((view === 'photos' ? 'photo-' : 'stop-') + n);
   if (!card) return;
@@ -417,9 +426,9 @@ function goToVerse(n) {
 svg.querySelectorAll('g.stop').forEach(g => {
   g.addEventListener('mouseenter', () => showTip(g));
   g.addEventListener('mouseleave', hideTip);
-  g.addEventListener('click', () => goToVerse(Number(g.dataset.n)));
+  g.addEventListener('click', () => openStop(Number(g.dataset.n)));
   g.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToVerse(Number(g.dataset.n)); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openStop(Number(g.dataset.n)); }
   });
 });
 tooltip.addEventListener('mouseenter', () => clearTimeout(hideTimer));
