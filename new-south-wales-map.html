@@ -15,8 +15,10 @@
   files, nothing to load from another site. Paste the whole
   thing into a Squarespace Code block and it works.
 
-  Hovering a numbered stop shows the part of the poem written
-  about that place. Clicking it jumps to the full verse below.
+  Hovering a numbered stop shows its photo, a one-line description
+  and an outside link. Below the map: a Photos view (default) and
+  The poem view. In Photos view clicking a stop opens its site; in
+  the poem view it jumps to the verse.
 
   TO EDIT A VERSE: find the STOPS array near the bottom and
   edit the "verse" lines, then edit the matching card in the
@@ -160,6 +162,44 @@
 
   .cthumb { width:100%; height:130px; object-fit:cover; border-radius:3px; margin:-2px 0 8px; display:block; background:#eef2f6; }
   .tooltip .t-img, .tooltip img.tip-photo { width:100%; max-width:280px; height:120px; object-fit:cover; border-radius:5px; margin:0 0 7px; display:block; }
+
+  [hidden] { display: none !important; }
+  /* ---- views under the map ---- */
+  .below { margin: 34px 0 0; border-top: 2px solid var(--ink); padding-top: 18px; }
+  .storylink { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0 0 18px; }
+  .storylink .lbl { font-size: .74rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; }
+  .storylink a { color: var(--ink); font-weight: 700; font-size: 1.02rem; text-decoration: none;
+    border-bottom: 1px solid currentColor; }
+  .storylink a:hover, .storylink a:focus { color: var(--accent); }
+  .viewbar { display: flex; gap: 8px; margin: 0 0 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .82rem; }
+  .viewbtn { padding: 6px 15px; border: 1px solid #d7dde6; border-radius: 999px;
+    background: #fff; color: var(--text); cursor: pointer; font: inherit; }
+  .viewbtn:hover { border-color: var(--ink); color: var(--ink); }
+  .viewbtn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 700; }
+  .viewbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #photos { list-style: none; padding: 0; margin: 0; display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; }
+  .pcard { margin: 0; border-left: 3px solid #dfe5ec; border-radius: 4px; padding: 10px 12px;
+    background: #faf8f5; transition: background .2s ease, border-color .2s ease; min-width: 0; }
+  .pcard.lit { background: #fbf3f1; border-left-color: var(--accent); }
+  .pcard .cthumb { width: 100%; aspect-ratio: 1/1; height: auto; object-fit: cover; object-position: 50% 30%;
+    border-radius: 4px; margin: 0 0 8px; display: block; background: #eef2f6; }
+  .pcard .nophoto { width: 100%; aspect-ratio: 1/1; border-radius: 4px; margin: 0 0 8px;
+    background: #eef2f6; display: flex; align-items: center; justify-content: center;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .78rem; color: var(--muted); }
+  .pcard.lit .badge { background: var(--accent); }
+  .pcard .desc { margin: 6px 0 4px; font-size: .88rem; line-height: 1.45; }
+  .pcard .site { display: inline-block; margin-top: 4px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .76rem; font-weight: 700; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
+  .pcard .site:hover, .pcard .site:focus { color: var(--accent); border-bottom-color: var(--accent); }
+  #tooltip .t-desc { display: block; font-size: .84rem; line-height: 1.45; }
+  .pcap { font-style: italic; font-size: .86rem; line-height: 1.4; color: #4a5566; margin-top: 4px; }
+  #tooltip img.tip-photo { width: 120px; height: 120px; object-fit: cover; object-position: 50% 30%;
+    border-radius: 4px; margin: 0 0 6px; display: block; background: #2a3c5c; }
+  @media (max-width: 520px) { #photos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
 </style>
 
 <div class="wrap">
@@ -233,7 +273,14 @@
 </svg>
   </div>
 
-  <hr class="rule">
+  <div class="below">
+    <p class="storylink"><span class="lbl">The full trip</span><a href="https://fivelittlerascals.com/blog/new-south-wales-canberra-with-kids" target="_top">Canberra, the Blue Mountains, Sydney and Port Stephens with Kids &rarr;</a></p>
+    <div class="viewbar" role="group" aria-label="Show below the map">
+      <button class="viewbtn" type="button" data-view="photos" aria-pressed="true">Photos</button>
+      <button class="viewbtn" type="button" data-view="poem" aria-pressed="false">The poem</button>
+    </div>
+    <ol id="photos"></ol>
+    <div id="poemview" hidden>
   <ol id="cards">
     <li class="card" id="stop-1" data-n="1"><div class="chead"><span class="badge">1</span><span class="cname">Sydney Airport</span><span class="creg">arriving in Oz</span></div><div class="verse"><span class="ln">Welcome to Oz.  Off the plane.  Grab a brew.</span><span class="ln">Got searched for cheese passing customs; whew, now you’re through.</span><span class="ln">Hop in a tiny hybrid—with driver and just room for two.</span><span class="ln">Now off to Canberra with open skies full of blue.</span></div></li>
 <li class="card" id="stop-2" data-n="2"><div class="chead"><span class="badge">2</span><span class="cname">Home in Forrest</span><span class="creg">Canberra</span></div><div class="verse"><span class="ln">Stretch your legs, arriving after a bit of a drive.</span><span class="ln">Home to Forrest; come on in; it’s lovely chaos with five.</span></div></li>
@@ -264,6 +311,8 @@
 <li class="card" id="stop-27" data-n="27"><div class="chead"><span class="badge">27</span><span class="cname">The spit to Fingal Island</span><span class="creg">Port Stephens</span></div><div class="verse"><span class="ln">One last adventure, we all braved the spit</span><span class="ln">A sandbar as passage, only ankle-deep water made a split</span><span class="ln">Like the Red Sea when Moses had parted</span><span class="ln">Rather Shark Island than Sinai is where our voyage was charted.</span><span class="br"></span><span class="ln">We dodged blue bottles galore with their tentacles intact</span><span class="ln">A mighty venom they possess, which we know for a fact.</span><span class="ln">Passing onto the island just after low tide</span><span class="ln">Hiking up a sand dune, James and CC get a ride.</span></div></li>
 <li class="card" id="stop-28" data-n="28"><div class="chead"><span class="badge">28</span><span class="cname">Fingal Island</span><span class="creg">Port Stephens</span></div><div class="verse"><span class="ln">We made it ‘cross the island, we couldn’t bear to fail</span><span class="ln">And were rewarded when we spotted the breaching of a whale</span><span class="ln">But quickly we returned to the place we had started</span><span class="ln">To ensure we didn’t cross at high tide and risk joining the departed.</span></div></li>
   </ol>
+    </div>
+  </div>
 
   <hr class="rule">
   <div id="coda"><span class="ln">A final goodbye when the rain was approaching</span><span class="ln">A fitting vacation finale with the weather constantly encroaching</span><span class="ln">Exploring Australia during La Niña times</span><span class="ln">Makes for fun dodging raindrops, then writing it in rhymes.</span></div>
@@ -271,6 +320,38 @@
 
 <script>
 const STOPS = [{"n": 1, "name": "Sydney Airport", "region": "arriving in Oz", "verse": ["Welcome to Oz.  Off the plane.  Grab a brew.", "Got searched for cheese passing customs; whew, now you’re through.", "Hop in a tiny hybrid—with driver and just room for two.", "Now off to Canberra with open skies full of blue."]}, {"n": 2, "name": "Home in Forrest", "region": "Canberra", "verse": ["Stretch your legs, arriving after a bit of a drive.", "Home to Forrest; come on in; it’s lovely chaos with five."]}, {"n": 3, "name": "National Arboretum", "region": "Canberra", "verse": ["Flying kites on the hillside getting muddy knees.", "Meandering through Cork Oaks, collecting bark from these trees."]}, {"n": 4, "name": "Carolina’s and James’ baptisms", "region": "Canberra", "verse": ["Baptisms for the youngest two, godparents join from afar.", "Caravanning to each place, as we did not fit in one car."]}, {"n": 5, "name": "Floriade, Commonwealth Park", "region": "Canberra", "verse": ["A long walk to Floriade, across the breezy lake.", "On the first Ferris Wheel in Canberra, many selfies to take.", "Tulips and daffodils arranged like Aboriginal art", "Amy and Judy running home to go play their part."]}, {"n": 6, "name": "Australian National Botanic Gardens", "region": "Canberra", "verse": ["Trying to see Banksias, getting caught in the rain.", "Start an activity at 3pm? With kids it’s insane."]}, {"n": 7, "name": "Questacon", "region": "Canberra", "verse": ["A science museum, with a steep slide and playing with water", "Joined by the oldest son and every last daughter."]}, {"n": 8, "name": "After school, off Cotter Road", "region": "Canberra", "verse": ["After school fun.  Gymnastics nearly every day.", "In the pool; need to focus on skills, not just play.", "Then dodging horse poop and ponies eating hay.", "Just hop on Cotter Road, the car knows the way."]}, {"n": 9, "name": "Four Winds Vineyard", "region": "Murrumbateman", "verse": ["A day away while the others are at school", "One yammering away, the smaller one prone to drool.", "We had woodfired pizza, and two flights of wine.", "The first place was good, the second less than fine."]}, {"n": 10, "name": "The Falls Mountain Retreat", "region": "Wentworth Falls", "verse": ["Now out of school early, head to Mountains of Blue.", "Driving on the highway past a mob of kangaroo.", "So much gear and people, not one car, but two", "And rotating a grandkid with grandparents, next time it might be you!", "", "An evening rain, a mountain lodge, warm your feet by the fire,", "Grandparents can take a break, in a quiet space to retire."]}, {"n": 11, "name": "Wentworth Falls", "region": "Blue Mountains", "verse": ["Up in the morning, down the hill, to Wentworth we go.", "Somewhere up ahead, it must be Jack, the fastest, oldest bro.", "The little guy, on front, then back, is bouncing to and fro.", "The storm looks near—see the rain—say it isn’t so.", "", "We went fast—not fast enough—stuck out in the storm.", "The rain did come but quickly turned to another form.", "The hail was next, with thunder. We dove under a tree,", "And when the storm clouds eased a bit, we made a dash to be free."]}, {"n": 12, "name": "The Three Sisters, Katoomba", "region": "Blue Mountains", "verse": ["Huge, hot baths to warm the kids, and parents too", "We try again, now Three Sisters, hiking trip “take two.”", "This time we got back under cover before came the hail.", "An early dinner, kids collapsing, a habit without fail."]}, {"n": 13, "name": "A canyon 400 metres deep", "region": "Blue Mountains", "verse": ["Another day of sandstone, a canyon 400 meters deep", "But this time was easier for the smallest one to sleep.", "Although less people, now the path was paved.", "And so the older four finally had what they had craved."]}, {"n": 14, "name": "Scooters, then a waterfall", "region": "Blue Mountains", "verse": ["A biking path for CC, and scooters for the rest", "The first run down the hill, was just the starter test.", "With switchbacks and easy speed, it proved a little tricky.", "A small food bag in the stroller; snackers couldn’t be too picky.", "", "Leave eight wheels behind; kids march to see a waterfall.", "A horsetail shape, a wispy end, the drop was just that tall.", "The falls abound with so much rain, we couldn’t count them all.", "If the light hits it right, you could see a rainbow there, but small."]}, {"n": 15, "name": "Mermaids Cave, Blackheath", "region": "Blue Mountains", "verse": ["The next day walks got shorter, but the falls didn’t stop", "Mermaid Cave was a short hike from the parking lot up top", "With stairs through a gorge and gum trees all around", "The places for us to play, seemed to endlessly abound.", "", "Barky boats in the river were only the beginning.", "Whoever made it first was the one who now was winning.", "With leaves tossing and turning going through the water.", "You could see the enthusiasm of the polka-dot-clad youngest daughter."]}, {"n": 16, "name": "Adelina Falls, Lawson", "region": "Blue Mountains", "verse": ["One final stop before heading to the city.", "We couldn’t forgo this one, it would truly be a pity.", "We had to stop by the falls that was Adeline’s namesake.", "So we could put her by the sign for a few photos we could take."]}, {"n": 17, "name": "The Rocks", "region": "Sydney", "verse": ["Welcome back to Sydney, the rain is still here", "Staying in the Rocks, seems like everything is near", "Early morning coffee and crepes, then a walk", "Brought the stroller without car seat, so CC wouldn’t balk."]}, {"n": 18, "name": "Royal Botanic Garden", "region": "Sydney", "verse": ["Didn’t bring the right card to see the harbour from Floor 35", "So went to the Gardens Botanic to see what flowers were alive."]}, {"n": 19, "name": "Sydney Opera House", "region": "Sydney", "verse": ["Exploring the iconic Opera House with junior-sized caution vests", "Lots of questions from the tour guide, he seemed to like these little tests:", "", "How many tiles are up on the roof?", "They say over 1,000,000 but didn’t show any proof.", "", "How many pipes does this organ use?", "10,000 from 5 keyboards and floor pedals for you to choose.", "", "Why does the roof look like it has a glimmer?", "It’s the white, bumpy tiles that gives it the shimmer.", "", "What did the upgrade do for 150 million bucks?", "Lots of sound equipment coming on underground trucks.", "", "How many years did it take to build?", "Over 16 years; with no one being killed!", "", "And what do you think, how old is the space?", "A half century next year, with the same chairs in place!"]}, {"n": 20, "name": "Manly & the Northern Beaches", "region": "Sydney", "verse": ["Grabbing lunch downstairs and seeing the fur seal", "Taking a ride to Manly on a vehicle with just one wheel", "It’s a solid green Ferry that takes half an hour", "Stayed mostly inside so avoided a sea shower.", "", "A taste of Vermont on the Northern Beaches", "Watching the surfers and other local creatures", "Seeing a rainbow warned us of what was to come", "Then heading southwest, back where we came from."]}, {"n": 21, "name": "Briar Ridge Vineyard", "region": "Hunter Valley", "verse": ["Next onto Hunter to check out the wine", "Doing lunch at the first stop, it was there by design.", "Singing and dancing, the girls sang, “Let it Go.”", "With maracas and tambourines, they then put on a show."]}, {"n": 22, "name": "Comyns & Co.", "region": "Hunter Valley", "verse": ["The next stop had what the kids’ deemed most fun.", "A playmate for Jack to jump and to run.", "And piggyback races for the middle girls.", "Spinning in the grass, with twirls and with whirls.", "", "Every bottle of wine was easy to sip", "It wasn’t necessary to leave them a tip", "Since we joined the club and bought quite a lot", "Then finally gathered the kids in the parking lot.", "", "Waved goodbye to Isla, Archie and Zara", "Said we’d see them the week after tomorrow", "Then closing the door and getting on our way", "Snacking through dinner time on the way to Fingal Bay."]}, {"n": 23, "name": "Fingal Bay Holiday Park", "region": "Port Stephens", "verse": ["It’s at the end of the road, just past the park,", "We pulled into the lodges well after dark.", "Then up in the morning to get coffee by the beach", "And a caramel slice for GJ, just a couple dollars each.", "", "A brave Adeline survives a skinned knee from a fall", "Before that she and Jack were having a ball", "Riding scooters at top speed neck and neck", "Jack needs to win; someone has to keep him in check.", "", "Between our adventures we played heaps of card games.", "Hearts, Crazy Eights, Go Fish were a few of the names.", "And sipped Semillon while watching Izzy or Bluey.", "With mint or caramel chocolate, to provide a bit of chewy."]}, {"n": 24, "name": "Fingal Bay beach", "region": "Port Stephens", "verse": ["That didn’t stop the kids from jumping on boogie boards", "Just foam strung to their wrists with long, thin, black cords.", "Going out deeper for waves with a bit more traction", "Even Carolina got in on that action.", "", "When they’re not boogieing, digging holes in the sand.", "Warmer for Mummy and James sitting back on dry land.", "But when it was raining, Mummy was bolder with the water.", "Going in in her leggings with the oldest and middle daughter."]}, {"n": 25, "name": "Tomaree Mountain", "region": "Port Stephens", "verse": ["The rain paused briefly to hike up Tomaree Mountain", "Couldn’t hold off forever, so we did get sprayed like a fountain.", "Caught in the rain, yet again, in our clothes.", "Another hot shower, we all want one of those."]}, {"n": 26, "name": "Port Stephens Koala Sanctuary", "region": "One Mile", "verse": ["We did take a field trip to see koalas in trees", "Recuperating, resting, eating eucalyptus leaves.", "Even escaped for an anniversary drink", "No chatter from the children, a few moments to think."]}, {"n": 27, "name": "The spit to Fingal Island", "region": "Port Stephens", "verse": ["One last adventure, we all braved the spit", "A sandbar as passage, only ankle-deep water made a split", "Like the Red Sea when Moses had parted", "Rather Shark Island than Sinai is where our voyage was charted.", "", "We dodged blue bottles galore with their tentacles intact", "A mighty venom they possess, which we know for a fact.", "Passing onto the island just after low tide", "Hiking up a sand dune, James and CC get a ride."]}, {"n": 28, "name": "Fingal Island", "region": "Port Stephens", "verse": ["We made it ‘cross the island, we couldn’t bear to fail", "And were rewarded when we spotted the breaching of a whale", "But quickly we returned to the place we had started", "To ensure we didn’t cross at high tide and risk joining the departed."]}];
+
+// ---------------- Photos ----------------
+// One photo per stop. To change a photo, put the file in img/new-south-wales-2022/
+// and edit its entry here ("f" = file name, "cap" = caption).
+const IMG_BASE = "https://maps.fivelittlerascals.com/img/new-south-wales-2022/";
+// One line and one outside link per stop ("d" = description, "l" = link text, "u" = address).
+const SITES = {"1": {"d": "Arriving from overseas, then the drive down to Canberra.", "l": "", "u": ""}, "2": {"d": "Our Canberra base in the inner south.", "l": "", "u": ""}, "3": {"d": "Hillside forests of rare and endangered trees above Lake Burley Griffin, with a bonsai collection.", "l": "National Arboretum Canberra", "u": "https://www.nationalarboretum.act.gov.au/"}, "4": {"d": "Baptisms for the two youngest.", "l": "", "u": ""}, "5": {"d": "Canberra's spring flower festival, with bulb beds across Commonwealth Park.", "l": "Floriade", "u": "https://floriadeaustralia.com/"}, "6": {"d": "The largest living collection of Australian native plants, on the slopes of Black Mountain.", "l": "Australian National Botanic Gardens", "u": "https://visit.anbg.gov.au/"}, "7": {"d": "The national science and technology centre, full of hands-on exhibits.", "l": "Questacon", "u": "https://www.questacon.edu.au/"}, "8": {"d": "Gymnastics and pony rides after school.", "l": "", "u": ""}, "9": {"d": "Murrumbateman cellar door with wood-fired pizza.", "l": "Four Winds Vineyard", "u": "https://www.fourwindsvineyard.com.au/"}, "10": {"d": "Apartments and loft suites in the bush, a walk from the Wentworth Falls lookouts.", "l": "The Falls Mountain Retreat", "u": "https://fallsmountainretreat.com.au/"}, "11": {"d": "Tracks and cliff stairs to the top of Wentworth Falls, above the Jamison Valley.", "l": "Wentworth Falls track", "u": "https://www.nationalparks.nsw.gov.au/things-to-do/walking-tracks/wentworth-falls-track"}, "12": {"d": "Katoomba's lookout over the Jamison Valley and the Three Sisters.", "l": "Echo Point lookout", "u": "https://www.nationalparks.nsw.gov.au/things-to-do/lookouts/echo-point-lookout-three-sisters/"}, "13": {"d": "A paved, family-friendly track through heath to Govetts Leap, above the Grose Valley.", "l": "Fairfax Heritage walking track", "u": "https://www.nationalparks.nsw.gov.au/things-to-do/walking-tracks/fairfax-heritage-walking-track"}, "14": {"d": "Lookout facing Bridal Veil Falls, a 180-metre drop into the Grose Valley.", "l": "Govetts Leap lookout", "u": "https://www.nationalparks.nsw.gov.au/things-to-do/lookouts/govetts-leap-lookout"}, "15": {"d": "Stairs down a fern gorge to a sandstone cave and creek near Blackheath.", "l": "", "u": ""}, "16": {"d": "One of four waterfalls on the South Lawson Park circuit.", "l": "South Lawson Waterfall Circuit", "u": "https://www.visitnsw.com/destinations/blue-mountains/katoomba-area/wentworth-falls/attractions/south-lawson-waterfall-circuit"}, "17": {"d": "Sydney's oldest neighbourhood, with laneways and sandstone terraces by Circular Quay.", "l": "The Rocks", "u": "https://www.therocks.com/"}, "18": {"d": "Australia's oldest botanic garden, on the harbour, with the Calyx flower displays.", "l": "Royal Botanic Garden Sydney", "u": "https://www.botanicgardens.org.au/royal-botanic-garden-sydney"}, "19": {"d": "Guided tours inside the shells, from the concert hall to the roof tiles.", "l": "Sydney Opera House tours", "u": "https://www.sydneyoperahouse.com/tours"}, "20": {"d": "The green ferry from Circular Quay across the harbour to Manly.", "l": "Manly ferry (F1)", "u": "https://transportnsw.info/routes/details/sydney-ferries-network/f1/090f1"}, "21": {"d": "Mount View winery with tastings and lunch in the Hunter Valley.", "l": "Briar Ridge Vineyard", "u": "https://www.briarridge.com.au/"}, "22": {"d": "Small-batch Hunter Valley wines in a Pokolbin cellar door.", "l": "Comyns & Co.", "u": "https://www.comynsandco.com.au/cellar-door/"}, "23": {"d": "Council-run holiday park in the bush at the end of the road, by the beach.", "l": "Fingal Bay Holiday Park", "u": "https://www.beachsideholidays.com.au/our-holiday-parks/beachside-holidays/fingal-bay-holiday-park/our-facilities"}, "24": {"d": "White-sand, patrolled surf beach tucked under Fingal Head.", "l": "Fingal Bay", "u": "https://www.portstephens.org.au/neighbourhoods-of-port-stephens/fingal-bay"}, "25": {"d": "A short, steep climb to views over Port Stephens and the coast.", "l": "Tomaree Head Summit walk", "u": "https://www.nationalparks.nsw.gov.au/things-to-do/walking-tracks/tomaree-head-summit-walk"}, "26": {"d": "Koala hospital and sanctuary with an elevated walkway through the gums.", "l": "Port Stephens Koala Sanctuary", "u": "https://www.portstephenskoalasanctuary.com.au/"}, "27": {"d": "A sand spit to Fingal Island that the tide covers fast; check the tides first.", "l": "Fingal Island safety (NSW National Parks)", "u": "https://www.nationalparks.nsw.gov.au/things-to-do/historic-buildings-places/point-stephens-lighthouse-and-fingal-island"}, "28": {"d": "Historic lighthouse and keepers' quarters on Fingal Island.", "l": "Point Stephens Lighthouse", "u": "https://www.nationalparks.nsw.gov.au/things-to-do/historic-buildings-places/point-stephens-lighthouse-and-fingal-island"}};
+const PHOTOS = {"2": {"f": "forrest-walk.jpg", "cap": "First walk around Forrest"}, "3": {"f": "arboretum-kite.jpg", "cap": "Kite on the Arboretum hill"}, "5": {"f": "floriade-tulips.jpg", "cap": "Four in front of the tulips"}, "6": {"f": "botanic-gardens-cafe.jpg", "cap": "Lunch at the Gardens café"}, "7": {"f": "questacon.jpg", "cap": "Air hockey"}, "8": {"f": "pony-lesson.jpg", "cap": "Up on the pony"}, "9": {"f": "four-winds-tasting.jpg", "cap": "Tasting paddles"}, "10": {"f": "falls-retreat-breakfast.jpg", "cap": "Breakfast at the lodge"}, "11": {"f": "wentworth-falls.jpg", "cap": "The falls dropping into the valley"}, "12": {"f": "three-sisters.jpg", "cap": "Three Sisters behind"}, "13": {"f": "grose-valley.jpg", "cap": "The Grose Valley"}, "14": {"f": "bridal-veil-falls.jpg", "cap": "Bridal Veil Falls, the horsetail"}, "15": {"f": "mermaids-cave-cascade.jpg", "cap": "Group at the cascade"}, "16": {"f": "adeline-falls-sign.jpg", "cap": "By the Adeline Falls sign"}, "17": {"f": "rocks-opera-house.jpg", "cap": "Opera House from The Rocks"}, "18": {"f": "calyx-flower-wall.jpg", "cap": "The Calyx flower wall"}, "19": {"f": "opera-house-tiles.jpg", "cap": "The roof tiles up close"}, "20": {"f": "fur-seal.jpg", "cap": "The fur seal by the Opera House"}, "21": {"f": "briar-ridge.jpg", "cap": "Briar Ridge cellar door"}, "22": {"f": "comyns-cellar-door.jpg", "cap": "Comyns & Co. cellar door"}, "23": {"f": "scooter-races.jpg", "cap": "Scooter races"}, "24": {"f": "fingal-bay.jpg", "cap": "Fingal Bay"}, "25": {"f": "tomaree-summit.jpg", "cap": "Family on the summit"}, "26": {"f": "koala-in-gums.jpg", "cap": "Koala up in the gums"}, "27": {"f": "fingal-spit.jpg", "cap": "The spit at low tide"}, "28": {"f": "point-stephens-lighthouse.jpg", "cap": "Point Stephens Lighthouse"}};
+function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+const photoList = document.getElementById('photos');
+STOPS.forEach(s => {
+  const p = PHOTOS[s.n];
+  const li = document.createElement('li');
+  li.className = 'pcard'; li.id = 'photo-' + s.n; li.dataset.n = s.n;
+  li.innerHTML = (p ? '<img class="cthumb" loading="lazy" src="' + IMG_BASE + p.f + '" alt="' + esc(p.cap || s.name) + '">'
+                    : '<div class="nophoto" aria-hidden="true"></div>') +
+    '<div class="chead"><span class="badge">' + s.n + '</span><span class="cname">' + esc(s.name) + '</span>' +
+    '<span class="creg">' + esc(s.region || '') + '</span></div>' +
+    (SITES[s.n] && SITES[s.n].d ? '<p class="desc">' + esc(SITES[s.n].d) + '</p>' : '') +
+    (SITES[s.n] && SITES[s.n].u ? '<a class="site" href="' + SITES[s.n].u + '" target="_blank" rel="noopener">' + esc(SITES[s.n].l) + ' &#8599;</a>' : '');
+  photoList.appendChild(li);
+});
+let view = (location.hash === '#poem') ? 'poem' : 'photos';
+function setView(v){
+  view = v;
+  document.getElementById('photos').hidden = (v !== 'photos');
+  document.getElementById('poemview').hidden = (v !== 'poem');
+  document.querySelectorAll('.viewbtn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+}
+document.querySelectorAll('.viewbtn').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+setView(view);
+
 const byNum = new Map(STOPS.map(s => [s.n, s]));
 const svg = document.getElementById('ozmap');
 const container = document.getElementById('map-container');
@@ -293,16 +374,14 @@ function showTip(g) {
   clearTimeout(hideTimer);
   const s = byNum.get(Number(g.dataset.n));
   if (!s) return;
-  let inner = '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
-  if (s.verse && s.verse.length) {
-    const v = verseHTML(s.verse, MAXLINES);
-    inner += '<span class="t-verse">' + v.html +
-      (v.truncated ? '<span class="t-more">Click to read the rest &rarr;</span>'
-                   : '<span class="t-more">Click to jump to this verse &rarr;</span>') +
-      '</span>';
-  } else {
-    inner += '<span class="t-verse">A stop on the route with no verse of its own.</span>';
-  }
+  const ph = PHOTOS[s.n];
+  let inner = (ph ? '<img class="tip-photo" src="' + IMG_BASE + ph.f + '" alt="">' : '') +
+    '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
+  const site = SITES[s.n] || {};
+  if (site.d) inner += '<span class="t-desc">' + esc(site.d) + '</span>';
+  if (view === 'photos' && site.u) inner += '<span class="t-more">Click to visit ' + esc(site.l) + ' &#8599;</span>';
+  else if (view === 'poem') inner += '<span class="t-more">Click to jump to this verse &rarr;</span>';
+  else inner += '<span class="t-more">Click to see this stop below &rarr;</span>';
   tooltip.innerHTML = inner;
 
   const crect = container.getBoundingClientRect();
@@ -323,10 +402,15 @@ function hideTip() {
 }
 
 let litTimer = null;
+function openStop(n) {
+  const site = SITES[n] || {};
+  if (view === 'photos' && site.u) { window.open(site.u, '_blank', 'noopener'); return; }
+  goToVerse(n);
+}
 function goToVerse(n) {
-  const card = document.getElementById('stop-' + n);
+  const card = document.getElementById((view === 'photos' ? 'photo-' : 'stop-') + n);
   if (!card) return;
-  document.querySelectorAll('.card.lit').forEach(c => c.classList.remove('lit'));
+  document.querySelectorAll('.card.lit, .pcard.lit').forEach(c => c.classList.remove('lit'));
   card.classList.add('lit');
   card.scrollIntoView({ behavior: 'smooth', block: 'center' });
   clearTimeout(litTimer);
@@ -336,16 +420,16 @@ function goToVerse(n) {
 svg.querySelectorAll('g.stop').forEach(g => {
   g.addEventListener('mouseenter', () => showTip(g));
   g.addEventListener('mouseleave', hideTip);
-  g.addEventListener('click', () => goToVerse(Number(g.dataset.n)));
+  g.addEventListener('click', () => openStop(Number(g.dataset.n)));
   g.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToVerse(Number(g.dataset.n)); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openStop(Number(g.dataset.n)); }
   });
 });
 tooltip.addEventListener('mouseenter', () => clearTimeout(hideTimer));
 tooltip.addEventListener('mouseleave', hideTip);
 
 // hovering a verse card highlights its marker on the map
-document.querySelectorAll('.card').forEach(card => {
+document.querySelectorAll('.card, .pcard').forEach(card => {
   const g = svg.querySelector('g.stop[data-n="' + card.dataset.n + '"]');
   if (!g) return;
   card.addEventListener('mouseenter', () => g.classList.add('active'));
