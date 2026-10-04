@@ -15,8 +15,9 @@
   files, nothing to load from another site. Paste the whole
   thing into a Squarespace Code block and it works.
 
-  Hovering a numbered stop shows the part of the poem written
-  about that place. Clicking it jumps to the full verse below.
+  Hovering a numbered stop shows its photo, a one-line description
+  and a link. Below the map: a Photos view (default, clicking a stop
+  opens its site) and The poem view (clicking jumps to the verse).
 
   TO EDIT A VERSE: find the STOPS array near the bottom and
   edit the "verse" lines, then edit the matching card in the
@@ -175,6 +176,44 @@
 
   .cthumb { width:100%; height:130px; object-fit:cover; border-radius:3px; margin:-2px 0 8px; display:block; background:#eef2f6; }
   .tooltip .t-img, .tooltip img.tip-photo { width:100%; max-width:280px; height:120px; object-fit:cover; border-radius:5px; margin:0 0 7px; display:block; }
+
+  [hidden] { display: none !important; }
+  /* ---- views under the map ---- */
+  .below { margin: 34px 0 0; border-top: 2px solid var(--ink); padding-top: 18px; }
+  .storylink { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0 0 18px; }
+  .storylink .lbl { font-size: .74rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; }
+  .storylink a { color: var(--ink); font-weight: 700; font-size: 1.02rem; text-decoration: none;
+    border-bottom: 1px solid currentColor; }
+  .storylink a:hover, .storylink a:focus { color: var(--accent); }
+  .viewbar { display: flex; gap: 8px; margin: 0 0 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .82rem; }
+  .viewbtn { padding: 6px 15px; border: 1px solid #d7dde6; border-radius: 999px;
+    background: #fff; color: var(--text); cursor: pointer; font: inherit; }
+  .viewbtn:hover { border-color: var(--ink); color: var(--ink); }
+  .viewbtn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 700; }
+  .viewbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #photos { list-style: none; padding: 0; margin: 0; display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; }
+  .pcard { margin: 0; border-left: 3px solid #dfe5ec; border-radius: 4px; padding: 10px 12px;
+    background: #faf8f5; transition: background .2s ease, border-color .2s ease; min-width: 0; }
+  .pcard.lit { background: #fbf3f1; border-left-color: var(--accent); }
+  .pcard .cthumb { width: 100%; aspect-ratio: 1/1; height: auto; object-fit: cover; object-position: 50% 30%;
+    border-radius: 4px; margin: 0 0 8px; display: block; background: #eef2f6; }
+  .pcard .nophoto { width: 100%; aspect-ratio: 1/1; border-radius: 4px; margin: 0 0 8px;
+    background: #eef2f6; display: flex; align-items: center; justify-content: center;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .78rem; color: var(--muted); }
+  .pcard.lit .badge { background: var(--accent); }
+  .pcard .desc { margin: 6px 0 4px; font-size: .88rem; line-height: 1.45; }
+  .pcard .site { display: inline-block; margin-top: 4px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .76rem; font-weight: 700; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
+  .pcard .site:hover, .pcard .site:focus { color: var(--accent); border-bottom-color: var(--accent); }
+  #tooltip .t-desc { display: block; font-size: .84rem; line-height: 1.45; }
+  .pcap { font-style: italic; font-size: .86rem; line-height: 1.4; color: #4a5566; margin-top: 4px; }
+  #tooltip img.tip-photo { width: 120px; height: 120px; object-fit: cover; object-position: 50% 30%;
+    border-radius: 4px; margin: 0 0 6px; display: block; background: #2a3c5c; }
+  @media (max-width: 520px) { #photos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
 </style>
 
 <div class="wrap">
@@ -204,13 +243,13 @@
 <path class="route" d="M393.2,252.6 Q264.2,247.5 138.8,278.0"/>
 <path class="route" d="M138.8,278.0 Q430.1,333.7 726.0,353.7"/>
 <path class="route" d="M726.0,353.7 Q704.0,250.1 654.3,156.5"/>
-<g class="stop" data-n="1" tabindex="0" role="button" aria-label="Stop 1: Yulara, Ayers Rock Resort. Show poem verse." transform="translate(683.2,141.7)"><circle r="13"/><text dy="0.34em">1</text></g>
-<g class="stop" data-n="2" tabindex="0" role="button" aria-label="Stop 2: Uluru at sunrise. Show poem verse." transform="translate(853.6,425.8)"><circle r="13"/><text dy="0.34em">2</text></g>
-<g class="stop" data-n="3" tabindex="0" role="button" aria-label="Stop 3: Uluru. Show poem verse." transform="translate(783.4,386.6)"><circle r="13"/><text dy="0.34em">3</text></g>
-<g class="stop" data-n="4" tabindex="0" role="button" aria-label="Stop 4: The million-dollar dunnies. Show poem verse." transform="translate(393.2,252.6)"><circle r="13"/><text dy="0.34em">4</text></g>
-<g class="stop" data-n="5" tabindex="0" role="button" aria-label="Stop 5: Kata Tjuta. Show poem verse." transform="translate(138.8,278.0)"><circle r="13"/><text dy="0.34em">5</text></g>
-<g class="stop" data-n="6" tabindex="0" role="button" aria-label="Stop 6: Around the base of Uluru. Show poem verse." transform="translate(726.0,353.7)"><circle r="13"/><text dy="0.34em">6</text></g>
-<g class="stop" data-n="7" tabindex="0" role="button" aria-label="Stop 7: Yulara, the last morning. Show poem verse." transform="translate(654.3,156.5)"><circle r="13"/><text dy="0.34em">7</text></g>
+<g class="stop" data-n="1" tabindex="0" role="button" aria-label="Stop 1: Yulara, Ayers Rock Resort. Show photo and poem verse." transform="translate(683.2,141.7)"><circle r="13"/><text dy="0.34em">1</text></g>
+<g class="stop" data-n="2" tabindex="0" role="button" aria-label="Stop 2: Uluru at sunrise. Show photo and poem verse." transform="translate(853.6,425.8)"><circle r="13"/><text dy="0.34em">2</text></g>
+<g class="stop" data-n="3" tabindex="0" role="button" aria-label="Stop 3: Uluru. Show photo and poem verse." transform="translate(783.4,386.6)"><circle r="13"/><text dy="0.34em">3</text></g>
+<g class="stop" data-n="4" tabindex="0" role="button" aria-label="Stop 4: The million-dollar dunnies. Show photo and poem verse." transform="translate(393.2,252.6)"><circle r="13"/><text dy="0.34em">4</text></g>
+<g class="stop" data-n="5" tabindex="0" role="button" aria-label="Stop 5: Kata Tjuta. Show photo and poem verse." transform="translate(138.8,278.0)"><circle r="13"/><text dy="0.34em">5</text></g>
+<g class="stop" data-n="6" tabindex="0" role="button" aria-label="Stop 6: Around the base of Uluru. Show photo and poem verse." transform="translate(726.0,353.7)"><circle r="13"/><text dy="0.34em">6</text></g>
+<g class="stop" data-n="7" tabindex="0" role="button" aria-label="Stop 7: Yulara, the last morning. Show photo and poem verse." transform="translate(654.3,156.5)"><circle r="13"/><text dy="0.34em">7</text></g>
 <line class="scalebar" x1="687" y1="466" x2="900" y2="466"/>
 <line class="scalebar" x1="687" y1="461" x2="687" y2="471"/>
 <line class="scalebar" x1="900" y1="461" x2="900" y2="471"/>
@@ -228,7 +267,14 @@
 </svg>
   </div>
 
-  <hr class="rule">
+  <div class="below">
+    <p class="storylink"><span class="lbl">The full trip</span><a href="https://fivelittlerascals.com/blog/uluru-kata-tjuta-with-kids" target="_top">Red Dirt, Tortilla Chips and a Million-Dollar Dunny: Uluru with Kids &rarr;</a></p>
+    <div class="viewbar" role="group" aria-label="Show below the map">
+      <button class="viewbtn" type="button" data-view="photos" aria-pressed="true">Photos</button>
+      <button class="viewbtn" type="button" data-view="poem" aria-pressed="false">The poem</button>
+    </div>
+    <ol id="photos"></ol>
+    <div id="poemview" hidden>
   <ol id="cards">
     <li class="card" id="stop-1" data-n="1"><div class="chead"><span class="badge">1</span><span class="cname">Yulara, Ayers Rock Resort</span><span class="creg">Northern Territory</span></div><div class="verse"><span class="ln">To the Red Centre, so glad that we flew.</span><span class="ln">If not, would have been 4 days driving, it’s true.</span><span class="ln">Passing the salt lakes and approaching Uluru.</span><span class="ln">At the start of three days, there’s so much here to do.</span><span class="br"></span><span class="ln">What a morning, lots to learn, grab an ice cream to cool off.</span><span class="ln">The kids are drained, an early morning, and Lorelei has a cough.</span><span class="ln">A cold pool for dad and kids; it is my multi-decade fate.</span><span class="ln">And then “Go Fish” at Pioneer Hotel, and chic nuggets on a plate.</span></div></li>
 <li class="card" id="stop-2" data-n="2"><div class="chead"><span class="badge">2</span><span class="cname">Uluru at sunrise</span><span class="creg">Northern Territory</span></div><div class="verse"><span class="ln">Getting up early, before even the sun.</span><span class="ln">Taking a bus, so we did not have to run.</span><span class="ln">The stars are out as we pass into the park.</span><span class="ln">They say it’s morning, but it still looks pretty dark.</span><span class="br"></span><span class="ln">With coffee and tea we get our first glimpse of the rock.</span><span class="ln">The moment seems solemn so seldom did we talk.</span><span class="ln">Except of course CC, who had something to say.</span><span class="ln">That was how we started, on this cool, sunny day.</span></div></li>
@@ -238,6 +284,8 @@
 <li class="card" id="stop-6" data-n="6"><div class="chead"><span class="badge">6</span><span class="cname">Around the base of Uluru</span><span class="creg">Northern Territory</span></div><div class="verse"><span class="ln">Another morning bus ride, but starting three hours later</span><span class="ln">This one was only transport, we had to all self-cater</span><span class="ln">We went through snacks at record pace, the bananas disappeared.</span><span class="ln">That we brought tortilla chips was cause for joy; all the children cheered.</span><span class="br"></span><span class="ln">The circumference of this monolith is nearly ten thousand metres.</span><span class="ln">We had to go around, there was no chance for cheaters.</span><span class="ln">At three hundred meters high, it would have been a rugged climb</span><span class="ln">And, of course, this is not allowed, that was in a different time.</span></div></li>
 <li class="card" id="stop-7" data-n="7"><div class="chead"><span class="badge">7</span><span class="cname">Yulara, the last morning</span><span class="creg">Northern Territory</span></div><div class="verse"><span class="ln">Mummy and James had a morning relaxing.</span><span class="ln">An art gallery tour was slightly less taxing.</span><span class="ln">In the afternoon we did a reprise of the pool.</span><span class="ln">Although in a different spot, it was equally cool.</span><span class="br"></span><span class="ln">Dot painting in the morning on a wombat or two</span><span class="ln">Can’t believe the hotel allowed painting on the floor with our crew</span><span class="ln">Spilled my coffee on CC, but at least I didn’t drop her too</span><span class="ln">Then a flight back in the rain, goodbye to Uluru.</span></div></li>
   </ol>
+    </div>
+  </div>
 
 
 </div>
@@ -255,6 +303,37 @@ document.querySelectorAll('#tabs a[data-nav]').forEach(a => {
   });
 });
 const STOPS = [{"n": 1, "name": "Yulara, Ayers Rock Resort", "region": "Northern Territory", "verse": ["To the Red Centre, so glad that we flew.", "If not, would have been 4 days driving, it’s true.", "Passing the salt lakes and approaching Uluru.", "At the start of three days, there’s so much here to do.", "", "What a morning, lots to learn, grab an ice cream to cool off.", "The kids are drained, an early morning, and Lorelei has a cough.", "A cold pool for dad and kids; it is my multi-decade fate.", "And then “Go Fish” at Pioneer Hotel, and chic nuggets on a plate."]}, {"n": 2, "name": "Uluru at sunrise", "region": "Northern Territory", "verse": ["Getting up early, before even the sun.", "Taking a bus, so we did not have to run.", "The stars are out as we pass into the park.", "They say it’s morning, but it still looks pretty dark.", "", "With coffee and tea we get our first glimpse of the rock.", "The moment seems solemn so seldom did we talk.", "Except of course CC, who had something to say.", "That was how we started, on this cool, sunny day."]}, {"n": 3, "name": "Uluru", "region": "Northern Territory", "verse": ["The guides tell us the rock was an ancient riverbed", "Six kilometres wide, with a bit of iron, so it’s red.", "Flowing sediment down from the half billion-year-old Petermann ranges.", "When it oxides, it’s from grey to red colour that it changes.", "", "How it got vertical, is really what’s quite crazy.", "Although the rock just sitting there seems a little lazy.", "The sedimentary lines are erect at 89 degrees.", "The earth turned up this heavy rock, hardened from the pressures of the seas.", "", "Wild to imagine that this place was twice covered in water", "First by a river, then an ocean, back when it was hotter.", "There likely weren’t Polar icecaps to hold up all the seas", "But more recently the water dropped after a major freeze.", "", "Now the earth is colder, but Australia is dryer", "In the middle of the day, the desert’s like a fryer.", "No activity, no animals, would venture out by day.", "They’re in burrows or nocturnal, is what our tour guides say."]}, {"n": 4, "name": "The million-dollar dunnies", "region": "on the road to Kata Tjuta", "verse": ["On our way to another ancient rock formation", "We make an important stop at a unique, remote station", "With dunnie drops that cost the govvies each a million bucks,", "We make a potty stop with the buses, cars, and trucks."]}, {"n": 5, "name": "Kata Tjuta", "region": "Northern Territory", "verse": ["Kata Tjuta is the name for the collection of the dome.", "It is a mighty conglomerate where the Anangu men roam.", "Not for the women, but only men, this is a sacred place.", "Unclear what all they do, but at least the wild game they chase."]}, {"n": 6, "name": "Around the base of Uluru", "region": "Northern Territory", "verse": ["Another morning bus ride, but starting three hours later", "This one was only transport, we had to all self-cater", "We went through snacks at record pace, the bananas disappeared.", "That we brought tortilla chips was cause for joy; all the children cheered.", "", "The circumference of this monolith is nearly ten thousand metres.", "We had to go around, there was no chance for cheaters.", "At three hundred meters high, it would have been a rugged climb", "And, of course, this is not allowed, that was in a different time."]}, {"n": 7, "name": "Yulara, the last morning", "region": "Northern Territory", "verse": ["Mummy and James had a morning relaxing.", "An art gallery tour was slightly less taxing.", "In the afternoon we did a reprise of the pool.", "Although in a different spot, it was equally cool.", "", "Dot painting in the morning on a wombat or two", "Can’t believe the hotel allowed painting on the floor with our crew", "Spilled my coffee on CC, but at least I didn’t drop her too", "Then a flight back in the rain, goodbye to Uluru."]}];
+// ---------------- Photos ----------------
+// One photo per stop. To change a photo, put the file in img/northern-territory-2022/
+// and edit its entry here ("f" = file name, "cap" = caption).
+const IMG_BASE = "https://maps.fivelittlerascals.com/img/northern-territory-2022/";
+// One line and one outside link per stop ("d" = description, "l" = link text, "u" = address).
+const SITES = {"1": {"d": "Resort town at Yulara, the base for visiting the park.", "l": "Ayers Rock Resort", "u": "https://www.ayersrockresort.com.au/"}, "2": {"d": "The main sunrise viewing area, facing Uluṟu with Kata Tjuṯa on the far horizon.", "l": "Talinguṟu Nyakunytjaku", "u": "https://uluru.gov.au/things-do/activities/sunrise-sunset/talinguru-nyakunytjaku/"}, "3": {"d": "Sandstone monolith sacred to Aṉangu, at the heart of a World Heritage national park.", "l": "Uluṟu-Kata Tjuṯa National Park", "u": "https://uluru.gov.au/"}, "4": {"d": "A remote toilet block on the long road out to Kata Tjuṯa.", "l": "", "u": ""}, "5": {"d": "Great conglomerate domes; the Waḻpa Gorge walk runs between two of them.", "l": "Waḻpa Gorge walk", "u": "https://uluru.gov.au/things-do/activities/walks/kata-tjuta-walks/walpa-gorge-walk/"}, "6": {"d": "The track around the whole base of the rock, on foot or by hired bike.", "l": "Uluṟu bike ride", "u": "https://uluru.gov.au/things-do/tours-experiences/something-different/uluru-bike-ride/"}, "7": {"d": "Dot painting workshops with Aṉangu artists at the resort.", "l": "Maruku Arts", "u": "https://maruku.com.au/tours-workshops/"}};
+const PHOTOS = {"1": {"f": "flying-in.jpg", "cap": "Coming in to land: red sand and Kata Tjuta on the horizon"}, "2": {"f": "uluru-sunrise.jpg", "cap": "Desert flowers in front of the glowing rock"}, "3": {"f": "uluru.jpg", "cap": "Uluru across the spinifex under a cloudy sky"}, "5": {"f": "walpa-gorge.jpg", "cap": "Walking up into Walpa Gorge"}, "6": {"f": "uluru-base-bike.jpg", "cap": "Riding under the rock's ridge"}, "7": {"f": "dot-painting.jpg", "cap": "Dot painting on the floor"}};
+function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+const photoList = document.getElementById('photos');
+STOPS.forEach(s => {
+  const p = PHOTOS[s.n];
+  const li = document.createElement('li');
+  li.className = 'pcard'; li.id = 'photo-' + s.n; li.dataset.n = s.n;
+  li.innerHTML = (p ? '<img class="cthumb" loading="lazy" src="' + IMG_BASE + p.f + '" alt="' + esc(p.cap || s.name) + '">'
+                    : '<div class="nophoto" aria-hidden="true"></div>') +
+    '<div class="chead"><span class="badge">' + s.n + '</span><span class="cname">' + esc(s.name) + '</span>' +
+    '<span class="creg">' + esc(s.region || '') + '</span></div>' +
+    (SITES[s.n] && SITES[s.n].d ? '<p class="desc">' + esc(SITES[s.n].d) + '</p>' : '') +
+    (SITES[s.n] && SITES[s.n].u ? '<a class="site" href="' + SITES[s.n].u + '" target="_blank" rel="noopener">' + esc(SITES[s.n].l) + ' &#8599;</a>' : '');
+  photoList.appendChild(li);
+});
+let view = (location.hash === '#poem') ? 'poem' : 'photos';
+function setView(v){
+  view = v;
+  document.getElementById('photos').hidden = (v !== 'photos');
+  document.getElementById('poemview').hidden = (v !== 'poem');
+  document.querySelectorAll('.viewbtn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+}
+document.querySelectorAll('.viewbtn').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+setView(view);
+
 const byNum = new Map(STOPS.map(s => [s.n, s]));
 const svg = document.getElementById('ntmap');
 const container = document.getElementById('map-container');
@@ -277,16 +356,14 @@ function showTip(g) {
   clearTimeout(hideTimer);
   const s = byNum.get(Number(g.dataset.n));
   if (!s) return;
-  let inner = '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
-  if (s.verse && s.verse.length) {
-    const v = verseHTML(s.verse, MAXLINES);
-    inner += '<span class="t-verse">' + v.html +
-      (v.truncated ? '<span class="t-more">Click to read the rest &rarr;</span>'
-                   : '<span class="t-more">Click to jump to this verse &rarr;</span>') +
-      '</span>';
-  } else {
-    inner += '<span class="t-verse">A stop on the route with no verse of its own.</span>';
-  }
+  const ph = PHOTOS[s.n];
+  let inner = (ph ? '<img class="tip-photo" src="' + IMG_BASE + ph.f + '" alt="">' : '') +
+    '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
+  const site = SITES[s.n] || {};
+  if (site.d) inner += '<span class="t-desc">' + esc(site.d) + '</span>';
+  if (view === 'photos' && site.u) inner += '<span class="t-more">Click to visit ' + esc(site.l) + ' &#8599;</span>';
+  else if (view === 'poem') inner += '<span class="t-more">Click to jump to this verse &rarr;</span>';
+  else inner += '<span class="t-more">Click to see this stop below &rarr;</span>';
   tooltip.innerHTML = inner;
 
   const crect = container.getBoundingClientRect();
@@ -307,10 +384,15 @@ function hideTip() {
 }
 
 let litTimer = null;
+function openStop(n) {
+  const site = SITES[n] || {};
+  if (view === 'photos' && site.u) { window.open(site.u, '_blank', 'noopener'); return; }
+  goToVerse(n);
+}
 function goToVerse(n) {
-  const card = document.getElementById('stop-' + n);
+  const card = document.getElementById((view === 'photos' ? 'photo-' : 'stop-') + n);
   if (!card) return;
-  document.querySelectorAll('.card.lit').forEach(c => c.classList.remove('lit'));
+  document.querySelectorAll('.card.lit, .pcard.lit').forEach(c => c.classList.remove('lit'));
   card.classList.add('lit');
   card.scrollIntoView({ behavior: 'smooth', block: 'center' });
   clearTimeout(litTimer);
@@ -320,16 +402,16 @@ function goToVerse(n) {
 svg.querySelectorAll('g.stop').forEach(g => {
   g.addEventListener('mouseenter', () => showTip(g));
   g.addEventListener('mouseleave', hideTip);
-  g.addEventListener('click', () => goToVerse(Number(g.dataset.n)));
+  g.addEventListener('click', () => openStop(Number(g.dataset.n)));
   g.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToVerse(Number(g.dataset.n)); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openStop(Number(g.dataset.n)); }
   });
 });
 tooltip.addEventListener('mouseenter', () => clearTimeout(hideTimer));
 tooltip.addEventListener('mouseleave', hideTip);
 
 // hovering a verse card highlights its marker on the map
-document.querySelectorAll('.card').forEach(card => {
+document.querySelectorAll('.card, .pcard').forEach(card => {
   const g = svg.querySelector('g.stop[data-n="' + card.dataset.n + '"]');
   if (!g) return;
   card.addEventListener('mouseenter', () => g.classList.add('active'));
