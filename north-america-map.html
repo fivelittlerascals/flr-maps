@@ -18,6 +18,13 @@
    1. NAV_URLS.world — the address of the world map.
    2. The blog addresses live in the cards themselves; to add
       one, edit the href on that stop's "Read the story" link.
+
+  2023, Vancouver Island (stops 1-7): under the 2023 heading, a link to
+  the full trip post, then Photos (default) and The poem buttons.
+  Hovering one of those stops shows its photo, a one-line description
+  and its outside link; clicking opens the site (Photos view) or the
+  verse (The poem, deep link #poem). Data: SITES23 / PHOTOS23 in the
+  script, images in img/vancouver-island-2023/.
   ============================================================
 -->
 <style>
@@ -177,6 +184,42 @@
     border-radius:4px; padding:10px 12px; background:#faf8f5; }
   #cards .stoplist { list-style:none; padding:14px 0 20px; margin:0;  column-gap:34px; }
   @media (max-width:720px){ #cards .stoplist { columns:1; } }
+  /* ---- 2023 Vancouver Island: photos / poem views (same pattern as the South Australia map) ---- */
+  [hidden] { display: none !important; }
+  .part23 { padding: 14px 0 6px; }
+  .storylink { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0 0 16px; }
+  .storylink .lbl { font-size: .74rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); font-weight: 700; }
+  .storylink a { color: var(--ink); font-weight: 700; font-size: 1.02rem; text-decoration: none;
+    border-bottom: 1px solid currentColor; }
+  .storylink a:hover, .storylink a:focus { color: var(--accent); }
+  .viewbar { display: flex; gap: 8px; margin: 0 0 20px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .82rem; }
+  .viewbtn { padding: 6px 15px; border: 1px solid #d7dde6; border-radius: 999px;
+    background: #fff; color: var(--text); cursor: pointer; font: inherit; }
+  .viewbtn:hover { border-color: var(--ink); color: var(--ink); }
+  .viewbtn[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; font-weight: 700; }
+  .viewbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #photos23 { list-style: none; padding: 0; margin: 0 0 8px; display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; }
+  .pcard { margin: 0; border-left: 3px solid var(--c); border-radius: 4px; padding: 10px 12px;
+    background: #faf8f5; transition: background .2s ease; min-width: 0; }
+  .pcard.lit { background: #fbf3f1; }
+  .pcard .cthumb { width: 100%; aspect-ratio: 1/1; height: auto; object-fit: cover; object-position: 50% 30%;
+    border-radius: 4px; margin: 0 0 8px; display: block; background: #eef2f6; }
+  .pcard .nophoto { width: 100%; aspect-ratio: 1/1; border-radius: 4px; margin: 0 0 8px; background: #eef2f6; }
+  .pcard .desc { margin: 6px 0 4px; font-size: .88rem; line-height: 1.45; }
+  .pcard .site { display: inline-block; margin-top: 4px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: .76rem; font-weight: 700; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
+  .pcard .site:hover, .pcard .site:focus { color: var(--accent); border-bottom-color: var(--accent); }
+  .restnote { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: .74rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--muted); font-weight: 700; margin: 26px 0 0; }
+  #tooltip .t-desc { display: block; font-size: .84rem; line-height: 1.45; }
+  #tooltip img.tip-photo { width: 120px; height: 120px; object-fit: cover; object-position: 50% 30%;
+    border-radius: 4px; margin: 0 0 6px; display: block; }
+  .photos23 #cards .trip-sec.y2023 .card.vi23 { display: none; }
+  @media (max-width: 520px) { #photos23 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
 </style>
 
 <div class="wrap">
@@ -676,13 +719,13 @@
 <li class="card y2010" id="stop-2010-25" data-year="2010" data-n="25"><details><summary><span class="badge y2010">25</span><span class="cname">Montréal</span><span class="creg">Québec</span></summary><p class="desc">Twenty hours playing visiting parents to a law student at McGill.</p><article class="post"><h4>Almost America <span class="part">(part)</span></h4><p class="byline">24 March 2010 &middot; Jacob</p><p>I soon found myself feeling a little more foreign when the signs started changing to French as we entered Quebec. I think Amy found herself at home with a whole province of bilingual French/English speakers.</p><p>Our entertainment for the 20 hours in Montreal was playing “visiting parents” to our friend, who is a 3rd year law student at McGill. I&#x27;ve never been on the other end of a college visit; we enjoyed seeing the classrooms, cafeteria, study lounges, meeting friends, going to dinner and then saying goodnight and going back to our hotel. In the morning, our little student came to pick us up at the hotel after her class and we went to visit her house where she lives with 4 other girls.</p><p>I suppose it wasn&#x27;t quite the same as a parental visit since we weren&#x27;t constantly assessing if the tuition dollars were being well spent.</p></article><article class="post"><h4>Identity Theft Hot Potato</h4><p class="byline">25 March 2010 &middot; Jacob</p><p>The FBI says Identity Theft is “the fastest growing white-collar crime in America.”</p><p>Well, if you want to jump on that bandwagon, let me enlighten you on the best path forward:</p><p>1. Choose a state to steal personal information and data. 2. When stealing said data, ensure you choose identities that reside in another state. 3. Fraudulently represent identities in a third state.</p><p>Result: Police precincts in all states do not want to take your complaint.</p></article></details></li>
 <li class="card y2010" id="stop-2010-26" data-year="2010" data-n="26"><details><summary><span class="badge y2010">26</span><span class="cname">Washington, DC</span><span class="creg">the end of the road</span></summary><p class="desc">Flag Day and the posting to Gaborone, then the swearing in by the Secretary of State.</p><article class="post"><h4>Washington, DC — Flag Day</h4><p class="byline">2 May 2010 &middot; Amy</p><p>Well we finally made it to DC, I&#x27;m sure you have all been wondering what happened to us? So I apologize for not writing this entry sooner, we&#x27;ve been enjoying the life in DC and Jacob has started training.</p><p>On Friday April 23rd, they had a ceremony they call “flag day.” It is the only time in their careers where they will receive their posting in a ceremony and it is celebrated. In the future they will be told where they are going via email.</p><p>Anyway, the ceremony is one of the more stressful things we&#x27;ve been to, as you have very little control over what you will receive, and it is 45 minutes of your life that determines the next 2 years of your life. They had several speakers talk about the class and then they proceeded to announce each country with its flag on the big screen. They would follow this up with the job this person would be holding and the name of the officer. They would present each officer with the flag of the country they were heading to, and a folder with their training schedule. After they had announced about half the class they finally announced “Gaborone, Botswana”, and stated that Jacob would be taking on this job. So the moment we have all been waiting for, well at least Jacob and I, has come and we are headed to Botswana in July!</p></article><article class="post"><h4>It&#x27;s Official — the swearing in ceremony</h4><p class="byline">2 May 2010 &middot; Amy</p><p>Although flag day is technically more exciting for us, the big deal day for the government is the “Commissioning Ceremony”; this is where the new class of diplomatic officers are sworn into service by the secretary of state. Jacob&#x27;s class was fortunate enough to have Hillary Clinton, our secretary of state, come and perform the swearing in herself.</p><p>The ceremony began with several speeches about of how wonderful this class of officers is, and how talented and great they will be. Finally the secretary arrived and she gave a 10 minute speech regarding how important their role as diplomats are, and how crucial their jobs are to American policy. She also talked about how talented the class is and how difficult it is to be accepted into this elite rank in the government. Finally she recited the oath, and they were officially officers of the foreign service!</p></article></details></li>
 <li class="yearhead y2023" data-year="2023">2023 &middot; 28 stops &middot; Canada &amp; US</li>
-<li class="card y2023" id="stop-2023-1" data-year="2023" data-n="1"><div class="chead"><span class="badge y2023">1</span><span class="cname">Vancouver</span><span class="creg">British Columbia</span></div><div class="verse"><span class="ln">Today was a day of Jamesey Roodle</span><span class="ln">He did some silly things the Doodle Doodle.</span><span class="ln">First he peed on my Vineyard Vines Shep Shirt</span><span class="ln">It was a bit of wetness even though he’s just a squirt.</span><span class="br"></span><span class="ln">After fourteen hours of sleeping and screaming</span><span class="ln">Watching Disney and Netflix like its constantly streaming</span><span class="ln">No one ate the plane food as it was awfully bland</span><span class="ln">But it was slightly less textured than the Vancouver Island sand</span></div></li>
-<li class="card y2023" id="stop-2023-2" data-year="2023" data-n="2"><div class="chead"><span class="badge y2023">2</span><span class="cname">Port Renfrew Seaside Cottages</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">Once we got to Canada it was just another antic</span><span class="ln">He was throwing books in the tub and making mummy frantic</span><span class="ln">That was all after he dumped his blanket in the toilet</span><span class="ln">We didn’t have a washer so we nearly had to boil it.</span><span class="br"></span><span class="ln">Mummy trimming kids’ toenails and drinking wine</span><span class="ln">Musical chairs was Addy’s choice with chairs in a line.</span><span class="ln">Skipping rocks for Jack again trying to go down by himself</span><span class="ln">And J.R. in a cupboard hiding on a shelf.</span><span class="br"></span><span class="ln">Four of the kids take the time writing in their journal</span><span class="ln">Try to keep it short, time spent need not be eternal</span><span class="ln">The youngest one without a journal, what else can he do?</span><span class="ln">Than take his toothbrush and drop it in the loo.</span><span class="br"></span><span class="ln">A hairbrush in the toilet, just another day</span><span class="ln">There’d be a toilet bowl party daily if James-O had his way.</span><span class="ln">He also chews the charcoal from the outdoor fire pit</span><span class="ln">Seems a bit too scratchy, but he doesn’t seem to mind the grit.</span></div></li>
-<li class="card y2023" id="stop-2023-3" data-year="2023" data-n="3"><div class="chead"><span class="badge y2023">3</span><span class="cname">Mystic Beach</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">To distract Jamesey we took him to the beach</span><span class="ln">There not a single toilet was even within reach</span><span class="ln">We made him a baby pool to warm the North Pacific</span><span class="ln">And no matter what we said, he thought the rock taste was terrific.</span><span class="br"></span><span class="ln">A creek came to a cliff as it approached the ocean</span><span class="ln">Inspiring interest from the kids and a flurry of motion</span><span class="ln">Handstands from Lorelei and a back walkover to boot</span><span class="ln">And Adeline in a cartwheel put her head below her foot.</span><span class="br"></span><span class="ln">A walk back up the hill with Jack running in the lead</span><span class="ln">With grapes and corn thins a semi-mobile CC did feed</span><span class="ln">Back to the cottage for skipping rocks by the tide pool</span><span class="ln">Foregoing workbooks for outdoors in a failing of home school.</span></div></li>
-<li class="card y2023" id="stop-2023-4" data-year="2023" data-n="4"><div class="chead"><span class="badge y2023">4</span><span class="cname">Botanical Beach</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">Another day of James-O eating sand</span><span class="ln">Even with no swimmers and confined to dry land</span><span class="ln">We were lucky to see a black bear on the way to the water</span><span class="ln">Fortunate we were in the car as it terrified the youngest daughter</span></div></li>
-<li class="card y2023" id="stop-2023-5" data-year="2023" data-n="5"><div class="chead"><span class="badge y2023">5</span><span class="cname">Lizard Lake</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">A bonsai tree, upon a stump, in the middle of a lake</span><span class="ln">A trail lost to time and shrubs, so a hike we didn’t take.</span><span class="ln">Instead ‘round Lizard Lake we follow blue and yellow blaze.</span><span class="ln">But when they’re gone we go ‘round a bit, in a coniferous maze.</span></div></li>
-<li class="card y2023" id="stop-2023-6" data-year="2023" data-n="6"><div class="chead"><span class="badge y2023">6</span><span class="cname">The Renfrew Pub</span><span class="creg">Port Renfrew</span></div><div class="verse"><span class="ln">The last night here, we treat ourselves at the local Renfru Pub</span><span class="ln">The scene is good, the space is nice, and above average grub.</span><span class="ln">Then pack the car, the morning comes in just a few more hours,</span><span class="ln">We send the kids quickly to bed, and mostly without showers.</span></div></li>
-<li class="card y2023" id="stop-2023-7" data-year="2023" data-n="7"><div class="chead"><span class="badge y2023">7</span><span class="cname">Swartz Bay &amp; the ferry</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">Wake before daybreak to get us on our way</span><span class="ln">A two-and-a-half-hour drive at sunrise just to start the day</span><span class="ln">At the Ferry Terminal before six in the morn</span><span class="ln">Then off to the mainland as the ship sounds its horn.</span><span class="br"></span><span class="ln">The day shifts back from ship to car</span><span class="ln">Then a plane ‘cause we need to go far</span><span class="ln">Far but not as far as we went before</span><span class="ln">Three hours by air, with delay, so it’s more.</span></div></li>
+<li class="card y2023 vi23" id="stop-2023-1" data-year="2023" data-n="1"><div class="chead"><span class="badge y2023">1</span><span class="cname">Vancouver</span><span class="creg">British Columbia</span></div><div class="verse"><span class="ln">Today was a day of Jamesey Roodle</span><span class="ln">He did some silly things the Doodle Doodle.</span><span class="ln">First he peed on my Vineyard Vines Shep Shirt</span><span class="ln">It was a bit of wetness even though he’s just a squirt.</span><span class="br"></span><span class="ln">After fourteen hours of sleeping and screaming</span><span class="ln">Watching Disney and Netflix like its constantly streaming</span><span class="ln">No one ate the plane food as it was awfully bland</span><span class="ln">But it was slightly less textured than the Vancouver Island sand</span></div></li>
+<li class="card y2023 vi23" id="stop-2023-2" data-year="2023" data-n="2"><div class="chead"><span class="badge y2023">2</span><span class="cname">Port Renfrew Seaside Cottages</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">Once we got to Canada it was just another antic</span><span class="ln">He was throwing books in the tub and making mummy frantic</span><span class="ln">That was all after he dumped his blanket in the toilet</span><span class="ln">We didn’t have a washer so we nearly had to boil it.</span><span class="br"></span><span class="ln">Mummy trimming kids’ toenails and drinking wine</span><span class="ln">Musical chairs was Addy’s choice with chairs in a line.</span><span class="ln">Skipping rocks for Jack again trying to go down by himself</span><span class="ln">And J.R. in a cupboard hiding on a shelf.</span><span class="br"></span><span class="ln">Four of the kids take the time writing in their journal</span><span class="ln">Try to keep it short, time spent need not be eternal</span><span class="ln">The youngest one without a journal, what else can he do?</span><span class="ln">Than take his toothbrush and drop it in the loo.</span><span class="br"></span><span class="ln">A hairbrush in the toilet, just another day</span><span class="ln">There’d be a toilet bowl party daily if James-O had his way.</span><span class="ln">He also chews the charcoal from the outdoor fire pit</span><span class="ln">Seems a bit too scratchy, but he doesn’t seem to mind the grit.</span></div></li>
+<li class="card y2023 vi23" id="stop-2023-3" data-year="2023" data-n="3"><div class="chead"><span class="badge y2023">3</span><span class="cname">Mystic Beach</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">To distract Jamesey we took him to the beach</span><span class="ln">There not a single toilet was even within reach</span><span class="ln">We made him a baby pool to warm the North Pacific</span><span class="ln">And no matter what we said, he thought the rock taste was terrific.</span><span class="br"></span><span class="ln">A creek came to a cliff as it approached the ocean</span><span class="ln">Inspiring interest from the kids and a flurry of motion</span><span class="ln">Handstands from Lorelei and a back walkover to boot</span><span class="ln">And Adeline in a cartwheel put her head below her foot.</span><span class="br"></span><span class="ln">A walk back up the hill with Jack running in the lead</span><span class="ln">With grapes and corn thins a semi-mobile CC did feed</span><span class="ln">Back to the cottage for skipping rocks by the tide pool</span><span class="ln">Foregoing workbooks for outdoors in a failing of home school.</span></div></li>
+<li class="card y2023 vi23" id="stop-2023-4" data-year="2023" data-n="4"><div class="chead"><span class="badge y2023">4</span><span class="cname">Botanical Beach</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">Another day of James-O eating sand</span><span class="ln">Even with no swimmers and confined to dry land</span><span class="ln">We were lucky to see a black bear on the way to the water</span><span class="ln">Fortunate we were in the car as it terrified the youngest daughter</span></div></li>
+<li class="card y2023 vi23" id="stop-2023-5" data-year="2023" data-n="5"><div class="chead"><span class="badge y2023">5</span><span class="cname">Lizard Lake</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">A bonsai tree, upon a stump, in the middle of a lake</span><span class="ln">A trail lost to time and shrubs, so a hike we didn’t take.</span><span class="ln">Instead ‘round Lizard Lake we follow blue and yellow blaze.</span><span class="ln">But when they’re gone we go ‘round a bit, in a coniferous maze.</span></div></li>
+<li class="card y2023 vi23" id="stop-2023-6" data-year="2023" data-n="6"><div class="chead"><span class="badge y2023">6</span><span class="cname">The Renfrew Pub</span><span class="creg">Port Renfrew</span></div><div class="verse"><span class="ln">The last night here, we treat ourselves at the local Renfru Pub</span><span class="ln">The scene is good, the space is nice, and above average grub.</span><span class="ln">Then pack the car, the morning comes in just a few more hours,</span><span class="ln">We send the kids quickly to bed, and mostly without showers.</span></div></li>
+<li class="card y2023 vi23" id="stop-2023-7" data-year="2023" data-n="7"><div class="chead"><span class="badge y2023">7</span><span class="cname">Swartz Bay &amp; the ferry</span><span class="creg">Vancouver Island</span></div><div class="verse"><span class="ln">Wake before daybreak to get us on our way</span><span class="ln">A two-and-a-half-hour drive at sunrise just to start the day</span><span class="ln">At the Ferry Terminal before six in the morn</span><span class="ln">Then off to the mainland as the ship sounds its horn.</span><span class="br"></span><span class="ln">The day shifts back from ship to car</span><span class="ln">Then a plane ‘cause we need to go far</span><span class="ln">Far but not as far as we went before</span><span class="ln">Three hours by air, with delay, so it’s more.</span></div></li>
 <li class="card y2023" id="stop-2023-8" data-year="2023" data-n="8"><div class="chead"><span class="badge y2023">8</span><span class="cname">Colorado Springs</span><span class="creg">Colorado</span></div><div class="verse"><span class="ln">Get to Colorado another hour to go</span><span class="ln">Cram the bags in the car, can’t fit much mo’</span><span class="ln">Bagels ‘to go’ attempting to avoid a food whine</span><span class="ln">Finally, the hotel lobby and cousins, just after nine.</span><span class="br"></span><span class="ln">Back to a cloudy hotel pool for swimming and play</span><span class="ln">A late, after thought dinner – take-out Chick-Fil-A.</span><span class="ln">Then let’s go to bed and wish there are less clouds tomorrow</span><span class="ln">Or we’ll miss Garden of the Gods and would wallow in sorrow.</span><span class="br"></span><span class="ln">Some lightning bolts over Pikes Peak make a glorious sight</span><span class="ln">Then off to Target for Round 2 of shop-a-thon delight</span><span class="ln">A 40th Birthday at a Brewery makes old age seem near</span><span class="ln">And James dumps a Unicorn purse in the toilet, CC’s greatest fear.</span></div></li>
 <li class="card y2023" id="stop-2023-9" data-year="2023" data-n="9"><div class="chead"><span class="badge y2023">9</span><span class="cname">Rock Ledge Ranch</span><span class="creg">Colorado Springs</span></div><div class="verse"><span class="ln">We mobilise after breakfast to arrive round about 10.</span><span class="ln">Wouldn’t have helped much if we had arrived before then.</span><span class="ln">The boys speeding ahead; when you’re young you have to be fast</span><span class="ln">With teepee, homestead and blacksmith to learn ‘bout the past.</span></div></li>
 <li class="card y2023" id="stop-2023-10" data-year="2023" data-n="10"><div class="chead"><span class="badge y2023">10</span><span class="cname">Manitou Cliff Dwellings</span><span class="creg">Manitou Springs</span></div><div class="verse"><span class="ln">Then to climb ladders and hop through a window and door</span><span class="ln">A cliff dwelling nearby, none of us had been there before</span><span class="ln">Shopping for souvenirs in the pueblo; glow in the dark t-shirts galore</span><span class="ln">Then run to the car in the midst of a torrential downpour.</span></div></li>
@@ -845,6 +888,63 @@ document.querySelectorAll('#tabs a[data-nav]').forEach(a => {
   });
 });
 
+// ---------------- 2023: Vancouver Island photos (stops 1-7) ----------------
+// One photo per stop. To change one, put the file in img/vancouver-island-2023/
+// and edit its entry ("f" = file name, "cap" = caption).
+const IMG_BASE23 = "https://maps.fivelittlerascals.com/img/vancouver-island-2023/";
+const POST23 = { label: "Toothbrushes, Tide Pools and a Black Bear: Vancouver Island with Kids",
+  url: "https://fivelittlerascals.com/blog/vancouver-island-port-renfrew-with-kids" };
+// One line and one outside link per stop ("d" = description, "l" = link text, "u" = address).
+const SITES23 = {
+  "1": {"d": "Landed at YVR, then the ferry from Tsawwassen across the Strait of Georgia to Vancouver Island.", "l": "Destination Vancouver", "u": "https://www.destinationvancouver.com/"},
+  "2": {"d": "Waterfront cottages on Port San Juan, with a rocky cove and tide pools below the deck.", "l": "Wild Renfrew Seaside Cottages", "u": "https://wildrenfrew.com/seaside-cottages/"},
+  "3": {"d": "A rainforest trail and suspension bridge down to a sandy beach with a waterfall over the cliff.", "l": "Juan de Fuca Park (BC Parks)", "u": "https://bcparks.ca/juan-de-fuca-park/"},
+  "4": {"d": "Sandstone shelves and tide pools at the western end of the Juan de Fuca Marine Trail.", "l": "Juan de Fuca Park (BC Parks)", "u": "https://bcparks.ca/juan-de-fuca-park/"},
+  "5": {"d": "A small forest lake and recreation site off the Pacific Marine Road, with a loop trail and a dock."},
+  "6": {"d": "Waterfront pub by the government dock in Port Renfrew.", "l": "The Renfrew Pub", "u": "https://wildrenfrew.com/renfrew-pub/"},
+  "7": {"d": "The early sailing from Swartz Bay back to Tsawwassen and the mainland.", "l": "BC Ferries", "u": "https://www.bcferries.com/"}
+};
+const PHOTOS23 = {
+  "1": {"f": "active-pass.jpg", "cap": "Through Active Pass on the ferry"},
+  "2": {"f": "port-renfrew-cove.jpg", "cap": "Three on the rocks below the cottage"},
+  "3": {"f": "mystic-beach.jpg", "cap": "Tide line at Mystic Beach"},
+  "4": {"f": "botanical-beach.jpg", "cap": "Rock islet at Botanical Beach"},
+  "5": {"f": "lizard-lake-dock.jpg", "cap": "Five on the Lizard Lake dock"},
+  "6": {"f": "renfrew-pub.jpg", "cap": "Window seats at the pub"},
+  "7": {"f": "swartz-bay-ferry.jpg", "cap": "The wake behind the morning ferry"}
+};
+const VI23 = new Set(Object.keys(SITES23).map(n => '2023-' + n));
+let view23 = (location.hash === '#poem') ? 'poem' : 'photos';
+function esc23(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+function tip23(k) {
+  const n = k.split('-')[1], m = META[k] || {}, ph = PHOTOS23[n], st = SITES23[n] || {};
+  let inner = (ph ? '<img class="tip-photo" src="' + IMG_BASE23 + ph.f + '" alt="">' : '') +
+    '<b>2023 &middot; #' + n + ' &middot; ' + m.name + ', ' + m.region + '</b>';
+  if (st.d) inner += '<span class="t-desc">' + esc23(st.d) + '</span>';
+  inner += st.u ? '<span class="tm">Click to visit ' + esc23(st.l) + ' &#8599;</span>'
+                : '<span class="tm">Click to see this stop below &rarr;</span>';
+  return inner;
+}
+function placeTip23(g) {
+  tooltip.style.opacity = 1;
+  const c = container.getBoundingClientRect(), r = g.getBoundingClientRect();
+  let x = r.left - c.left + r.width / 2 - tooltip.offsetWidth / 2;
+  let y = r.top - c.top - tooltip.offsetHeight - 10;
+  if (y < 0) y = r.top - c.top + r.height + 10;
+  x = Math.max(4, Math.min(x, c.width - tooltip.offsetWidth - 4));
+  tooltip.style.left = x + 'px';
+  tooltip.style.top = y + 'px';
+}
+function setView23(v) {
+  view23 = v;
+  const box = document.getElementById('photos23');
+  if (box) box.hidden = (v !== 'photos');
+  const rn = document.getElementById('rest23');
+  if (rn) rn.hidden = (v !== 'photos');
+  document.body.classList.toggle('photos23', v === 'photos');
+  document.querySelectorAll('.viewbtn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+}
+
 let hideTimer = null;
 function key(g) { return g.dataset.year + '-' + g.dataset.n; }
 
@@ -855,6 +955,7 @@ svg.querySelectorAll('.stop').forEach(g => {
     g.classList.add('lit');
     const card = document.getElementById('stop-' + k);
     if (card) card.classList.add('lit');
+    if (VI23.has(k) && view23 === 'photos') { tooltip.innerHTML = tip23(k); placeTip23(g); return; }
     let inner = (m.photo ? '<img class="tip-photo" src="' + m.photo + (m.photo.indexOf('?')>-1?'&':'?') + 'format=400w" alt="' + (m.name||'') + '" loading="lazy">' : '') + '<b>' + m.year + ' &middot; #' + g.dataset.n + ' &middot; ' +
                 m.name + ', ' + m.region + '</b>';
     if (m.verse && m.verse.length) {
@@ -890,6 +991,12 @@ svg.querySelectorAll('.stop').forEach(g => {
       const yr = g.dataset.year || meta.year;
       if (yr && typeof applyYear === 'function') { applyYear(yr); return; }
     }
+    // 2023 Vancouver Island stops in the Photos view open the place's own site
+    if (VI23.has(k)) {
+      const st = SITES23[k.split('-')[1]] || {};
+      if (view23 === 'photos' && st.u) { window.open(st.u, '_blank', 'noopener'); return; }
+      if (view23 === 'photos') { const pc = document.getElementById('photo-' + k); if (pc) { pc.classList.add('lit'); pc.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => pc.classList.remove('lit'), 3500); } return; }
+    } else if (k.indexOf('2023-') === 0 && view23 === 'photos') { setView23('poem'); }
     // STAGE 2: already in a single-trip view -> open the blog if this stop has one
     if (meta.url && meta.url.indexOf('fivelittlerascals.com/blog') !== -1) {
       window.open(meta.url, '_blank', 'noopener'); return;
@@ -997,6 +1104,49 @@ tooltip.addEventListener('mouseleave', () => {
       });
     };
   }
+})();
+</script>
+
+<script>
+/* 2023: Vancouver Island part (stops 1-7) — trip-post link, Photos view (default) and The poem toggle (#poem). */
+(function(){
+  var sec = document.querySelector('#cards .trip-sec.y2023');
+  if (!sec) return;
+  var part = document.createElement('div');
+  part.className = 'part23';
+  part.innerHTML =
+    '<p class="storylink"><span class="lbl">Vancouver Island &middot; stops 1&ndash;7</span>' +
+    '<a href="' + POST23.url + '" target="_top">' + esc23(POST23.label) + ' &rarr;</a></p>' +
+    '<div class="viewbar" role="group" aria-label="Show for the Vancouver Island stops">' +
+    '<button class="viewbtn" type="button" data-view="photos" aria-pressed="true">Photos</button>' +
+    '<button class="viewbtn" type="button" data-view="poem" aria-pressed="false">The poem</button></div>' +
+    '<ol id="photos23"></ol>' +
+    '<p class="restnote" id="rest23">The rest of the 2023 trip: Colorado, Wyoming, Qu&eacute;bec &amp; Maine</p>';
+  var sm = sec.querySelector('summary');
+  sm.insertAdjacentElement('afterend', part);
+  var list = document.getElementById('photos23');
+  Object.keys(SITES23).forEach(function(n){
+    var k = '2023-' + n, m = META[k] || {}, p = PHOTOS23[n], st = SITES23[n] || {};
+    var li = document.createElement('li');
+    li.className = 'pcard y2023'; li.id = 'photo-' + k; li.dataset.year = '2023'; li.dataset.n = n;
+    li.innerHTML = (p ? '<img class="cthumb" loading="lazy" src="' + IMG_BASE23 + p.f + '" alt="' + esc23(p.cap) + '">'
+                      : '<div class="nophoto" aria-hidden="true"></div>') +
+      '<div class="chead"><span class="badge y2023">' + n + '</span><span class="cname">' + esc23(m.name || '') + '</span>' +
+      '<span class="creg">' + esc23(m.region || '') + '</span></div>' +
+      (st.d ? '<p class="desc">' + esc23(st.d) + '</p>' : '') +
+      (st.u ? '<a class="site" href="' + st.u + '" target="_blank" rel="noopener">' + esc23(st.l) + ' &#8599;</a>' : '');
+    var g = svg.querySelector('g.stop[data-year="2023"][data-n="' + n + '"]');
+    if (g) {
+      li.addEventListener('mouseenter', function(){ g.classList.add('lit'); });
+      li.addEventListener('mouseleave', function(){ g.classList.remove('lit'); });
+    }
+    list.appendChild(li);
+  });
+  part.querySelectorAll('.viewbtn').forEach(function(b){
+    b.addEventListener('click', function(){ setView23(b.dataset.view); });
+  });
+  setView23(view23);
+  if (location.hash === '#poem' && typeof window.applyYear === 'function') window.applyYear('2023');
 })();
 </script>
 
