@@ -18,7 +18,8 @@
   2021 stops: hovering shows the stop's photo and a one-line
   description; clicking opens the place's own site (Photos view) or
   jumps to the verse (The poem view, deep link #poem).
-  2024 stops: hovering shows the notes; clicking jumps to the card.
+  2024 stops: hovering shows the stop's photo and first note; clicking
+  opens its first link, or jumps to its tile when it has none.
 
   TO EDIT A VERSE: find the STOPS array near the bottom and
   edit the "verse" lines, then edit the matching card in the
@@ -204,7 +205,6 @@
     grid-template-areas: "ra rb" "ca cb"; }
   #trip-cols > #rule-a { grid-area: ra; }
   #trip-cols > #rule-b { grid-area: rb; }
-  #trip-cols > #cardsb { grid-area: cb; }
   /* when a single trip is selected, collapse to one column */
   .show-a #trip-cols { grid-template-columns: 1fr; grid-template-areas: "ra" "ca"; }
   .show-b #trip-cols { grid-template-columns: 1fr; grid-template-areas: "rb" "cb"; }
@@ -245,6 +245,15 @@
   #tooltip img.tip-photo { width: 120px; height: 120px; object-fit: cover; object-position: 50% 30%;
     border-radius: 4px; margin: 0 0 6px; display: block; background: #2a3c5c; }
   #trip-cols > #trip-a { grid-area: ca; min-width: 0; }
+  #trip-cols > #trip-b { grid-area: cb; min-width: 0; }
+  .show-a #trip-b { display: none; }
+  #photosb { list-style: none; padding: 0; margin: 0; display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; }
+  .pcard.b { border-left-color: #cfe0d6; }
+  .pcard.b.lit { border-left-color: var(--ink-b); background: #eef5f0; }
+  .pcard.b .site { color: var(--ink-b); border-bottom-color: var(--ink-b); margin-right: 10px; }
+  .pcard.b .site:hover, .pcard.b .site:focus { color: var(--accent); border-bottom-color: var(--accent); }
+  @media (max-width: 520px) { #photosb { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
   .show-b #trip-a { display: none; }
   @media (max-width: 520px) { #photos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } }
 </style>
@@ -354,23 +363,23 @@
 <g class="stop a" data-trip="a" data-n="28" tabindex="0" role="button" aria-label="Stop 28: Devonport. Show photo and link." transform="translate(438.0,369.0)"><circle r="13"/><text dy="0.34em">28</text></g>
 <g class="stop a" data-trip="a" data-n="29" tabindex="0" role="button" aria-label="Stop 29: Bass Strait crossing. Show photo and link." transform="translate(449.0,200.8)"><circle r="13"/><text dy="0.34em">29</text></g>
 <g class="stop a" data-trip="a" data-n="30" tabindex="0" role="button" aria-label="Stop 30: Melbourne, then home. Show photo and link." transform="translate(409.3,73.9)"><circle r="13"/><text dy="0.34em">30</text></g>
-<g class="stop b" data-trip="b" data-n="1" tabindex="0" role="button" aria-label="2024 trip, stop 1: Geelong. Show details." transform="translate(232.4,78.2)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">1</text></g>
-<g class="stop b" data-trip="b" data-n="2" tabindex="0" role="button" aria-label="2024 trip, stop 2: Devonport. Show details." transform="translate(462.8,327.1)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">2</text></g>
-<g class="stop b" data-trip="b" data-n="3" tabindex="0" role="button" aria-label="2024 trip, stop 3: Stanley. Show details." transform="translate(260.5,257.3)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">3</text></g>
-<g class="stop b" data-trip="b" data-n="4" tabindex="0" role="button" aria-label="2024 trip, stop 4: Kingston. Show details." transform="translate(601.5,759.9)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">4</text></g>
-<g class="stop b" data-trip="b" data-n="5" tabindex="0" role="button" aria-label="2024 trip, stop 5: Hobart. Show details." transform="translate(607.7,729.8)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">5</text></g>
-<g class="stop b" data-trip="b" data-n="6" tabindex="0" role="button" aria-label="2024 trip, stop 6: Stewarts Bay. Show details." transform="translate(669.3,764.8)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">6</text></g>
-<g class="stop b" data-trip="b" data-n="7" tabindex="0" role="button" aria-label="2024 trip, stop 7: Port Arthur. Show details." transform="translate(699.7,817.2)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">7</text></g>
-<g class="stop b" data-trip="b" data-n="8" tabindex="0" role="button" aria-label="2024 trip, stop 8: The Unzoo. Show details." transform="translate(728.2,770.1)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">8</text></g>
-<g class="stop b" data-trip="b" data-n="9" tabindex="0" role="button" aria-label="2024 trip, stop 9: Remarkable Cave. Show details." transform="translate(695.2,786.7)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">9</text></g>
-<g class="stop b" data-trip="b" data-n="10" tabindex="0" role="button" aria-label="2024 trip, stop 10: Tasman Arch &amp; Devils Kitchen. Show details." transform="translate(700.6,756.4)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">10</text></g>
-<g class="stop b" data-trip="b" data-n="11" tabindex="0" role="button" aria-label="2024 trip, stop 11: Coles Bay. Show details." transform="translate(759.1,528.5)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">11</text></g>
-<g class="stop b" data-trip="b" data-n="12" tabindex="0" role="button" aria-label="2024 trip, stop 12: Wineglass Bay. Show details." transform="translate(775.8,554.4)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">12</text></g>
-<g class="stop b" data-trip="b" data-n="13" tabindex="0" role="button" aria-label="2024 trip, stop 13: Launceston. Show details." transform="translate(593.1,397.9)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">13</text></g>
-<g class="stop b" data-trip="b" data-n="14" tabindex="0" role="button" aria-label="2024 trip, stop 14: Cataract Gorge. Show details." transform="translate(561.9,401.6)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">14</text></g>
-<g class="stop b" data-trip="b" data-n="15" tabindex="0" role="button" aria-label="2024 trip, stop 15: Seahorse World &amp; Platypus House. Show details." transform="translate(530.1,323.2)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">15</text></g>
-<g class="stop b" data-trip="b" data-n="16" tabindex="0" role="button" aria-label="2024 trip, stop 16: Devonport. Show details." transform="translate(434.2,338.5)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">16</text></g>
-<g class="stop b" data-trip="b" data-n="17" tabindex="0" role="button" aria-label="2024 trip, stop 17: Melbourne. Show details." transform="translate(489.0,77.7)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">17</text></g>
+<g class="stop b" data-trip="b" data-n="1" tabindex="0" role="button" aria-label="2024 trip, stop 1: Geelong. Show photo and link." transform="translate(232.4,78.2)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">1</text></g>
+<g class="stop b" data-trip="b" data-n="2" tabindex="0" role="button" aria-label="2024 trip, stop 2: Devonport. Show photo and link." transform="translate(462.8,327.1)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">2</text></g>
+<g class="stop b" data-trip="b" data-n="3" tabindex="0" role="button" aria-label="2024 trip, stop 3: Stanley. Show photo and link." transform="translate(260.5,257.3)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">3</text></g>
+<g class="stop b" data-trip="b" data-n="4" tabindex="0" role="button" aria-label="2024 trip, stop 4: Kingston. Show photo and link." transform="translate(601.5,759.9)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">4</text></g>
+<g class="stop b" data-trip="b" data-n="5" tabindex="0" role="button" aria-label="2024 trip, stop 5: Hobart. Show photo and link." transform="translate(607.7,729.8)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">5</text></g>
+<g class="stop b" data-trip="b" data-n="6" tabindex="0" role="button" aria-label="2024 trip, stop 6: Stewarts Bay. Show photo and link." transform="translate(669.3,764.8)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">6</text></g>
+<g class="stop b" data-trip="b" data-n="7" tabindex="0" role="button" aria-label="2024 trip, stop 7: Port Arthur. Show photo and link." transform="translate(699.7,817.2)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">7</text></g>
+<g class="stop b" data-trip="b" data-n="8" tabindex="0" role="button" aria-label="2024 trip, stop 8: The Unzoo. Show photo and link." transform="translate(728.2,770.1)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">8</text></g>
+<g class="stop b" data-trip="b" data-n="9" tabindex="0" role="button" aria-label="2024 trip, stop 9: Remarkable Cave. Show photo and link." transform="translate(695.2,786.7)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">9</text></g>
+<g class="stop b" data-trip="b" data-n="10" tabindex="0" role="button" aria-label="2024 trip, stop 10: Tasman Arch &amp; Devils Kitchen. Show photo and link." transform="translate(700.6,756.4)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">10</text></g>
+<g class="stop b" data-trip="b" data-n="11" tabindex="0" role="button" aria-label="2024 trip, stop 11: Coles Bay. Show photo and link." transform="translate(759.1,528.5)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">11</text></g>
+<g class="stop b" data-trip="b" data-n="12" tabindex="0" role="button" aria-label="2024 trip, stop 12: Wineglass Bay. Show photo and link." transform="translate(775.8,554.4)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">12</text></g>
+<g class="stop b" data-trip="b" data-n="13" tabindex="0" role="button" aria-label="2024 trip, stop 13: Launceston. Show photo and link." transform="translate(593.1,397.9)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">13</text></g>
+<g class="stop b" data-trip="b" data-n="14" tabindex="0" role="button" aria-label="2024 trip, stop 14: Cataract Gorge. Show photo and link." transform="translate(561.9,401.6)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">14</text></g>
+<g class="stop b" data-trip="b" data-n="15" tabindex="0" role="button" aria-label="2024 trip, stop 15: Seahorse World &amp; Platypus House. Show photo and link." transform="translate(530.1,323.2)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">15</text></g>
+<g class="stop b" data-trip="b" data-n="16" tabindex="0" role="button" aria-label="2024 trip, stop 16: Devonport. Show photo and link." transform="translate(434.2,338.5)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">16</text></g>
+<g class="stop b" data-trip="b" data-n="17" tabindex="0" role="button" aria-label="2024 trip, stop 17: Melbourne. Show photo and link." transform="translate(489.0,77.7)"><rect x="-12.0" y="-12.0" width="24.0" height="24.0" rx="4.5"/><text dy="0.34em">17</text></g>
 </svg>
   </div>
 
@@ -420,7 +429,9 @@
   </div>
 
   <hr class="rule" id="rule-b">
-  <ol id="cardsb">
+  <div id="trip-b">
+    <ol id="photosb"></ol>
+  <ol id="cardsb" hidden>
     <li class="card b" id="stopb-1" data-trip="b" data-n="1"><div class="chead"><span class="badge b">1</span><span class="cname">Geelong</span><span class="creg">Spirit of Tasmania</span></div><div class="verse plain"><span class="ln">The overnight sailing across Bass Strait from Geelong to Devonport.</span></div><a class="site" href="https://www.spiritoftasmania.com.au/" target="_blank" rel="noopener">Spirit of Tasmania &rarr;</a></li>
 <li class="card b" id="stopb-2" data-trip="b" data-n="2"><div class="chead"><span class="badge b">2</span><span class="cname">Devonport</span><span class="creg">arrival</span></div><div class="verse plain"><span class="ln">The ferry terminal, and the start of the loop around the island.</span></div></li>
 <li class="card b" id="stopb-3" data-trip="b" data-n="3"><div class="chead"><span class="badge b">3</span><span class="cname">Stanley</span><span class="creg">north-west</span></div><div class="verse plain"><span class="ln">Climbing the Nut, the core of an extinct volcano. No dogs.</span><span class="ln">Highfield Historic Site, the first European settlement in north-west Tasmania.</span><span class="ln">A one-hour self-guided heritage walk.</span></div><a class="site" href="https://parks.tas.gov.au/explore-our-parks/the-nut-state-reserve" target="_blank" rel="noopener">The Nut State Reserve &rarr;</a><a class="site" href="https://parks.tas.gov.au/Pages/Highfield-Historic-Site.aspx" target="_blank" rel="noopener">Highfield Historic Site &rarr;</a></li>
@@ -439,6 +450,7 @@
 <li class="card b" id="stopb-16" data-trip="b" data-n="16"><div class="chead"><span class="badge b">16</span><span class="cname">Devonport</span><span class="creg">departure</span></div><div class="verse plain"><span class="ln">Back to the ferry terminal for the overnight crossing.</span></div></li>
 <li class="card b" id="stopb-17" data-trip="b" data-n="17"><div class="chead"><span class="badge b">17</span><span class="cname">Melbourne</span><span class="creg">and home</span></div><div class="verse plain"><span class="ln">Off the ferry and on the road home.</span></div></li>
   </ol>
+  </div>
 
   <hr class="rule">
   </div>
@@ -488,6 +500,26 @@ function setView(v){
 document.querySelectorAll('.viewbtn').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
 setView(view);
 
+
+// ---------------- 2024 photos ----------------
+// One photo per 2024 stop, in img/tasmania-2024/ ("f" = file name, "cap" = caption).
+// Each 2024 tile shows the stop's notes and links from STOPSB.
+const IMG_BASE_B = "https://maps.fivelittlerascals.com/img/tasmania-2024/";
+const PHOTOSB = {"1": {"f": "geelong-ferry-shore.jpg", "cap": "The dog's last paddle in Corio Bay"}, "2": {"f": "ferry-cabin.jpg", "cap": "Cabin on the overnight ferry"}, "3": {"f": "stanley-beach.jpg", "cap": "Everyone on the beach below the Nut"}, "5": {"f": "botanical-gardens.jpg", "cap": "Royal Tasmanian Botanical Gardens"}, "6": {"f": "stewarts-bay.jpg", "cap": "Stewarts Bay on a still morning"}, "8": {"f": "unzoo-kangaroo.jpg", "cap": "Feeding a kangaroo together"}, "9": {"f": "remarkable-cave.jpg", "cap": "Surf through Remarkable Cave"}, "10": {"f": "tasman-arch.jpg", "cap": "Tasman Arch"}, "11": {"f": "coles-bay.jpg", "cap": "The dog on the beach at Coles Bay"}, "12": {"f": "wineglass-bay-lookout.jpg", "cap": "Wineglass Bay lookout"}, "13": {"f": "launceston-gorge-walk.jpg", "cap": "Walking into the gorge from town"}, "14": {"f": "suspension-bridge.jpg", "cap": "Alexandra Suspension Bridge"}, "15": {"f": "platypus.jpg", "cap": "Platypus underwater"}, "16": {"f": "devonport-playground.jpg", "cap": "Playground before the ferry"}, "17": {"f": "off-the-ferry.jpg", "cap": "Morning off the ferry"}};
+const photoListB = document.getElementById('photosb');
+STOPSB.forEach(s => {
+  const p = PHOTOSB[s.n];
+  const li = document.createElement('li');
+  li.className = 'pcard b'; li.id = 'photob-' + s.n; li.dataset.n = s.n; li.dataset.trip = 'b';
+  li.innerHTML = (p ? '<img class="cthumb" loading="lazy" src="' + IMG_BASE_B + p.f + '" alt="' + esc(p.cap || s.name) + '">'
+                    : '<div class="nophoto" aria-hidden="true"></div>') +
+    '<div class="chead"><span class="badge b">' + s.n + '</span><span class="cname">' + esc(s.name) + '</span>' +
+    '<span class="creg">' + esc(s.region || '') + '</span></div>' +
+    ((s.notes && s.notes.length) ? '<p class="desc">' + esc(s.notes.join(' ')) + '</p>' : '') +
+    (s.link || []).map(l => '<a class="site" href="' + l[1] + '" target="_blank" rel="noopener">' + esc(l[0]) + ' &#8599;</a>').join('');
+  photoListB.appendChild(li);
+});
+
 const byKey = new Map();
 STOPS.forEach(s => byKey.set('a' + s.n, s));
 STOPSB.forEach(s => byKey.set('b' + s.n, Object.assign({}, s, { verse: s.notes, trip: 'b' })));
@@ -520,6 +552,17 @@ function showTip(g) {
     if (view === 'photos' && site.u) inner += '<span class="t-more">Click to visit ' + esc(site.l) + ' &#8599;</span>';
     else if (view === 'poem') inner += '<span class="t-more">Click to jump to this verse &rarr;</span>';
     else inner += '<span class="t-more">Click to see this stop below &rarr;</span>';
+    tooltip.innerHTML = inner;
+    placeTip(g);
+    return;
+  }
+  if (g.dataset.trip === 'b') {
+    const ph = PHOTOSB[s.n], lk = (s.link || [])[0];
+    let inner = (ph ? '<img class="tip-photo" src="' + IMG_BASE_B + ph.f + '" alt="">' : '') +
+      '<span class="t-name">' + s.n + ' &middot; ' + s.name + '</span>';
+    if (s.notes && s.notes.length) inner += '<span class="t-desc">' + esc(s.notes[0]) + '</span>';
+    inner += lk ? '<span class="t-more">Click to visit ' + esc(lk[0]) + ' &#8599;</span>'
+                : '<span class="t-more">Click to see this stop below &rarr;</span>';
     tooltip.innerHTML = inner;
     placeTip(g);
     return;
@@ -557,12 +600,17 @@ function hideTip() {
 
 let litTimer = null;
 function openStop(trip, n) {
+  if (trip === 'b') {
+    const s = STOPSB.find(x => String(x.n) === String(n)), lk = s && (s.link || [])[0];
+    if (lk) { window.open(lk[1], '_blank', 'noopener'); return; }
+    goToVerse(trip, n); return;
+  }
   const site = SITES[n] || {};
-  if (trip !== 'b' && view === 'photos' && site.u) { window.open(site.u, '_blank', 'noopener'); return; }
+  if (view === 'photos' && site.u) { window.open(site.u, '_blank', 'noopener'); return; }
   goToVerse(trip, n);
 }
 function goToVerse(trip, n) {
-  const card = document.getElementById((trip === 'b' ? 'stopb-' : (view === 'photos' ? 'photo-' : 'stop-')) + n);
+  const card = document.getElementById((trip === 'b' ? 'photob-' : (view === 'photos' ? 'photo-' : 'stop-')) + n);
   if (!card) return;
   document.querySelectorAll('.card.lit, .pcard.lit').forEach(c => c.classList.remove('lit'));
   card.classList.add('lit');
