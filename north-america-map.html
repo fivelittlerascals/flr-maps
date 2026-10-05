@@ -1416,7 +1416,8 @@ tooltip.addEventListener('mouseleave', () => {
   const part = document.createElement('div');
   part.id = 'y10';
   part.innerHTML =
-    '<p class="storylink"><span class="lbl">The full trip</span><a href="' + Y10_POST.url + '" target="_top">' + esc(Y10_POST.label) + ' &rarr;</a></p>' +
+    /* TRIP-POST-LINK hidden until the 2010 post is published; to restore, uncomment the next line:
+    '<p class="storylink"><span class="lbl">The full trip</span><a href="' + Y10_POST.url + '" target="_top">' + esc(Y10_POST.label) + ' &rarr;</a></p>' + */
     '<div class="y10bar" role="group" aria-label="Show the 2010 stops as">' +
     '<button class="y10btn" type="button" data-view="photos" aria-pressed="true">Photos</button>' +
     '<button class="y10btn" type="button" data-view="posts" aria-pressed="false">The blog posts</button></div>' +
